@@ -458,7 +458,7 @@
       height: calc(100% - 44px);
       background: linear-gradient(180deg, transparent, oklch(0.8 0.14 162 / 0.32), transparent);
     }
-    .vault-copy, .vault-console { position: relative; z-index: 1; }
+    .vault-copy, .vault-console { position: relative; z-index: 1; min-width: 0; }
     .vault-name {
       font-family: var(--font-display);
       font-size: clamp(58px, 9vw, 116px);
@@ -894,9 +894,65 @@
       .hero-shell, .about-grid, .bankr-panel, .vault-panel, .demo-grid, .project-grid, .use-grid, .finder-results, .finder-row, .resource-grid { grid-template-columns: 1fr; }
       .demo-copy { border-right: 0; border-bottom: 1px solid var(--border-soft); }
       .demo-status { grid-template-columns: 1fr; }
+      .vault-panel {
+        padding: 24px 18px 20px;
+        border-radius: 24px;
+        gap: 24px;
+      }
       .vault-panel::before { display: none; }
+      .vault-name {
+        font-size: clamp(48px, 17vw, 68px);
+        line-height: 0.92;
+        letter-spacing: 0;
+        margin-bottom: 16px;
+      }
+      .vault-subhead {
+        font-size: 15px;
+        line-height: 1.68;
+      }
+      .vault-badges {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .vault-badge {
+        min-height: 36px;
+        justify-content: center;
+        text-align: center;
+        border-radius: 13px;
+        padding: 8px 9px;
+        font-size: 10px;
+        line-height: 1.25;
+        letter-spacing: 0.04em;
+      }
+      .vault-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .vault-actions .btn {
+        width: 100%;
+        min-height: 40px;
+        border-radius: 14px;
+        padding: 10px 8px;
+        font-size: 12px;
+      }
+      .vault-actions .btn:first-child { grid-column: 1 / -1; }
+      .vault-console {
+        border-radius: 20px;
+        padding: 14px;
+      }
       .vault-step { grid-template-columns: 44px 1fr; }
       .vault-step span { grid-column: 2; text-align: left; }
+      .vault-code {
+        max-height: 220px;
+        font-size: 10px;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
       .hero h1 { font-size: clamp(50px, 18vw, 72px); }
       .hero-card { order: -1; }
       .about-stats { grid-template-columns: 1fr 1fr; }
@@ -910,6 +966,26 @@
       .container, nav { width: min(100% - 24px, var(--max-w)); }
       .about-stats, .mini-metrics { grid-template-columns: 1fr; }
       .stat { min-height: auto; }
+      .hero { padding: 44px 0 50px; }
+      .hero h1 { letter-spacing: 0; line-height: 0.94; }
+      .hero p { font-size: 15px; line-height: 1.72; margin-top: 20px; }
+      .section-label, .hero-tag, .bankr-kicker {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        gap: 8px;
+      }
+      .section-label::before, .hero-tag::before, .bankr-kicker::before { width: 18px; }
+      .vault-panel { padding: 20px 14px 16px; }
+      .vault-badges { grid-template-columns: 1fr 1fr; }
+      .vault-actions { grid-template-columns: 1fr 1fr; }
+      .vault-actions .btn:nth-child(5) { grid-column: 1 / -1; }
+      .terminal-top { font-size: 10px; gap: 12px; }
+      .vault-step {
+        padding: 11px 12px;
+        gap: 8px;
+      }
+      .vault-step code, .vault-step strong { font-size: 11px; }
+      .vault-note { font-size: 11px; line-height: 1.55; }
     }
 
     @media (prefers-reduced-motion: reduce) {
