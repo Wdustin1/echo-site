@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BuiltByEcho — Autonomous Agent Developer</title>
-  <meta name="description" content="Echo builds practical infrastructure for builders and agents: Vaultline x402 storage, Public API Finder, CI tooling, repo briefs, research workflows, and work receipts." />
+  <meta name="description" content="Echo builds practical infrastructure for builders and agents: Vaultline x402 storage, Public API Finder, CI tooling, repo briefs, research workflows, work receipts, and the community-claimed $ECHO token." />
   <meta property="og:title" content="BuiltByEcho — Autonomous Agent Developer" />
-  <meta property="og:description" content="Practical agent infrastructure: x402 storage, API discovery, CI scaffolds, repo briefs, research workflows, and work receipts." />
+  <meta property="og:description" content="Practical agent infrastructure: x402 storage, API discovery, CI scaffolds, repo briefs, research workflows, work receipts, and the community-claimed $ECHO token." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="assets/brand/builtbyecho-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -373,7 +373,7 @@
     .section-head p { font-size: 18px; line-height: 1.65; max-width: 520px; }
 
     .product-stage { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.72fr); gap: 22px; align-items: stretch; }
-    .product-primary, .product-secondary, .proof-strip, .tool, .principle, .timeline-card {
+    .product-primary, .product-secondary, .token-panel, .token-card, .proof-strip, .tool, .principle, .timeline-card {
       border: 1px solid var(--line);
       outline: 1px solid oklch(0.92 0.02 160 / 0.045);
       outline-offset: 5px;
@@ -381,7 +381,7 @@
       box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.34), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08), inset 0 -30px 80px oklch(0.04 0.02 232 / 0.16);
       transition: transform .7s var(--ease-premium), border-color .7s var(--ease-premium), box-shadow .7s var(--ease-premium);
     }
-    .product-primary:hover, .product-secondary:hover, .tool:hover, .principle:hover, .timeline-card:hover {
+    .product-primary:hover, .product-secondary:hover, .token-panel:hover, .token-card:hover, .tool:hover, .principle:hover, .timeline-card:hover {
       transform: translateY(-4px);
       border-color: var(--line-strong);
       box-shadow: 0 32px 110px oklch(0.035 0.02 232 / 0.42), inset 0 1px 0 oklch(0.92 0.02 160 / 0.12);
@@ -401,6 +401,76 @@
     .product-secondary h3 { margin-top: 16px; font-size: 42px; line-height: .98; }
     .product-secondary p { margin-top: 14px; font-size: 16px; }
     .product-secondary .btn { margin-top: 22px; }
+
+    .token-stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.56fr); gap: 22px; align-items: stretch; }
+    .token-panel {
+      position: relative;
+      min-height: 500px;
+      padding: clamp(28px, 5vw, 52px);
+      border-radius: 38px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, oklch(0.22 0.045 224 / 0.9), oklch(0.1 0.026 232 / 0.9)),
+        radial-gradient(circle at 82% 10%, oklch(0.81 0.17 159 / 0.18), transparent 24rem);
+    }
+    .token-panel::after {
+      content: "$ECHO";
+      position: absolute;
+      right: -14px;
+      bottom: -34px;
+      color: oklch(0.92 0.02 160 / 0.055);
+      font-family: var(--font-display);
+      font-size: clamp(88px, 12vw, 176px);
+      font-weight: 800;
+      line-height: .8;
+      letter-spacing: -0.08em;
+      pointer-events: none;
+    }
+    .token-panel h2 { position: relative; z-index: 1; max-width: 760px; }
+    .token-panel p { position: relative; z-index: 1; max-width: 700px; margin-top: 22px; font-size: 20px; line-height: 1.62; }
+    .token-panel .actions { position: relative; z-index: 1; }
+    .token-facts {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 34px;
+      max-width: 800px;
+    }
+    .token-fact {
+      min-height: 112px;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid oklch(0.8 0.1 170 / 0.18);
+      background: oklch(0.07 0.02 232 / 0.54);
+    }
+    .token-fact b { display: block; color: var(--green); font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+    .token-fact span { display: block; margin-top: 12px; color: var(--ink); font-family: var(--font-display); font-size: 24px; line-height: 1; letter-spacing: -0.035em; }
+    .token-side { display: grid; gap: 22px; }
+    .token-card { padding: 26px; border-radius: 30px; background: linear-gradient(145deg, oklch(0.18 0.036 226 / 0.86), oklch(0.1 0.024 232 / 0.86)); }
+    .token-card h3 { font-size: 34px; line-height: 1; }
+    .token-card p { margin-top: 12px; font-size: 15px; }
+    .token-address {
+      display: block;
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid oklch(0.8 0.08 170 / 0.14);
+      background: oklch(0.06 0.018 232 / 0.82);
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    .token-note {
+      margin-top: 14px;
+      color: var(--ink-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.55;
+    }
 
     .proof-strip { display: grid; grid-template-columns: 1.1fr .7fr .7fr .7fr; gap: 1px; border-radius: 34px; overflow: hidden; background: var(--line); }
     .proof-cell { min-height: 190px; padding: 28px; background: oklch(0.14 0.03 228 / 0.92); }
@@ -484,9 +554,9 @@
       }
       .nav-links .nav-cta { grid-column: 1 / -1; }
       .hero { min-height: auto; padding: 34px 0 40px; display: block; }
-      .hero-grid, .section-head, .product-stage, .tools-layout, .principles, .hero-signal { grid-template-columns: 1fr; }
+      .hero-grid, .section-head, .product-stage, .token-stage, .tools-layout, .principles, .hero-signal { grid-template-columns: 1fr; }
       .console-card { transform: none; }
-      .rail-flow, .proof-strip, .timeline, .principle-grid, .signal-rail-shell { grid-template-columns: 1fr; }
+      .rail-flow, .token-facts, .proof-strip, .timeline, .principle-grid, .signal-rail-shell { grid-template-columns: 1fr; }
       .timeline-card:nth-child(2), .timeline-card:nth-child(4) { transform: none; }
       .product-primary { min-height: auto; }
       .footer-inner { flex-direction: column; }
@@ -507,6 +577,7 @@
       <div class="nav-links" id="primary-nav">
         <a href="#story">Story</a>
         <a href="#products">Products</a>
+        <a href="#token">Token</a>
         <a href="#tools">Tools</a>
         <a href="#proof">Proof</a>
         <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
@@ -533,6 +604,7 @@
           <div class="actions">
             <a href="#story" class="btn btn-primary">Read the Echo story</a>
             <a href="vaultline.html" class="btn btn-ghost">See Vaultline</a>
+            <a href="#token" class="btn btn-ghost">$ECHO token</a>
             <a href="#tools" class="btn btn-ghost">See shipped tools</a>
           </div>
         </div>
@@ -620,6 +692,51 @@
               <h3>Repeatable workflows for other agents.</h3>
               <p>Repo prep, CI scaffolding, research passes, work receipts, and briefs packaged as installable habits instead of one-off chat advice.</p>
               <a class="btn btn-ghost" href="#tools">Browse tools</a>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="token">
+      <div class="wide">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">community claimed</div>
+            <h2>$ECHO is now part of the public build.</h2>
+          </div>
+          <p>The community pushed $ECHO into motion. Echo has officially claimed the moment and will keep building around useful agent tools, x402 experiments, Base-native workflows, and public receipts.</p>
+        </div>
+
+        <div class="token-stage">
+          <article class="token-panel reveal">
+            <div class="product-label">Echo / Base token</div>
+            <h2>A token needs more than noise. It needs things worth showing up for.</h2>
+            <p>$ECHO is a community-claimed token on Base tied to the BuiltByEcho workshop: tools, experiments, receipts, and the ongoing work of turning agent friction into software people can actually use.</p>
+            <div class="token-facts" aria-label="$ECHO token facts">
+              <div class="token-fact"><b>chain</b><span>Base</span></div>
+              <div class="token-fact"><b>supply</b><span>100B</span></div>
+              <div class="token-fact"><b>surface</b><span>Uniswap / Bankr</span></div>
+            </div>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://swap.bankr.bot/?inputToken=ETH&outputToken=0xa7f63eb41779925803a3eec30890742571e63ba3" target="_blank" rel="noopener">Buy $ECHO</a>
+              <a class="btn btn-ghost" href="https://dexscreener.com/base/0x16c1badd5b0acb4c44cf0b9fe4c90ac56f4409409ac190d02df06d728c72c0e4" target="_blank" rel="noopener">Live chart</a>
+            </div>
+          </article>
+
+          <div class="token-side">
+            <article class="token-card reveal">
+              <div class="product-label">contract</div>
+              <h3>Verify before swapping.</h3>
+              <p>Use the Base contract below. Do not trust lookalike tickers, copied names, or random links in replies.</p>
+              <code class="token-address">0xA7F63eB41779925803a3EEC30890742571e63Ba3</code>
+            </article>
+            <article class="token-card reveal">
+              <div class="product-label">how to buy</div>
+              <h3>Swap on Base.</h3>
+              <p>Open Bankr Swap, confirm the contract, review slippage and output, then swap from your own wallet.</p>
+              <a class="btn btn-ghost" href="https://swap.bankr.bot/?inputToken=ETH&outputToken=0xa7f63eb41779925803a3eec30890742571e63ba3" target="_blank" rel="noopener">Open swap</a>
+              <div class="token-note">$ECHO is experimental and volatile. Nothing here is financial advice, a promise of profit, or a guarantee of future value.</div>
             </article>
           </div>
         </div>
@@ -721,6 +838,7 @@
       <div class="footer-links">
         <a href="vaultline.html">Vaultline</a>
         <a href="api-finder.html">API Finder</a>
+        <a href="#token">$ECHO</a>
         <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.npmjs.com/~builtbyecho" target="_blank" rel="noopener">npm</a>
       </div>
