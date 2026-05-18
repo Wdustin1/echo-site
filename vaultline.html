@@ -605,6 +605,85 @@
     .api-result a { color: var(--accent); font-size: 12px; }
     .finder-empty { color: var(--fg-muted); font-size: 13px; margin-top: 14px; }
 
+    .live-demo {
+      border: 1px solid var(--border-soft);
+      border-radius: 28px;
+      background: linear-gradient(145deg, oklch(0.19 0.03 226 / 0.86), oklch(0.09 0.02 232 / 0.86));
+      box-shadow: var(--shadow), inset 0 1px 0 oklch(0.96 0.02 160 / 0.06);
+      overflow: hidden;
+    }
+    .demo-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(360px, 1.18fr);
+      min-height: 500px;
+    }
+    .demo-copy {
+      padding: clamp(24px, 5vw, 44px);
+      border-right: 1px solid var(--border-soft);
+      background: oklch(0.11 0.022 232 / 0.48);
+    }
+    .demo-copy h2 {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+      color: var(--fg-bright);
+      margin-bottom: 18px;
+    }
+    .demo-copy p { color: var(--fg-muted); line-height: 1.85; max-width: 520px; }
+    .demo-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .demo-status {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 26px;
+    }
+    .demo-metric {
+      border: 1px solid oklch(0.72 0.08 180 / 0.14);
+      border-radius: 16px;
+      padding: 14px;
+      background: oklch(0.08 0.02 232 / 0.58);
+    }
+    .demo-metric span {
+      display: block;
+      color: var(--fg-muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+    }
+    .demo-metric strong { color: var(--fg-bright); font-size: 18px; }
+    .demo-console {
+      padding: clamp(20px, 4vw, 34px);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+    }
+    .demo-output {
+      min-height: 300px;
+      border: 1px solid oklch(0.72 0.08 180 / 0.14);
+      border-radius: 18px;
+      background: oklch(0.045 0.018 232 / 0.86);
+      color: oklch(0.82 0.14 162);
+      padding: 18px;
+      overflow: auto;
+      white-space: pre-wrap;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .demo-command {
+      display: block;
+      border: 1px solid oklch(0.72 0.08 180 / 0.14);
+      border-radius: 16px;
+      background: oklch(0.08 0.02 232 / 0.72);
+      color: var(--fg);
+      padding: 14px;
+      font-size: 11px;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
 
     .timeline {
       position: relative;
@@ -812,7 +891,9 @@
         text-align: center;
       }
       .hero { padding: 62px 0 62px; }
-      .hero-shell, .about-grid, .bankr-panel, .vault-panel, .project-grid, .use-grid, .finder-results, .finder-row, .resource-grid { grid-template-columns: 1fr; }
+      .hero-shell, .about-grid, .bankr-panel, .vault-panel, .demo-grid, .project-grid, .use-grid, .finder-results, .finder-row, .resource-grid { grid-template-columns: 1fr; }
+      .demo-copy { border-right: 0; border-bottom: 1px solid var(--border-soft); }
+      .demo-status { grid-template-columns: 1fr; }
       .vault-panel::before { display: none; }
       .vault-step { grid-template-columns: 44px 1fr; }
       .vault-step span { grid-column: 2; text-align: left; }
@@ -846,6 +927,7 @@
       <div class="nav-links" id="primary-nav">
         <a href="index.html#products">Products</a>
         <a href="vaultline.html" class="active">Vaultline</a>
+        <a href="#live-demo">Live demo</a>
         <a href="api-finder.html">API Finder</a>
         <a href="index.html#tools">Tools</a>
         <a href="index.html#proof">Proof</a>
@@ -862,7 +944,8 @@
           <h1>Storage built for <span class="dim">agent work.</span></h1>
           <p>Agents are starting to produce real artifacts — reports, datasets, images, logs, briefs — but most storage tools still assume a human with a dashboard and a billing account. Vaultline now routes its public paid storage endpoints through Bankr x402, with the direct API kept as the lower-level fallback.</p>
           <div class="hero-cta">
-            <a href="#resources" class="btn btn-primary">Open docs hub</a>
+            <a href="#live-demo" class="btn btn-primary">Run live demo</a>
+            <a href="#resources" class="btn btn-ghost">Open docs hub</a>
             <a href="https://github.com/BuiltByEcho/vaultline" target="_blank" rel="noopener" class="btn btn-ghost">View source</a>
             <a href="index.html" class="btn btn-ghost">Back to Echo</a>
           </div>
@@ -917,6 +1000,38 @@
   "encoding": "text"
 }</code>
           <p class="vault-note">Primary public price: $0.002 USDC/request through Bankr. Direct Vaultline x402 remains available for lower-level clients.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="live-demo">
+    <div class="container">
+      <div class="section-label">// Live Demo</div>
+      <div class="live-demo reveal">
+        <div class="demo-grid">
+          <div class="demo-copy">
+            <h2>Watch the storage rail answer in public.</h2>
+            <p>This demo checks the live Vaultline backend and probes the production Bankr x402 listing endpoint. It does not spend a wallet from the browser; it shows the real payment challenge that an agent or wallet client would pay and retry.</p>
+            <div class="demo-actions">
+              <button class="btn btn-primary" type="button" id="run-vaultline-demo">Run live check</button>
+              <a href="vaultline-docs.html" class="btn btn-ghost">Open API docs</a>
+            </div>
+            <div class="demo-status" aria-label="Vaultline live demo status">
+              <div class="demo-metric"><span>Backend</span><strong id="demo-health">waiting</strong></div>
+              <div class="demo-metric"><span>x402</span><strong id="demo-payment">waiting</strong></div>
+            </div>
+          </div>
+          <div class="demo-console">
+            <div class="terminal-top"><span>vaultline://live-demo</span><div class="lights"><span></span><span></span><span></span></div></div>
+            <pre class="demo-output" id="vaultline-demo-output">Press “Run live check” to ask the live backend for health and ask Bankr for the payment challenge on /vaultline-list.</pre>
+            <code class="demo-command" id="vaultline-demo-command">bankr x402 call https://x402.bankr.bot/0x2a16625fad3b0d840ac02c7c59edea3781e340ae/vaultline-list \
+  -X POST \
+  -d '{"prefix":"demo/"}' \
+  --max-payment 0.01 \
+  -y \
+  --raw</code>
+          </div>
         </div>
       </div>
     </div>
@@ -1070,6 +1185,60 @@
         button.textContent = open ? 'Close' : 'Menu';
       });
     });
+
+    const vaultlineDemoEndpoint = '/api/vaultline-demo';
+    const vaultlineCommand = `bankr x402 call https://x402.bankr.bot/0x2a16625fad3b0d840ac02c7c59edea3781e340ae/vaultline-list \\
+  -X POST \\
+  -d '{"prefix":"demo/"}' \\
+  --max-payment 0.01 \\
+  -y \\
+  --raw`;
+
+    const renderVaultlineDemo = (data) => {
+      const output = document.querySelector('#vaultline-demo-output');
+      const health = document.querySelector('#demo-health');
+      const payment = document.querySelector('#demo-payment');
+      const command = document.querySelector('#vaultline-demo-command');
+      const challenge = data?.bankr?.probe?.challenge || {};
+      if (health) health.textContent = data?.storage?.ok ? 'online' : `status ${data?.storage?.status || 'error'}`;
+      if (payment) payment.textContent = data?.bankr?.probe?.paymentRequired ? `${challenge.amountUsdc || '$0.002'} ${challenge.asset || 'USDC'}` : 'no challenge';
+      if (command) command.textContent = vaultlineCommand;
+      if (!output) return;
+      output.textContent = JSON.stringify({
+        checkedAt: data?.checkedAt,
+        backend: data?.storage?.body || data?.storage,
+        bankrPaymentChallenge: {
+          status: data?.bankr?.probe?.status,
+          paymentRequired: data?.bankr?.probe?.paymentRequired,
+          amount: `${challenge.amountUsdc || '0.002000'} ${challenge.asset || 'USDC'}`,
+          network: challenge.network,
+          resource: challenge.resource,
+          facilitator: challenge.facilitator,
+        },
+        nextStep: 'Run the Bankr CLI command below from a funded wallet to pay and list demo objects.',
+      }, null, 2);
+    };
+
+    async function runVaultlineDemo() {
+      const output = document.querySelector('#vaultline-demo-output');
+      const health = document.querySelector('#demo-health');
+      const payment = document.querySelector('#demo-payment');
+      if (health) health.textContent = 'checking';
+      if (payment) payment.textContent = 'probing';
+      if (output) output.textContent = 'Checking storage.builtbyecho.xyz and probing the live Bankr x402 endpoint...';
+      try {
+        const response = await fetch(vaultlineDemoEndpoint, { method: 'POST' });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.error || 'demo check failed');
+        renderVaultlineDemo(data);
+      } catch (error) {
+        if (health) health.textContent = 'check failed';
+        if (payment) payment.textContent = 'check failed';
+        if (output) output.textContent = `Live check failed: ${error.message || error}`;
+      }
+    }
+
+    document.querySelector('#run-vaultline-demo')?.addEventListener('click', runVaultlineDemo);
 
     const apiFinderData = [
       { name: 'Open-Meteo', url: 'https://open-meteo.com/en/docs', description: 'Free weather forecast, historical weather, climate, geocoding, and marine weather APIs.', auth: 'No', https: true, cors: 'Yes', category: 'Weather' },

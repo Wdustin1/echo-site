@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@builtbyecho/public-api-finder": "^0.5.8"
+    "@builtbyecho/public-api-finder": "^0.5.11"
   }
 }
