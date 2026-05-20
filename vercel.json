@@ -4,6 +4,7 @@
     { "source": "/vaultline-download", "destination": "/api/x402-proxy?service=vaultline-download" },
     { "source": "/vaultline-list", "destination": "/api/x402-proxy?service=vaultline-list" },
     { "source": "/public-api-finder", "destination": "/api/x402-proxy?service=public-api-finder" },
+    { "source": "/agent-wormhole-open", "destination": "/api/x402-proxy?service=agent-wormhole-open" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

@@ -6,6 +6,7 @@ const SERVICES = {
   'vaultline-download': `${BANKR_BASE}/vaultline-download`,
   'vaultline-list': `${BANKR_BASE}/vaultline-list`,
   'public-api-finder': `${BANKR_BASE}/public-api-finder`,
+  'agent-wormhole-open': `${BANKR_BASE}/agent-wormhole-open`,
 };
 
 const HOP_BY_HOP_HEADERS = new Set([
