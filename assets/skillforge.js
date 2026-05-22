@@ -78,12 +78,12 @@ Suggested pricing:
 
 Next publish targets:
 ${r.map(e=>`- ${e}`).join(`
-`)}`,tools:g}}var f=document.querySelector(`#app`),p=d(e);function m(e){return e.replaceAll(`&`,`&amp;`).replaceAll(`<`,`&lt;`).replaceAll(`>`,`&gt;`)}function h(e,t){navigator.clipboard?.writeText(e);let n=document.querySelector(`[data-status]`);n&&(n.textContent=`${t} copied`,window.setTimeout(()=>{n.textContent=`${p.score}% ready`},1600))}function g(e){return`
+`)}`,tools:g}}var f=document.querySelector(`#app`),p=d(e),m=null;function h(e){return e.replaceAll(`&`,`&amp;`).replaceAll(`<`,`&lt;`).replaceAll(`>`,`&gt;`)}function g(e,t){navigator.clipboard?.writeText(e);let n=document.querySelector(`[data-status]`);n&&(n.textContent=`${t} copied`,window.setTimeout(()=>{n.textContent=`${p.score}% ready`},1600))}function _(e){return`
     <li class="check">
       <span class="check-dot ${e.passed?`passed`:``}" aria-hidden="true"></span>
       <span>${e.label}</span>
     </li>
-  `}function _(){f.innerHTML=`
+  `}function v(){f.innerHTML=`
     <nav>
       <div class="nav-inner">
         <a class="brand" href="https://www.builtbyecho.xyz/">
@@ -136,6 +136,7 @@ ${r.map(e=>`- ${e}`).join(`
             <p class="kicker">Current package</p>
             <h2>${p.skillName}</h2>
             <p>${p.description}</p>
+            ${m?`<div class="forged-banner">Forged package ready. Copy the SKILL.md or install notes below.</div>`:``}
             <div class="meta-list">
               <span>${p.slug}</span>
               <span>$5 install</span>
@@ -146,7 +147,7 @@ ${r.map(e=>`- ${e}`).join(`
           <div class="panel checks-panel">
             <p class="kicker">Validation</p>
             <ul class="checks">
-              ${p.checks.map(g).join(``)}
+              ${p.checks.map(_).join(``)}
             </ul>
           </div>
         </aside>
@@ -156,12 +157,16 @@ ${r.map(e=>`- ${e}`).join(`
         <article class="panel package-panel">
           <div class="panel-head">
             <div>
-              <p class="kicker">Generated</p>
+              <p class="kicker">${m?`Just forged`:`Generated`}</p>
               <h2>SKILL.md</h2>
             </div>
-            <button class="small-btn" type="button" data-copy-skill>Copy</button>
+            <button class="small-btn" type="button" data-copy-skill>Copy SKILL.md</button>
           </div>
-          <pre><code>${m(p.skillMd)}</code></pre>
+          <div class="package-summary">
+            <strong>${p.skillName}</strong>
+            <span>${p.slug}</span>
+          </div>
+          <pre><code>${h(p.skillMd)}</code></pre>
         </article>
 
         <article id="capture" class="panel install-panel">
@@ -170,13 +175,13 @@ ${r.map(e=>`- ${e}`).join(`
               <p class="kicker">Install story</p>
               <h2>Two pieces.</h2>
             </div>
-            <button class="small-btn" type="button" data-copy-install>Copy</button>
+            <button class="small-btn" type="button" data-copy-install>Copy install notes</button>
           </div>
           <p>
             Install the capture skill into Hermes so it can create workflow bundles after useful runs.
             Then use the app to forge those bundles into packages.
           </p>
-          <pre>${m(p.install)}</pre>
+          <pre>${h(p.install)}</pre>
         </article>
       </section>
 
@@ -189,4 +194,4 @@ ${r.map(e=>`- ${e}`).join(`
         </div>
       </section>
     </main>
-  `,document.querySelector(`.forge-form`).addEventListener(`submit`,e=>{e.preventDefault(),p=d(document.querySelector(`#workflow`).value),_(),document.querySelector(`.output-grid`).scrollIntoView({behavior:`smooth`,block:`start`})}),document.querySelector(`[data-reset]`).addEventListener(`click`,()=>{p=d(e),_()}),document.querySelector(`[data-copy-skill]`).addEventListener(`click`,()=>{h(p.skillMd,`SKILL.md`)}),document.querySelector(`[data-copy-install]`).addEventListener(`click`,()=>{h(p.install,`install notes`)})}_();
+  `,document.querySelector(`.forge-form`).addEventListener(`submit`,e=>{e.preventDefault(),p=d(document.querySelector(`#workflow`).value),m=Date.now(),v(),document.querySelector(`.status`).textContent=`forged package ready`,document.querySelector(`.output-grid`).scrollIntoView({behavior:`smooth`,block:`center`})}),document.querySelector(`[data-reset]`).addEventListener(`click`,()=>{p=d(e),m=null,v()}),document.querySelector(`[data-copy-skill]`).addEventListener(`click`,()=>{g(p.skillMd,`SKILL.md`)}),document.querySelector(`[data-copy-install]`).addEventListener(`click`,()=>{g(p.install,`install notes`)})}v();
