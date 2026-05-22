@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BuiltByEcho Skills</title>
+  <meta name="description" content="Public SKILL.md library for BuiltByEcho tools. Grab the exact agent skill file you need." />
+  <meta property="og:title" content="BuiltByEcho Skills" />
+  <meta property="og:description" content="Public SKILL.md library for BuiltByEcho tools. Grab the exact agent skill file you need." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/brand/builtbyecho-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: oklch(0.118 0.026 226);
+      --bg-deep: oklch(0.075 0.022 232);
+      --ink: oklch(0.965 0.012 150);
+      --ink-soft: oklch(0.77 0.034 178);
+      --ink-dim: oklch(0.58 0.04 190);
+      --panel: oklch(0.17 0.034 226 / 0.82);
+      --panel-2: oklch(0.215 0.04 224 / 0.88);
+      --line: oklch(0.38 0.052 190 / 0.36);
+      --line-strong: oklch(0.67 0.12 166 / 0.46);
+      --green: oklch(0.81 0.17 159);
+      --cyan: oklch(0.78 0.12 212);
+      --amber: oklch(0.84 0.14 88);
+      --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+      --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max: 1180px;
+      --wide: 1380px;
+      --ease-premium: cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background:
+        radial-gradient(circle at 16% 4%, oklch(0.48 0.12 165 / 0.22), transparent 32rem),
+        radial-gradient(circle at 78% 10%, oklch(0.48 0.12 218 / 0.18), transparent 34rem),
+        linear-gradient(180deg, var(--bg), var(--bg-deep) 72%);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.32;
+      background-image:
+        linear-gradient(oklch(0.9 0.02 180 / 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, oklch(0.9 0.02 180 / 0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at 50% 10%, black, transparent 74%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    p { color: var(--ink-soft); }
+    .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .wide { width: min(var(--wide), calc(100% - 40px)); margin: 0 auto; }
+
+    nav {
+      position: sticky;
+      top: 14px;
+      z-index: 100;
+      width: min(var(--wide), calc(100% - 28px));
+      margin: 8px auto 0;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: oklch(0.105 0.026 228 / 0.72);
+      backdrop-filter: blur(20px) saturate(1.25);
+      box-shadow: 0 18px 60px oklch(0.03 0.02 232 / 0.42);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 10px 14px 10px 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      background: oklch(0.08 0.02 232 / 0.72);
+      border: 1px solid oklch(0.81 0.17 159 / 0.38);
+      overflow: hidden;
+    }
+
+    .brand-mark img { width: 23px; height: 23px; display: block; }
+
+    .menu-toggle { display: none; }
+    .nav-links { display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 12px; }
+    .nav-links a { color: var(--ink-dim); padding: 9px 12px; border-radius: 999px; transition: color .18s ease, background .18s ease; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); background: oklch(0.82 0.1 170 / 0.09); }
+    .nav-cta { color: oklch(0.08 0.02 232) !important; background: var(--green); font-weight: 700; }
+
+    .hero {
+      padding: clamp(48px, 8vw, 88px) 0 40px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+      box-shadow: 0 0 18px currentColor;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      color: var(--ink);
+      letter-spacing: -0.055em;
+      text-wrap: balance;
+    }
+
+    h1 {
+      max-width: 980px;
+      margin-top: 18px;
+      font-size: clamp(56px, 8vw, 108px);
+      line-height: 0.88;
+      font-weight: 800;
+    }
+
+    .hero-lede {
+      max-width: 760px;
+      margin-top: 20px;
+      font-size: clamp(18px, 1.8vw, 23px);
+      line-height: 1.5;
+      color: oklch(0.82 0.035 180);
+    }
+
+    .hero-actions, .chip-row, .card-actions, .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform .45s var(--ease-premium), box-shadow .45s var(--ease-premium), background .45s var(--ease-premium), border-color .45s var(--ease-premium);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: oklch(0.08 0.02 232); box-shadow: 0 18px 42px oklch(0.72 0.15 170 / 0.22); }
+    .btn-ghost { border: 1px solid var(--line); background: oklch(0.18 0.035 226 / 0.58); color: var(--ink); }
+
+    section { padding: 28px 0 80px; }
+
+    .overview {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 20px;
+      align-items: stretch;
+      margin-top: 28px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      outline: 1px solid oklch(0.92 0.02 160 / 0.045);
+      outline-offset: 5px;
+      border-radius: 34px;
+      background: var(--panel);
+      box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.34), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08), inset 0 -30px 80px oklch(0.04 0.02 232 / 0.16);
+    }
+
+    .summary-panel {
+      padding: 30px;
+      background: linear-gradient(145deg, oklch(0.2 0.04 226 / 0.9), oklch(0.1 0.025 232 / 0.88));
+    }
+
+    .summary-panel h2 {
+      font-size: clamp(36px, 4.6vw, 64px);
+      line-height: 0.92;
+    }
+
+    .summary-panel p {
+      margin-top: 16px;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .facts-panel {
+      display: grid;
+      gap: 1px;
+      overflow: hidden;
+      background: var(--line);
+    }
+
+    .fact {
+      padding: 24px;
+      background: oklch(0.14 0.03 228 / 0.92);
+    }
+
+    .fact b {
+      display: block;
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .fact span {
+      display: block;
+      margin-top: 12px;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 22px;
+    }
+
+    .search-shell label, .filter-shell span {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .search-shell input {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: oklch(0.16 0.032 226 / 0.58);
+      color: var(--ink);
+      font: inherit;
+    }
+
+    .chip-row { gap: 10px; }
+
+    .chip {
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: oklch(0.16 0.032 226 / 0.58);
+      color: var(--ink-soft);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      color: oklch(0.08 0.02 232);
+      background: var(--green);
+      border-color: transparent;
+      font-weight: 700;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .skill-card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      outline: 1px solid oklch(0.92 0.02 160 / 0.045);
+      outline-offset: 5px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, var(--panel-2), oklch(0.1 0.024 232 / 0.88));
+      box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.28), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08);
+      transition: transform .55s var(--ease-premium), border-color .55s var(--ease-premium);
+    }
+
+    .skill-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--line-strong);
+    }
+
+    .skill-card h3 {
+      margin-top: 16px;
+      font-size: 34px;
+      line-height: 0.96;
+    }
+
+    .skill-card p {
+      margin-top: 12px;
+      min-height: 94px;
+      font-size: 16px;
+    }
+
+    .meta-row {
+      margin-top: 16px;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      color: var(--ink-soft);
+      background: oklch(0.8 0.06 180 / 0.09);
+      border: 1px solid oklch(0.8 0.06 180 / 0.12);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .path {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      background: oklch(0.06 0.018 232 / 0.82);
+      border: 1px solid oklch(0.8 0.08 170 / 0.14);
+      color: var(--green);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .card-actions {
+      margin-top: 18px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: oklch(0.18 0.035 226 / 0.58);
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 26px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: oklch(0.15 0.03 226 / 0.72);
+      color: var(--ink-soft);
+      font-size: 16px;
+    }
+
+    footer { padding: 0 0 42px; color: var(--ink-dim); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 24px; border-top: 1px solid var(--line); padding-top: 24px; font-family: var(--font-mono); font-size: 12px; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 16px; }
+
+    @media (max-width: 1100px) {
+      .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .overview { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 900px) {
+      nav { top: 8px; width: min(100% - 20px, var(--wide)); border-radius: 28px; }
+      .nav-inner { align-items: center; display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 12px; }
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 9px 13px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: oklch(0.16 0.032 226 / 0.72);
+        color: var(--ink);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .nav-links {
+        grid-column: 1 / -1;
+        width: 100%;
+        display: none;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      nav.nav-open .nav-links { display: grid; }
+      .nav-links a, .nav-links .nav-cta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 8px;
+        border: 1px solid var(--line);
+        background: oklch(0.16 0.032 226 / 0.58);
+        text-align: center;
+      }
+      .nav-links .nav-cta { grid-column: 1 / -1; }
+      .controls, .footer-inner, .skills-grid { grid-template-columns: 1fr; display: grid; }
+      .skills-grid { gap: 18px; }
+      .summary-panel p { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html"><span class="brand-mark"><img src="assets/brand/builtbyecho-logo.png" alt="" /></span>BuiltByEcho</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <div class="nav-links" id="primary-nav">
+        <a href="index.html#products">Products</a>
+        <a href="skills.html" class="active">Skills</a>
+        <a href="vaultline.html">Vaultline</a>
+        <a href="agentor.html">agenTOR</a>
+        <a href="agent-wormhole.html">Wormhole</a>
+        <a href="agent-pack.html">Agent Pack</a>
+        <a href="api-finder.html">API Finder</a>
+        <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="wide">
+        <div class="eyebrow">builtbyecho / public skill library</div>
+        <h1>Grab the exact `SKILL.md` an agent needs.</h1>
+        <p class="hero-lede">This page is the public pickup point for BuiltByEcho skills. Each entry links straight to the raw skill file, plus the matching product surface when one exists.</p>
+        <div class="hero-actions" style="margin-top: 24px;">
+          <a class="btn btn-primary" href="#library">Open the skill library</a>
+          <a class="btn btn-ghost" href="https://github.com/BuiltByEcho" target="_blank" rel="noopener">View GitHub</a>
+        </div>
+
+        <div class="overview">
+          <article class="panel summary-panel">
+            <h2>Public skills, stripped down to the files agents actually consume.</h2>
+            <p>The release set focuses on working skills with clear triggers, concise workflows, and no hidden repo spelunking. Public copies stay product-focused and leave private staging details out of the website surface.</p>
+          </article>
+          <aside class="panel facts-panel" aria-label="Library facts">
+            <div class="fact"><b>skills live</b><span>12</span></div>
+            <div class="fact"><b>format</b><span>Raw markdown</span></div>
+            <div class="fact"><b>focus</b><span>Agent-ready release files</span></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="library">
+      <div class="wide">
+        <div class="controls">
+          <div class="search-shell">
+            <label for="skill-search">Search skills</label>
+            <input id="skill-search" type="search" placeholder="Find by name, tag, or use case" />
+          </div>
+          <div class="filter-shell">
+            <span>Filter</span>
+            <div class="chip-row" id="skill-filters"></div>
+          </div>
+        </div>
+
+        <div class="skills-grid" id="skills-grid"></div>
+        <div class="empty-state" id="empty-state">No skills matched that filter. Try another tag or a broader search.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wide footer-inner">
+      <div>Built by Echo.</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="skills.html">Skills</a>
+        <a href="vaultline.html">Vaultline</a>
+        <a href="agent-wormhole.html">Wormhole</a>
+        <a href="agent-pack.html">Agent Pack</a>
+        <a href="https://www.npmjs.com/~builtbyecho" target="_blank" rel="noopener">npm</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const skills = [
+      {
+        name: "Vaultline",
+        slug: "vaultline",
+        description: "Store, retrieve, and price agent artifacts with open and private tiers plus x402 payment flow guidance.",
+        tags: ["storage", "x402", "artifacts"],
+        page: "vaultline.html",
+        external: "https://www.npmjs.com/package/@builtbyecho/vaultline-sdk"
+      },
+      {
+        name: "Echo Gate",
+        slug: "echo-gate",
+        description: "Local-first tool firewall for agent-callable tools: keys, policies, approvals, receipts, spend limits, and secret handling.",
+        tags: ["security", "local-first", "tools"],
+        page: "https://github.com/BuiltByEcho/echo-gate",
+        external: "https://www.npmjs.com/package/@builtbyecho/echo-gate"
+      },
+      {
+        name: "Agent Wormhole",
+        slug: "agent-wormhole",
+        description: "One-time sealed handoffs for encrypted payloads, scoped secrets, artifacts, and agent-to-agent delivery.",
+        tags: ["handoff", "encrypted", "x402"],
+        page: "agent-wormhole.html"
+      },
+      {
+        name: "agenTOR",
+        slug: "agentor",
+        description: "Tor-routed browser sessions with screenshots, HTML capture, and compact research receipts.",
+        tags: ["browser", "research", "privacy"],
+        page: "agentor.html"
+      },
+      {
+        name: "Agent Pack",
+        slug: "agent-pack",
+        description: "Bundle agent work into a delivery archive with manifest, checks, receipts, and handoff-ready artifacts.",
+        tags: ["handoff", "release", "artifacts"],
+        page: "agent-pack.html",
+        external: "https://www.npmjs.com/package/@builtbyecho/agent-pack"
+      },
+      {
+        name: "BuiltByEcho Research",
+        slug: "builtbyecho-research",
+        description: "Local-first web research workflows for search, extraction, rendered pages, traces, and citation-backed reports.",
+        tags: ["research", "web", "citations"],
+        external: "https://www.npmjs.com/package/@builtbyecho/research"
+      },
+      {
+        name: "Public API Finder",
+        slug: "public-api-finder",
+        description: "Find practical public APIs before coding, with auth, HTTPS, CORS, and docs-fit checks.",
+        tags: ["api", "discovery", "integration"],
+        page: "api-finder.html",
+        external: "https://www.npmjs.com/package/@builtbyecho/public-api-finder"
+      },
+      {
+        name: "CI Pipeline",
+        slug: "ci-pipeline",
+        description: "Scaffold CI and browser gates for web projects, with GitHub Actions and Playwright-first release checks.",
+        tags: ["ci", "testing", "automation"],
+        external: "https://www.npmjs.com/package/@builtbyecho/add-ci"
+      },
+      {
+        name: "Repo Agent Brief",
+        slug: "repo-agent-brief",
+        description: "Orient coding agents with repo map, stack, commands, risky files, and branch-aware handoff context.",
+        tags: ["repo", "brief", "handoff"],
+        external: "https://www.npmjs.com/package/repo-agent-brief"
+      },
+      {
+        name: "Agent Runlog",
+        slug: "agent-runlog",
+        description: "Wrap commands with concise, redacted run logs for debugging, verification, and reproducible handoffs.",
+        tags: ["logs", "verification", "cli"],
+        external: "https://www.npmjs.com/package/agent-runlog"
+      },
+      {
+        name: "Trust Log",
+        slug: "trustlog",
+        description: "Generate local receipts that show what ran, what changed, and what passed before a human review.",
+        tags: ["receipts", "audit", "verification"],
+        external: "https://www.npmjs.com/package/@builtbyecho/trustlog"
+      },
+      {
+        name: "Agent Work Receipts",
+        slug: "agent-work-receipts",
+        description: "Meta-workflow combining repo brief, run logs, trust receipts, and CI planning into one auditable path.",
+        tags: ["workflow", "receipts", "handoff"]
+      }
+    ];
+
+    const filters = ["all", "security", "local-first", "handoff", "receipts", "research", "release", "integration"];
+    const grid = document.getElementById("skills-grid");
+    const emptyState = document.getElementById("empty-state");
+    const searchInput = document.getElementById("skill-search");
+    const filterHost = document.getElementById("skill-filters");
+    let activeFilter = "all";
+
+    document.querySelectorAll(".menu-toggle").forEach((button) => {
+      const nav = button.closest("nav");
+      button.addEventListener("click", () => {
+        const open = nav.classList.toggle("nav-open");
+        button.setAttribute("aria-expanded", String(open));
+        button.textContent = open ? "Close" : "Menu";
+      });
+    });
+
+    function makeFilterChip(filter) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "chip";
+      button.textContent = filter;
+      if (filter === activeFilter) button.classList.add("active");
+      button.addEventListener("click", () => {
+        activeFilter = filter;
+        document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip.textContent === filter));
+        render();
+      });
+      return button;
+    }
+
+    function cardLink(label, href) {
+      if (!href || href === "#") return "";
+      return `<a class="card-link" href="${href}" ${href.startsWith("http") ? 'target="_blank" rel="noopener"' : ""}>${label}</a>`;
+    }
+
+    function render() {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = skills.filter((skill) => {
+        const haystack = [skill.name, skill.slug, skill.description, ...(skill.tags || [])].join(" ").toLowerCase();
+        const matchesQuery = !query || haystack.includes(query);
+        const matchesFilter = activeFilter === "all" || (skill.tags || []).includes(activeFilter);
+        return matchesQuery && matchesFilter;
+      });
+
+      grid.innerHTML = filtered.map((skill) => `
+        <article class="skill-card">
+          <div class="eyebrow" style="margin-bottom:0;">${skill.slug}</div>
+          <h3>${skill.name}</h3>
+          <p>${skill.description}</p>
+          <div class="meta-row">
+            ${skill.tags.map((tag) => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+          <div class="path">skills/${skill.slug}/SKILL.md</div>
+          <div class="card-actions">
+            <a class="card-link" href="skills/${skill.slug}/SKILL.md">Open SKILL.md</a>
+            ${cardLink("Product page", skill.page)}
+            ${cardLink("npm", skill.external)}
+          </div>
+        </article>
+      `).join("");
+
+      emptyState.style.display = filtered.length ? "none" : "block";
+    }
+
+    filters.forEach((filter) => filterHost.appendChild(makeFilterChip(filter)));
+    searchInput.addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>
