@@ -547,6 +547,13 @@
         external: "https://www.npmjs.com/package/@builtbyecho/vaultline-sdk"
       },
       {
+        name: "Vaultline for Hermes",
+        slug: "vaultline-hermes",
+        description: "Package Vaultline as a Hermes-native skill drop for agent artifacts, handoff briefs, context drops, and x402-paid storage.",
+        tags: ["Hermes", "storage", "handoff"],
+        page: "vaultline.html"
+      },
+      {
         name: "Echo Gate",
         slug: "echo-gate",
         description: "Local-first tool firewall for agent-callable tools: keys, policies, approvals, receipts, spend limits, and secret handling.",
@@ -627,7 +634,7 @@
       }
     ];
 
-    const filters = ["all", "security", "local-first", "handoff", "receipts", "research", "release", "integration"];
+    const filters = ["all", "Hermes", "security", "local-first", "handoff", "receipts", "research", "release", "integration"];
     const grid = document.getElementById("skills-grid");
     const emptyState = document.getElementById("empty-state");
     const searchInput = document.getElementById("skill-search");
