@@ -19,8 +19,10 @@ Vaultline gives Hermes a simple storage and handoff rail for agent work: upload 
 Install from Hermes:
 
 ```bash
-hermes skills install skills-sh/BuiltByEcho/echo-site/skills/vaultline-hermes --yes
+hermes skills install skills-sh/BuiltByEcho/echo-site/skills/vaultline-hermes --force --yes
 ```
+
+Hermes Skills Guard may mark this skill as `CAUTION` because Vaultline intentionally uploads and retrieves agent artifacts through external storage endpoints. Review the skill first, then use `--force` when you want Hermes to install this external-handoff capability.
 
 Use this skill when the user asks Hermes to:
 
