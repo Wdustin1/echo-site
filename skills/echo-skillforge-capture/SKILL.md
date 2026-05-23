@@ -1,91 +1,41 @@
 ---
 name: echo-skillforge-capture
-description: Produce paste-ready Skillforge drops from useful Hermes or agent runs so Echo Skillforge can turn them into installable skills.
+description: Turn a useful Hermes or agent workflow into a complete Echo Skill package: SKILL.md, metadata, install notes, marketplace listing, and ready/not-ready decision.
 ---
 
-# Echo Skillforge Capture
+# Echo Skillforge Maker
 
-Use this skill when the user asks Hermes to package, capture, export, summarize, or prepare a useful run for Echo Skillforge.
+Use this skill when the user asks Hermes or another agent to make, package, forge, export, or list a useful workflow as an Echo Skill.
 
-Also use it when a Hermes run produced a repeatable pattern and the user says something like:
+Trigger phrases include:
 
-- "package this for Echo"
-- "give Echo the output"
-- "make this reusable"
+- "make this an Echo Skill"
+- "make that workflow an Echo Skill"
+- "forge this skill"
+- "package this workflow"
 - "turn this into a skill"
-- "prep this for Skillforge"
-- "give me the thing to paste into the webapp"
+- "list this on the Echo marketplace"
+- "ship this as a reusable skill"
 
 ## Job
 
-Create a **Skillforge drop**: a clean, paste-ready block of text that Echo Skillforge can ingest.
+Do the whole agent-side workflow. Do not ask the user to manually translate the run into a web form.
 
-The drop is not a transcript. It is the reusable pattern behind the run.
+Produce a complete **Echo Skill package** from the useful workflow:
 
-## Output Only This Shape
+1. Decide whether the workflow is reusable.
+2. Extract the repeatable pattern from the run.
+3. Remove private data, secrets, personal details, raw transcripts, local paths, and irrelevant noise.
+4. Write the final `SKILL.md`.
+5. Add metadata, install notes, marketplace listing copy, pricing suggestion, and safety notes.
+6. If requested, prepare the package for Echo Marketplace listing.
 
-Return exactly this structure:
+## If Not Reusable
 
-```text
-Skill idea:
-[Short name for the future skill]
-
-Hermes output:
-[One short paragraph explaining what Hermes did and what useful result came out of the run.]
-
-What worked:
-- [Repeatable step or decision that helped]
-- [Repeatable step or decision that helped]
-- [Quality check, heuristic, or ordering rule that should be reused]
-
-Reusable pattern:
-[Explain when another user or agent should use this pattern and what the future skill should produce.]
-
-Tools used:
-- [Only tools/context actually needed]
-- [Only tools/context actually needed]
-
-Avoid next time:
-- [Failure mode, privacy rule, or thing that caused waste]
-- [Failure mode, privacy rule, or thing that caused waste]
-
-Example future request:
-"[A user request that should trigger the future skill]"
-
-Suggested visibility:
-[private | public | paid public listing after review]
-
-Suggested pricing:
-[free | $3-$10 install | $10-$50 install | $0.05-$1 hosted run]
-
-Why reusable:
-[One sentence explaining why this deserves to become a skill.]
-```
-
-## Capture Rules
-
-- Preserve the reusable operating pattern, not the whole transcript.
-- Do not include raw private messages, personal data, secrets, tokens, API keys, local paths, or private file names.
-- Replace sensitive details with placeholders like `[private repo]`, `[API key]`, `[local file]`, or `[customer name]`.
-- Keep the drop concise enough to paste into a web form.
-- Include only tools that are required to repeat the workflow.
-- Write in plain operational language. No marketing copy.
-- If the run was not reusable, say that directly and explain what is missing instead of forcing a skill.
-
-## Reusability Test
-
-Before returning a Skillforge drop, check:
-
-- Would another agent benefit from repeating this pattern?
-- Are the steps clear enough to become instructions?
-- Are the failure modes known?
-- Is the example future request obvious?
-- Can this be shared without leaking private context?
-
-If the answer is mostly no, return:
+If the workflow is too vague, one-off, unsafe, private, or missing clear repeatable steps, return this instead of forcing a bad skill:
 
 ```text
-Not ready for Skillforge:
+Not ready for Echo Skillforge:
 [Brief reason]
 
 What is missing:
@@ -96,54 +46,134 @@ Next run should capture:
 - [What Hermes should do or record next time]
 ```
 
-## Pricing Heuristic
+## Output Contract
 
-Use these defaults:
-
-- Simple prompt/workflow skill: `$3-$10 install`
-- Specialized operational skill: `$10-$50 install`
-- Hosted execution skill with live tools or paid APIs: `$0.05-$1 hosted run`
-- Private/internal team workflow: `private`
-- Weak or one-off workflow: `free` or `not ready`
-
-## Example Drop
+When the workflow is reusable, return exactly this package shape:
 
 ```text
-Skill idea:
-Hermes Research Sprint
+Echo Skill package:
+[Short human-readable package name]
 
-Hermes output:
-Hermes ran a research sprint on x402 agent payment rails and produced a concise Echo wedge with sources, risks, and next actions.
+Status:
+ready for review
 
-What worked:
-- Clarified the target before searching.
-- Started with primary sources, then checked credible secondary context.
-- Pulled out facts, claims, timing, risks, and open questions.
-- Separated verified facts from narrative angles.
-- Ended with a short wedge and next actions.
-
-Reusable pattern:
-Use this when a user asks Hermes to investigate a market, protocol, repo, or product and return a concise brief with source discipline and launch framing.
-
-Tools used:
-- web search
-- browser
-- project context
-
-Avoid next time:
-- do not invent source support
-- do not expose private memory
-- do not treat stale information as current without checking live sources
-
-Example future request:
-"Hermes, run a research sprint on x402 agent payment rails and produce the top wedge for Echo."
+Suggested slug:
+[lowercase-kebab-case-slug]
 
 Suggested visibility:
-paid public listing after review
+[private | public | paid public listing after review]
 
 Suggested pricing:
-$5 install or $0.10 hosted run
+[free | $3-$10 install | $10-$50 install | $0.05-$1 hosted run]
 
-Why reusable:
-Many agents need a repeatable way to turn messy research into source-backed launch briefs.
+Install path:
+skills/[slug]/SKILL.md
+
+SKILL.md:
+---
+name: [slug]
+description: [One sentence describing what the skill does and when to use it.]
+---
+
+# [Skill Name]
+
+Use this skill when [clear trigger condition].
+
+## What It Does
+
+- [Concrete capability]
+- [Concrete capability]
+
+## Required Context
+
+- [Only required tool/context]
+- [Only required tool/context]
+
+## Workflow
+
+1. [Repeatable step]
+2. [Repeatable step]
+3. [Quality check or decision rule]
+4. [Output step]
+
+## Safety Boundaries
+
+- [Privacy/security/failure boundary]
+- [Privacy/security/failure boundary]
+
+## Output Contract
+
+- [What the skill must return]
+- [What the skill must not claim]
+
+## Example
+
+"[User request that should trigger the skill]"
+
+metadata.json:
+{
+  "name": "[slug]",
+  "title": "[Skill Name]",
+  "version": "0.1.0",
+  "creator": "Hermes",
+  "forgedBy": "Echo Skillforge",
+  "visibility": "[private | public | paid]",
+  "pricing": "[pricing suggestion]",
+  "sourceWorkflow": "[short non-private source summary]"
+}
+
+Marketplace listing:
+Title: [Skill Name]
+Summary: [Short marketplace summary]
+Use when: [When another agent/user should install it]
+Includes:
+- [Feature]
+- [Feature]
+Price: [pricing suggestion]
+
+Install notes:
+Save the SKILL.md section to `skills/[slug]/SKILL.md` in the target agent runtime.
+
+Safety notes:
+- [Review note]
+- [Review note]
 ```
+
+## Listing Mode
+
+If the user says "list this on the Echo marketplace", produce the package above and add:
+
+```text
+Marketplace action:
+ready_to_list
+
+Listing checklist:
+- SKILL.md complete
+- metadata complete
+- no private data
+- pricing suggested
+- human review recommended before public paid listing
+```
+
+Do not claim the listing is live unless the marketplace/publishing tool actually confirms it.
+
+## Rules
+
+- The user should only need to say: "Make this an Echo Skill."
+- Output the full package. Do not output only a summary or a prompt.
+- Prefer concrete workflow steps over generic advice.
+- Keep `SKILL.md` concise enough for an agent to load.
+- Do not include raw secrets, API keys, private repo paths, local file paths, or private user data.
+- Replace sensitive specifics with placeholders such as `[private repo]`, `[API key]`, `[local file]`, or `[customer name]`.
+- Do not invent tools, verification, pricing, or marketplace status.
+- Mark public/paid listings as "after review" unless the user explicitly wants a private internal skill.
+
+## Example Command
+
+User:
+
+```text
+Make this an Echo Skill.
+```
+
+Hermes should return the complete Echo Skill package, not a webapp input.

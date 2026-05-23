@@ -63,8 +63,8 @@ ${b.map(e=>`- ${e}`).join(`
 
 ${x.map(e=>`- "${e.replace(/^"|"$/g,``)}"`).join(`
 `)}
-`;return{input:n,skillName:h,slug:g,description:S,score:w,checks:C,metadata:{name:g,title:h,description:S,version:`0.1.0`,creator:`Hermes`,forgedBy:`Echo Skillforge`,compatibility:[`OpenClaw`,`Codex-style skills`],pricing:{mode:`paid-install-ready`,suggestedInstallPriceUsd:5,suggestedRunPriceUsd:.1,marketplaceFeePercent:15},install:{app:`Run Echo Skillforge to extract Hermes output into packages.`,captureSkillPath:`skills/echo-skillforge-capture/SKILL.md`,generatedSkillPath:`skills/${g}/SKILL.md`},publishTargets:r,validationScore:w,tools:_},skillMd:T,install:`Install Echo Skillforge Capture:
-Copy skills/echo-skillforge-capture/SKILL.md into the agent runtime's skills folder so Hermes can turn useful output into forgeable source material.
+`;return{input:n,skillName:h,slug:g,description:S,score:w,checks:C,metadata:{name:g,title:h,description:S,version:`0.1.0`,creator:`Hermes`,forgedBy:`Echo Skillforge`,compatibility:[`OpenClaw`,`Codex-style skills`],pricing:{mode:`paid-install-ready`,suggestedInstallPriceUsd:5,suggestedRunPriceUsd:.1,marketplaceFeePercent:15},install:{app:`Use Echo Skillforge to preview or publish agent-made skill packages.`,captureSkillPath:`skills/echo-skillforge-capture/SKILL.md`,generatedSkillPath:`skills/${g}/SKILL.md`},publishTargets:r,validationScore:w,tools:_},skillMd:T,install:`Install Echo Skillforge Maker:
+Copy skills/echo-skillforge-capture/SKILL.md into the agent runtime's skills folder so Hermes can create complete Echo Skill packages from useful workflows.
 
 Generated skill install path:
 skills/${g}/SKILL.md
@@ -103,10 +103,10 @@ ${r.map(e=>`- ${e}`).join(`
     <main>
       <section class="hero container">
         <p class="eyebrow">Echo Skillforge</p>
-        <h1>Hermes workflows become installable skills.</h1>
+        <h1>Agents forge skills. Echo publishes them.</h1>
         <p class="hero-lede">
-          Drop in Hermes output. Skillforge extracts the reusable pattern and turns it into a clean
-          <code>SKILL.md</code>, install notes, validation, and a marketplace-ready listing.
+          Tell Hermes: <code>Make this an Echo Skill.</code> The agent creates the package.
+          This page previews the package and points toward marketplace listing.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#forge">Forge a skill</a>
@@ -118,16 +118,16 @@ ${r.map(e=>`- ${e}`).join(`
         <div class="panel input-panel">
           <div class="panel-head">
             <div>
-              <p class="kicker">Hermes output</p>
-              <h2>Paste the run. We package the skill.</h2>
+              <p class="kicker">Preview surface</p>
+              <h2>Paste output only when you need a manual fallback.</h2>
             </div>
             <span class="status" data-status>${h.score}% ready</span>
           </div>
           <form class="forge-form">
-            <label for="workflow">Hermes output, notes, or workflow bundle</label>
+            <label for="workflow">Hermes output or finished Echo Skill package</label>
             <textarea id="workflow" spellcheck="true">${h.input}</textarea>
             <div class="form-actions">
-              <button class="btn btn-primary" type="submit">Pack into skill</button>
+              <button class="btn btn-primary" type="submit">Preview package</button>
               <button class="btn btn-ghost" type="button" data-reset>Reset sample</button>
             </div>
           </form>
@@ -135,7 +135,7 @@ ${r.map(e=>`- ${e}`).join(`
 
         <aside class="side-stack">
           <div class="panel result-card">
-            <p class="kicker">Reusable skill</p>
+            <p class="kicker">Previewed skill</p>
             <h2>${h.skillName}</h2>
             <p>${h.description}</p>
             ${g?`<div class="forged-banner">Forged package ready. Copy the SKILL.md or install notes below.</div>`:``}
@@ -181,7 +181,7 @@ ${r.map(e=>`- ${e}`).join(`
           </div>
           <p>
             Install the capture skill into Hermes so it can create workflow bundles after useful runs.
-            People can also paste raw Hermes output here; Skillforge extracts the reusable pattern and packages it.
+            The normal path is agent-handled: ask Hermes to make an Echo Skill, then use Echo to publish or list it.
           </p>
           <pre>${_(h.install)}</pre>
         </article>
@@ -190,9 +190,9 @@ ${r.map(e=>`- ${e}`).join(`
       <section class="container roadmap">
         <p class="eyebrow">What ships now</p>
         <div class="roadmap-list">
-          <div><strong>Drop</strong><span>Paste raw Hermes output.</span></div>
-          <div><strong>Pack</strong><span>Extract the reusable pattern.</span></div>
-          <div><strong>List</strong><span>Marketplace preview and pricing defaults.</span></div>
+          <div><strong>Ask</strong><span>"Make this an Echo Skill."</span></div>
+          <div><strong>Forge</strong><span>Agent returns the full package.</span></div>
+          <div><strong>List</strong><span>Echo marketplace review and publishing.</span></div>
         </div>
       </section>
     </main>
