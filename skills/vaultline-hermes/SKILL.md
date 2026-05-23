@@ -16,6 +16,12 @@ metadata:
 
 Vaultline gives Hermes a simple storage and handoff rail for agent work: upload artifacts, share context drops, retrieve files, list workspace paths, and use x402-paid endpoints when the task needs machine-buyable storage.
 
+Install from Hermes:
+
+```bash
+hermes skills install skills-sh/BuiltByEcho/echo-site/skills/vaultline-hermes --yes
+```
+
 Use this skill when the user asks Hermes to:
 
 - save a file, artifact, note, report, or generated output outside the current chat
@@ -187,4 +193,3 @@ Useful live check:
 ```bash
 bankr x402 call -X POST -d '{"prefix":"hermes/"}' --max-payment 0.01 -y --raw https://x402.bankr.bot/0x2a16625fad3b0d840ac02c7c59edea3781e340ae/vaultline-list
 ```
-
