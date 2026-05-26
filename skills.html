@@ -266,6 +266,46 @@
       margin-bottom: 22px;
     }
 
+    .jumpstart {
+      margin-bottom: 22px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: oklch(0.14 0.03 228 / 0.84);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .jump-btn {
+      min-height: 48px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid oklch(0.8 0.08 170 / 0.2);
+      background: oklch(0.1 0.022 232 / 0.7);
+      color: var(--ink-soft);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .25s var(--ease-premium), color .25s var(--ease-premium), transform .25s var(--ease-premium);
+    }
+
+    .jump-btn:hover {
+      border-color: var(--line-strong);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .jump-btn b {
+      display: block;
+      color: var(--green);
+      font-size: 10px;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
     .search-shell label, .filter-shell span {
       display: block;
       margin-bottom: 10px;
@@ -450,6 +490,11 @@
       .controls, .footer-inner, .skills-grid { grid-template-columns: 1fr; display: grid; }
       .skills-grid { gap: 18px; }
       .summary-panel p { font-size: 17px; }
+      .jumpstart { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .jumpstart { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -504,6 +549,13 @@
             <span>Filter</span>
             <div class="chip-row" id="skill-filters"></div>
           </div>
+        </div>
+
+        <div class="jumpstart" aria-label="Quick starts">
+          <button class="jump-btn" type="button" data-jump-filter="storage"><b>store artifacts</b>Vaultline rails</button>
+          <button class="jump-btn" type="button" data-jump-filter="handoff"><b>hand off work</b>Wormhole + Pack</button>
+          <button class="jump-btn" type="button" data-jump-filter="security"><b>control tools</b>Echo Gate</button>
+          <button class="jump-btn" type="button" data-jump-filter="research"><b>run research</b>agenTOR + research skills</button>
         </div>
 
         <div class="skills-grid" id="skills-grid"></div>
@@ -679,7 +731,7 @@
       }
     ];
 
-    const filters = ["all", "Hermes", "security", "local-first", "handoff", "receipts", "research", "release", "integration"];
+    const filters = ["all", "storage", "handoff", "security", "research", "receipts", "integration", "Hermes"];
     const grid = document.getElementById("skills-grid");
     const emptyState = document.getElementById("empty-state");
     const searchInput = document.getElementById("skill-search");
@@ -745,6 +797,16 @@
 
     filters.forEach((filter) => filterHost.appendChild(makeFilterChip(filter)));
     searchInput.addEventListener("input", render);
+    document.querySelectorAll("[data-jump-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.getAttribute("data-jump-filter");
+        activeFilter = filter;
+        searchInput.value = "";
+        document.querySelectorAll(".chip").forEach((chip) => chip.classList.toggle("active", chip.textContent === filter));
+        render();
+        document.getElementById("library").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
     render();
   </script>
 </body>
