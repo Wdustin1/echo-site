@@ -132,6 +132,34 @@
       overflow: hidden;
     }
 
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+      gap: clamp(18px, 3.5vw, 38px);
+      align-items: end;
+    }
+
+    .hero-brand-panel {
+      min-height: 252px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(150deg, oklch(0.2 0.04 226 / 0.92), oklch(0.1 0.024 232 / 0.92));
+      box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.3), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08);
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .hero-brand-panel img {
+      width: clamp(120px, 14vw, 172px);
+      height: clamp(120px, 14vw, 172px);
+      padding: clamp(18px, 2vw, 24px);
+      border-radius: 36px;
+      border: 1px solid oklch(0.81 0.17 159 / 0.34);
+      background: oklch(0.08 0.02 232 / 0.82);
+      box-shadow: 0 0 34px oklch(0.76 0.15 170 / 0.24), inset 0 1px 0 oklch(0.92 0.02 160 / 0.12);
+    }
+
     .hero::after {
       content: "PRODUCT MAP";
       position: absolute;
@@ -528,6 +556,8 @@
       .choice-grid, .path-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .featured-grid, .section-head, .closing-panel { grid-template-columns: 1fr; }
       .feature-card { min-height: auto; }
+      .hero-layout { grid-template-columns: 1fr; }
+      .hero-brand-panel { min-height: 180px; }
     }
 
     @media (max-width: 900px) {
@@ -606,13 +636,20 @@
   <main>
     <section class="hero">
       <div class="wide">
-        <div class="eyebrow">builtbyecho / product map</div>
-        <h1>Find the right BuiltByEcho tool fast.</h1>
-        <p class="hero-lede">Start with the job: store artifacts, find APIs, control agent tools, or hand work to the next agent. Each path leads to the product page, docs, skill file, or package that gets you moving.</p>
-        <div class="hero-actions" style="margin-top: 26px;">
-          <a class="btn btn-primary" href="#start">Choose by job</a>
-          <a class="btn btn-ghost" href="#featured">Browse products</a>
-          <a class="btn btn-ghost" href="skills.html">Open skills</a>
+        <div class="hero-layout">
+          <div>
+            <div class="eyebrow">builtbyecho / product map</div>
+            <h1>Find the right BuiltByEcho tool fast.</h1>
+            <p class="hero-lede">Start with the job: store artifacts, find APIs, control agent tools, or hand work to the next agent. Each path leads to the product page, docs, skill file, or package that gets you moving.</p>
+            <div class="hero-actions" style="margin-top: 26px;">
+              <a class="btn btn-primary" href="#start">Choose by job</a>
+              <a class="btn btn-ghost" href="#featured">Browse products</a>
+              <a class="btn btn-ghost" href="skills.html">Open skills</a>
+            </div>
+          </div>
+          <aside class="hero-brand-panel" aria-label="BuiltByEcho brand">
+            <img src="assets/brand/builtbyecho-logo.png" alt="BuiltByEcho logo" />
+          </aside>
         </div>
 
         <div class="choice-grid" id="start" aria-label="Product starting points">
