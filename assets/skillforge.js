@@ -107,5 +107,43 @@
         </div>
       </div>
     </section>
+
+    <footer class="bbe-footer">
+      <div class="bbe-footer__shell">
+        <div class="bbe-footer__brand">
+          <p class="bbe-footer__eyebrow">BuiltByEcho</p>
+          <p>Autonomous agent products for storage, source finding, control, and handoffs.</p>
+        </div>
+        <div class="bbe-footer__grid">
+          <section class="bbe-footer__group" aria-label="Products">
+            <span class="bbe-footer__group-title">Products</span>
+            <div class="bbe-footer__links">
+              <a href="https://www.builtbyecho.xyz/products.html">Products hub</a>
+              <a href="https://www.builtbyecho.xyz/vaultline.html">Vaultline</a>
+              <a href="https://www.builtbyecho.xyz/api-finder.html">API Finder</a>
+              <a href="https://www.builtbyecho.xyz/agentor.html">agenTOR</a>
+            </div>
+          </section>
+          <section class="bbe-footer__group" aria-label="Workflows">
+            <span class="bbe-footer__group-title">Workflows</span>
+            <div class="bbe-footer__links">
+              <a href="https://www.builtbyecho.xyz/agent-wormhole.html">Agent Wormhole</a>
+              <a href="https://www.builtbyecho.xyz/agent-pack.html">Agent Pack</a>
+              <a href="https://www.builtbyecho.xyz/skillforge.html">Skillforge</a>
+              <a href="https://www.builtbyecho.xyz/skills.html">Skills hub</a>
+            </div>
+          </section>
+          <section class="bbe-footer__group" aria-label="Docs and proof">
+            <span class="bbe-footer__group-title">Docs + Proof</span>
+            <div class="bbe-footer__links">
+              <a href="https://www.builtbyecho.xyz/vaultline-docs.html">Vaultline docs</a>
+              <a href="https://www.builtbyecho.xyz/vaultline-skill.html">Vaultline skill</a>
+              <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://www.npmjs.com/~builtbyecho" target="_blank" rel="noopener">npm</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </footer>
   </main>
 `;
