@@ -6,8 +6,9 @@
         <span>BuiltByEcho</span>
       </a>
       <div class="nav-links" aria-label="Primary">
+        <a href="https://www.builtbyecho.xyz/products.html">Products</a>
         <a href="https://www.builtbyecho.xyz/skills.html">Skills</a>
-        <a href="#package">Package</a>
+        <a href="https://www.builtbyecho.xyz/skillforge.html" class="active">Skillforge</a>
         <a href="#marketplace">Marketplace</a>
       </div>
     </div>

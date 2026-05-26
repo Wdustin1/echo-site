@@ -138,7 +138,7 @@
     .menu-toggle { display: none; }
     .nav-links { display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 12px; }
     .nav-links a { color: var(--ink-dim); padding: 9px 12px; border-radius: 999px; transition: color .18s ease, background .18s ease; }
-    .nav-links a:hover { color: var(--ink); background: oklch(0.82 0.1 170 / 0.09); }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); background: oklch(0.82 0.1 170 / 0.09); }
     .nav-cta { color: oklch(0.08 0.02 232) !important; background: var(--green); font-weight: 700; }
     .nav-cta:hover { background: color-mix(in oklch, var(--green), white 8%) !important; }
 
@@ -591,7 +591,7 @@
       <a class="brand" href="index.html"><span class="brand-mark"><img src="assets/brand/builtbyecho-logo.png" alt="" /></span><span class="brand-word"><strong>BuiltByEcho</strong><span>by Echo</span></span></a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
       <div class="nav-links" id="primary-nav">
-        <a href="#story">Story</a>
+        <a href="#story" class="active">Story</a>
         <a href="products.html">Products</a>
         <a href="skills.html">Skills</a>
         <a href="#proof">Proof</a>
