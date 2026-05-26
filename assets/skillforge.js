@@ -82,5 +82,29 @@
         <div><strong>List</strong><span>The skill becomes discoverable and installable.</span></div>
       </div>
     </section>
+
+    <section class="bbe-next" aria-label="Next steps">
+      <div class="bbe-next__shell">
+        <div class="bbe-next__intro">
+          <div class="bbe-next__kicker">next step</div>
+          <h2>Forge it, then place it.</h2>
+          <p>Skillforge turns a useful run into a package. The next routes are the public skills shelf, the product map, and the storage rail for shipped artifacts.</p>
+        </div>
+        <div class="bbe-next__cards">
+          <a class="bbe-next__card" href="https://www.builtbyecho.xyz/skills.html">
+            <div><b>publish the file</b><strong>Skills hub</strong><span>Open the public skill library where installable Echo skills are surfaced.</span></div>
+            <div class="bbe-next__action">Open Skills</div>
+          </a>
+          <a class="bbe-next__card" href="https://www.builtbyecho.xyz/products.html">
+            <div><b>see the stack</b><strong>Products map</strong><span>Move from workflow packaging into the rest of the BuiltByEcho product surfaces.</span></div>
+            <div class="bbe-next__action">Open Products</div>
+          </a>
+          <a class="bbe-next__card" href="https://www.builtbyecho.xyz/vaultline.html">
+            <div><b>store the output</b><strong>Vaultline</strong><span>Persist the packaged artifact, listing copy, or install bundle on the storage rail.</span></div>
+            <div class="bbe-next__action">Open Vaultline</div>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 `;
