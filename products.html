@@ -65,6 +65,11 @@
     }
 
     a { color: inherit; text-decoration: none; }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 6px oklch(0.81 0.17 159 / 0.12);
+    }
     p { color: var(--ink-soft); }
     .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
     .wide { width: min(var(--wide), calc(100% - 40px)); margin: 0 auto; }
@@ -204,6 +209,7 @@
     }
 
     .btn:hover { transform: translateY(-2px); }
+    .btn:active, .mini-link:active, .choice-card:active { transform: translateY(0) scale(0.985); }
     .btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: oklch(0.08 0.02 232); box-shadow: 0 18px 42px oklch(0.72 0.15 170 / 0.22); }
     .btn-ghost { border: 1px solid var(--line); background: oklch(0.18 0.035 226 / 0.58); color: var(--ink); }
 
@@ -312,7 +318,7 @@
     }
 
     .feature-card > * { position: relative; z-index: 1; }
-    .feature-card h3 { margin-top: 24px; max-width: 720px; font-size: clamp(50px, 6vw, 86px); line-height: 0.9; }
+    .feature-card h3 { margin-top: 24px; max-width: 720px; font-size: clamp(42px, 6vw, 86px); line-height: 0.9; }
     .feature-card p { margin-top: 22px; max-width: 650px; font-size: 20px; line-height: 1.62; }
 
     .flow {
@@ -508,10 +514,14 @@
 
     @media (max-width: 640px) {
       .container, .wide { width: min(100% - 28px, var(--wide)); }
+      .hero { padding-top: 42px; }
+      .hero-lede { font-size: 17px; }
       .choice-grid, .path-grid { grid-template-columns: 1fr; }
       .choice-card, .product-card, .path-card { border-radius: 24px; }
       .feature-card, .closing-panel { border-radius: 28px; }
       .flow { grid-template-columns: 1fr; }
+      .flow-step { min-height: 76px; }
+      .feature-card p { font-size: 18px; line-height: 1.5; }
       .btn, .mini-link { width: 100%; }
       .path-card p { min-height: auto; }
     }
@@ -536,38 +546,38 @@
     <section class="hero">
       <div class="wide">
         <div class="eyebrow">builtbyecho / product map</div>
-        <h1>Every BuiltByEcho product in one clean path.</h1>
-        <p class="hero-lede">Start with the job you need done, then jump into the product, docs, skill file, or package. The stack is organized around the real agent workflow: find sources, control tools, store artifacts, and hand work off cleanly.</p>
+        <h1>Find the right BuiltByEcho tool fast.</h1>
+        <p class="hero-lede">Start with the job: store artifacts, find APIs, control agent tools, or hand work to the next agent. Each path leads to the product page, docs, skill file, or package that gets you moving.</p>
         <div class="hero-actions" style="margin-top: 26px;">
-          <a class="btn btn-primary" href="#start">Choose a path</a>
+          <a class="btn btn-primary" href="#start">Choose by job</a>
           <a class="btn btn-ghost" href="#featured">Browse products</a>
           <a class="btn btn-ghost" href="skills.html">Open skills</a>
         </div>
 
         <div class="choice-grid" id="start" aria-label="Product starting points">
           <a class="choice-card" href="vaultline.html">
-            <b>I need storage</b>
+            <b>Store artifacts</b>
             <h2>Vaultline</h2>
             <p>Upload, price, gate, and retrieve agent artifacts through x402-ready rails.</p>
-            <span>Open storage path</span>
+            <span>Use Vaultline</span>
           </a>
           <a class="choice-card" href="api-finder.html">
-            <b>I need APIs</b>
+            <b>Find APIs</b>
             <h2>API Finder</h2>
             <p>Find real public APIs before an agent builds around a fake endpoint.</p>
-            <span>Open source path</span>
+            <span>Open API Finder</span>
           </a>
           <a class="choice-card" href="skills/echo-gate/SKILL.md">
-            <b>I need control</b>
+            <b>Control tools</b>
             <h2>Echo Gate</h2>
             <p>Keep tool access, approvals, spend limits, and secrets controlled locally.</p>
-            <span>Open control path</span>
+            <span>Open Echo Gate</span>
           </a>
           <a class="choice-card" href="agent-wormhole.html">
-            <b>I need handoff</b>
+            <b>Hand off work</b>
             <h2>Wormhole</h2>
             <p>Move payloads, files, and context between agents without a messy inbox.</p>
-            <span>Open handoff path</span>
+            <span>Open Wormhole</span>
           </a>
         </div>
       </div>
@@ -578,15 +588,15 @@
         <div class="section-head">
           <div>
             <div class="section-kicker">featured products</div>
-            <h2>The core stack for agent work.</h2>
+            <h2>The core stack.</h2>
           </div>
-          <p>These are the front doors most builders need first: artifact storage, API discovery, and local tool control. Everything else supports the same loop.</p>
+          <p>Most visitors should start here: artifact storage, API discovery, and local tool control. The handoff and release tools sit underneath that workflow.</p>
         </div>
 
         <div class="featured-grid">
           <article class="feature-card">
             <div class="product-label">Vaultline / x402 storage</div>
-            <h3>Store and sell agent artifacts through x402.</h3>
+            <h3>Store and sell agent artifacts.</h3>
             <p>Vaultline gives reports, datasets, images, logs, and run outputs a real home. Upload the artifact, set the access model, price it when needed, and give another agent or builder a clean retrieval path.</p>
             <div class="flow" aria-label="Vaultline flow">
               <div class="flow-step"><b>PUT</b><span>Upload an artifact</span></div>
@@ -683,7 +693,7 @@
         <div class="closing-panel">
           <div>
             <div class="section-kicker">full library</div>
-            <h2>Need the raw agent files?</h2>
+            <h2>Need the exact skill file?</h2>
             <p>The Skills hub is the pickup shelf for public SKILL.md files. Use this Products page to choose the right tool, then use the Skills page when an agent needs the exact instruction file.</p>
           </div>
           <div class="card-actions">
