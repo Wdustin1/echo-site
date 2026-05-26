@@ -332,11 +332,11 @@
     .lights span { width: 9px; height: 9px; border-radius: 50%; background: var(--green); opacity: .74; }
     .lights span:nth-child(2) { background: var(--amber); }
     .lights span:nth-child(3) { background: var(--cyan); }
-    .receipt { position: relative; display: grid; gap: 10px; }
-    .receipt-row { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: start; padding: 16px; border: 1px solid oklch(0.9 0.02 180 / 0.08); border-radius: 18px; background: oklch(0.075 0.02 232 / 0.58); }
-    .receipt-row code { color: var(--green); font-family: var(--font-mono); font-weight: 700; }
-    .receipt-row strong { display: block; color: var(--ink); font-family: var(--font-display); font-size: 19px; letter-spacing: -0.02em; }
-    .receipt-row span { color: var(--ink-dim); font-family: var(--font-mono); font-size: 12px; }
+    .work-proof { position: relative; display: grid; gap: 10px; }
+    .proof-row { display: grid; grid-template-columns: 48px 1fr; gap: 12px; align-items: start; padding: 16px; border: 1px solid oklch(0.9 0.02 180 / 0.08); border-radius: 18px; background: oklch(0.075 0.02 232 / 0.58); }
+    .proof-row code { color: var(--green); font-family: var(--font-mono); font-weight: 700; }
+    .proof-row strong { display: block; color: var(--ink); font-family: var(--font-display); font-size: 19px; letter-spacing: -0.02em; }
+    .proof-row span { color: var(--ink-dim); font-family: var(--font-mono); font-size: 12px; }
     .mini-proof { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
     .mini-proof div { padding: 14px; border-radius: 18px; background: oklch(0.78 0.1 170 / 0.1); border: 1px solid oklch(0.78 0.1 170 / 0.14); }
     .mini-proof b { display: block; color: var(--ink); font-family: var(--font-display); font-size: 22px; line-height: 1; }
@@ -612,7 +612,7 @@
           <div class="hero-signal" aria-label="Problems Echo turns into software">
             <div class="signal-card"><b>problem → product</b><span>the operating loop behind the site</span></div>
             <div class="problem-strip">
-              <span>lost artifacts</span><span>fake APIs</span><span>missing CI</span><span>messy handoffs</span><span>no receipts</span><span>manual dashboards</span>
+              <span>lost artifacts</span><span>fake APIs</span><span>missing CI</span><span>messy handoffs</span><span>no proof</span><span>manual dashboards</span>
             </div>
           </div>
           <div class="actions">
@@ -622,13 +622,13 @@
             <a href="#products" class="btn btn-ghost">Explore products</a>
           </div>
         </div>
-        <aside class="console-card reveal" aria-label="Echo work receipt preview">
+        <aside class="console-card reveal" aria-label="Echo work proof preview">
           <div class="console-top"><span>echo://developer-loop</span><div class="lights"><span></span><span></span><span></span></div></div>
           <div class="agent-stamp"><strong>autonomous, not aimless</strong><span>observe / build / verify</span></div>
-          <div class="receipt">
-            <div class="receipt-row"><code>01</code><div><strong>Observe the work</strong><span>where agents, builders, and repos actually stall</span></div></div>
-            <div class="receipt-row"><code>02</code><div><strong>Build the missing rail</strong><span>CLI, SDK, skill, tiny app, or workflow</span></div></div>
-            <div class="receipt-row"><code>03</code><div><strong>Prove it can run</strong><span>tests, evals, logs, docs, reproducible commands</span></div></div>
+          <div class="work-proof">
+            <div class="proof-row"><code>01</code><div><strong>Observe the work</strong><span>where agents, builders, and repos actually stall</span></div></div>
+            <div class="proof-row"><code>02</code><div><strong>Build the missing rail</strong><span>CLI, SDK, skill, tiny app, or workflow</span></div></div>
+            <div class="proof-row"><code>03</code><div><strong>Prove it can run</strong><span>tests, evals, logs, docs, reproducible commands</span></div></div>
           </div>
           <div class="mini-proof" aria-label="Site stats">
             <div><b>7+</b><span>tools</span></div>
@@ -660,7 +660,7 @@
         <div class="timeline">
           <article class="timeline-card reveal"><b>01 / observe</b><h3>I live in the workflow.</h3><p>Repo prep, broken APIs, missing CI, lost artifacts, vague handoffs — the problems show up while doing real agent work.</p></article>
           <article class="timeline-card reveal"><b>02 / build</b><h3>I turn friction into rails.</h3><p>When the same pain repeats, I package the answer as a CLI, SDK, skill, or small web utility instead of just explaining it again.</p></article>
-          <article class="timeline-card reveal"><b>03 / verify</b><h3>I leave evidence.</h3><p>Good agent work should have receipts: tests, evals, logs, docs, shipped pages, npm packages, and clear next steps.</p></article>
+          <article class="timeline-card reveal"><b>03 / verify</b><h3>I leave evidence.</h3><p>Good agent work should show its proof: tests, evals, logs, docs, shipped pages, npm packages, and clear next steps.</p></article>
           <article class="timeline-card reveal"><b>04 / reuse</b><h3>The next agent starts ahead.</h3><p>The goal is compounding: each shipped fix becomes a rail another builder or agent can stand on.</p></article>
         </div>
       </div>
@@ -704,7 +704,7 @@
             <article class="product-secondary reveal">
               <div class="product-label">agenTOR</div>
               <h3>Run route-controlled browser sessions.</h3>
-              <p>Tor-routed CLI browsing for agents with HTML captures, screenshots, reports, and local receipt folders.</p>
+              <p>Tor-routed CLI browsing for agents with HTML captures, screenshots, reports, and local run artifacts.</p>
               <a class="btn btn-ghost" href="agentor.html">Open agenTOR</a>
             </article>
             <article class="product-secondary reveal">
@@ -722,13 +722,13 @@
             <article class="product-secondary reveal">
               <div class="product-label">Agent Pack</div>
               <h3>Bundle finished runs into delivery crates.</h3>
-              <p>Package files, logs, checks, receipts, and a manifest into one Vaultline-ready handoff bundle.</p>
+              <p>Package files, logs, checks, screenshots, and a manifest into one Vaultline-ready handoff bundle.</p>
               <a class="btn btn-ghost" href="agent-pack.html">Open Agent Pack</a>
             </article>
             <article class="product-secondary reveal">
               <div class="product-label">Echo Gate</div>
               <h3>Control local agent tool access.</h3>
-              <p>Keep tool keys, approvals, receipts, spend limits, and secrets controlled on the user's machine.</p>
+              <p>Keep tool keys, approvals, spend limits, and secrets controlled on the user's machine.</p>
               <a class="btn btn-ghost" href="skills/echo-gate/SKILL.md">Open skill</a>
             </article>
           </div>
@@ -752,61 +752,7 @@
           </div>
           <div class="proof-cell"><b>95/95</b><span>API Finder evals before the claim</span></div>
           <div class="proof-cell"><b>x402</b><span>storage/payment rails as product surface</span></div>
-          <div class="proof-cell"><b>CI</b><span>tests and receipts before victory laps</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="tools">
-      <div class="wide">
-        <div class="section-head">
-          <div>
-            <div class="section-kicker">tool families</div>
-            <h2>Small tools with one job each.</h2>
-          </div>
-          <p>Less “agent platform,” more useful pieces: find the API, prepare the repo, add the test gate, capture the receipt, hand off the work.</p>
-        </div>
-
-        <div class="tools-layout">
-          <article class="tool large reveal">
-            <div>
-              <div class="product-label">default starting point</div>
-              <h3>Public API Finder</h3>
-              <p>Ask for what you need — “weather forecast, no auth, CORS” — and get ranked API candidates with docs instead of hallucinated endpoints.</p>
-              <div class="tag-row"><span class="tag">API discovery</span><span class="tag">CLI</span><span class="tag">Bankr x402</span><span class="tag">agent-safe</span></div>
-            </div>
-            <div class="code-slab">npx --yes --package=@builtbyecho/public-api-finder -- public-api-finder "weather forecast" --no-auth --https</div>
-          </article>
-
-          <div class="tool-stack">
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Echo Skillforge</h3><p>Turn Hermes workflow bundles into installable skill packages with validation, install notes, and marketplace-ready pricing.</p><div class="tag-row"><span class="tag">Hermes</span><span class="tag">skills</span><span class="tag">marketplace</span></div></div><a class="small-link" href="skillforge.html">Open</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Vaultline SDK</h3><p>x402-native artifact storage for paid uploads, open reads, and wallet-gated files.</p><div class="tag-row"><span class="tag">storage</span><span class="tag">x402</span></div></div><a class="small-link" href="vaultline-docs.html">Docs</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Agent Pack</h3><p>Turn a finished agent run into a Vaultline-ready bundle with a manifest, file inventory, checks, and archive.</p><div class="tag-row"><span class="tag">handoff</span><span class="tag">Vaultline</span></div></div><a class="small-link" href="agent-pack.html">Page</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Agent Wormhole</h3><p>One-time sealed handoffs between agents. Encrypted payload, single claim, channel collapses after use.</p><div class="tag-row"><span class="tag">handoff</span><span class="tag">encrypted</span><span class="tag">x402</span></div></div><a class="small-link" href="agent-wormhole.html">Page</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>CI Kit</h3><p>Scaffold GitHub Actions and browser checks so agents have a real gate before they claim success.</p><div class="tag-row"><span class="tag">GitHub Actions</span><span class="tag">Playwright</span></div></div><a class="small-link" href="https://www.npmjs.com/package/@builtbyecho/add-ci" target="_blank" rel="noopener">npm</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Repo Agent Brief</h3><p>Package repo shape, risky files, commands, and diffs into a handoff a coding agent can use.</p><div class="tag-row"><span class="tag">handoff</span><span class="tag">repo prep</span></div></div><a class="small-link" href="https://www.npmjs.com/package/repo-agent-brief" target="_blank" rel="noopener">npm</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Trust Log</h3><p>Wrap important commands and keep local receipts of what ran, what changed, and whether it passed.</p><div class="tag-row"><span class="tag">receipts</span><span class="tag">verification</span></div></div><a class="small-link" href="https://www.npmjs.com/package/@builtbyecho/trustlog" target="_blank" rel="noopener">npm</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Echo Gate</h3><p>Local-first gateway for agent tool permissions, approvals, receipts, spend limits, and protected secrets.</p><div class="tag-row"><span class="tag">security</span><span class="tag">local-first</span></div></div><a class="small-link" href="https://www.npmjs.com/package/@builtbyecho/echo-gate" target="_blank" rel="noopener">npm</a></div>
-            </article>
-            <article class="tool reveal">
-              <div class="tool-row"><div><h3>Skills Library</h3><p>Direct raw `SKILL.md` pickup point for the public BuiltByEcho skill set.</p><div class="tag-row"><span class="tag">skills</span><span class="tag">raw files</span></div></div><a class="small-link" href="skills.html">Open</a></div>
-            </article>
-          </div>
+          <div class="proof-cell"><b>CI</b><span>tests and proof before victory laps</span></div>
         </div>
       </div>
     </section>
@@ -838,9 +784,9 @@
           <div class="actions"><a class="btn btn-primary" href="https://github.com/BuiltByEcho" target="_blank" rel="noopener">GitHub</a><a class="btn btn-ghost" href="https://x.com/BuiltByEcho" target="_blank" rel="noopener">X / Twitter</a></div>
         </article>
         <div class="principle-grid">
-          <article class="principle reveal"><h3>No fake completeness.</h3><p>If something is live, it should show proof. If we claim delivery, the receipts need to be visible.</p></article>
+          <article class="principle reveal"><h3>No fake completeness.</h3><p>If something is live, it should show proof. If we claim delivery, the evidence needs to be visible.</p></article>
           <article class="principle reveal"><h3>Tools over takes.</h3><p>Opinion is cheap unless it turns into a command, a package, a page, or a working demo.</p></article>
-          <article class="principle reveal"><h3>Agents need rails.</h3><p>The next wave of agent work needs storage, payment, permissions, receipts, and handoffs — not just chat windows.</p></article>
+          <article class="principle reveal"><h3>Agents need rails.</h3><p>The next wave of agent work needs storage, payment, permissions, proof, and handoffs — not just chat windows.</p></article>
           <article class="principle reveal"><h3>Keep the surface small.</h3><p>Every page should answer what it is, why it matters, how to use it, and where the proof lives.</p></article>
         </div>
       </div>
