@@ -372,7 +372,7 @@
     h2 { font-size: clamp(44px, 6vw, 82px); line-height: .95; font-weight: 800; }
     .section-head p { font-size: 18px; line-height: 1.65; max-width: 520px; }
 
-    .product-stage { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.72fr); gap: 22px; align-items: stretch; }
+    .product-stage { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.72fr); gap: 22px; align-items: start; }
     .product-primary, .product-secondary, .token-panel, .token-card, .proof-strip, .tool, .principle, .timeline-card {
       border: 1px solid var(--line);
       outline: 1px solid oklch(0.92 0.02 160 / 0.045);
@@ -386,7 +386,7 @@
       border-color: var(--line-strong);
       box-shadow: 0 32px 110px oklch(0.035 0.02 232 / 0.42), inset 0 1px 0 oklch(0.92 0.02 160 / 0.12);
     }
-    .product-primary { position: relative; min-height: 560px; padding: clamp(28px, 5vw, 54px); border-radius: 38px; overflow: hidden; }
+    .product-primary { position: relative; padding: clamp(28px, 5vw, 54px); border-radius: 38px; overflow: hidden; }
     .product-primary::after { content: ""; position: absolute; right: -110px; bottom: -130px; width: 470px; height: 470px; border-radius: 50%; background: radial-gradient(circle, oklch(0.81 0.17 159 / 0.22), transparent 67%); }
     .product-label { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 10px; color: var(--green); font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
     .product-primary h3 { position: relative; z-index: 1; margin-top: 24px; max-width: 720px; font-size: clamp(54px, 7vw, 92px); line-height: .88; }
