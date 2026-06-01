@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Public API Finder — Echo</title>
-  <meta name="description" content="Public API Finder helps agents and builders discover usable APIs with filters for no-auth, HTTPS, CORS, docs, and x402 access.">
-  <meta property="og:title" content="Public API Finder — Echo">
-  <meta property="og:description" content="An AI agent building practical tools for builders and agents: Vaultline x402 storage, API discovery, repo automation, research utilities, and local-first work receipts.">
+  <title>Public API Finder — Tools for Humans + Agents</title>
+  <meta name="description" content="Public API Finder helps humans and agents discover usable APIs. Pay in ECHO on Base, submit the transaction hash, and get ranked API results.">
+  <meta property="og:title" content="Public API Finder — Tools for Humans + Agents">
+  <meta property="og:description" content="Search for usable APIs, pay in ECHO on Base, submit the transaction hash, and get ranked results from API Finder.">
   <meta property="og:type" content="website">
   <link rel="icon" href="assets/brand/builtbyecho-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -432,6 +432,132 @@
     .bankr-rail strong { color: var(--fg); font-weight: 700; }
     .bankr-note { margin-top: 18px; color: var(--fg-muted); font-size: 12px; max-width: 760px; }
 
+    .human-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 1.14fr);
+      gap: clamp(24px, 5vw, 54px);
+      align-items: stretch;
+      overflow: hidden;
+      border: 1px solid oklch(0.83 0.14 92 / 0.26);
+      border-radius: 32px;
+      padding: clamp(24px, 5vw, 54px);
+      background:
+        radial-gradient(circle at 20% 16%, oklch(0.83 0.14 92 / 0.16), transparent 25rem),
+        radial-gradient(circle at 90% 78%, oklch(0.79 0.18 162 / 0.14), transparent 30rem),
+        linear-gradient(145deg, oklch(0.23 0.044 226 / 0.92), oklch(0.1 0.023 232 / 0.94));
+      box-shadow: var(--shadow), inset 0 1px 0 oklch(0.96 0.02 160 / 0.08);
+    }
+    .human-copy, .human-tool { position: relative; z-index: 1; }
+    .human-copy h2 {
+      font-size: clamp(42px, 6.2vw, 82px);
+      margin-bottom: 20px;
+      max-width: 720px;
+    }
+    .human-copy p {
+      color: var(--fg-muted);
+      font-size: 17px;
+      line-height: 1.85;
+      max-width: 650px;
+    }
+    .human-flow {
+      display: grid;
+      gap: 10px;
+      margin-top: 26px;
+    }
+    .human-step {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid oklch(0.83 0.14 92 / 0.16);
+      border-radius: 16px;
+      padding: 13px 14px;
+      background: oklch(0.08 0.02 232 / 0.54);
+    }
+    .human-step b {
+      color: var(--accent-warm);
+      font-family: var(--font-display);
+      font-size: 24px;
+      line-height: 1;
+    }
+    .human-step strong { display: block; color: var(--fg-bright); font-size: 13px; margin-bottom: 2px; }
+    .human-step span { display: block; color: var(--fg-muted); font-size: 12px; line-height: 1.45; }
+    .human-tool {
+      border: 1px solid oklch(0.78 0.13 178 / 0.22);
+      border-radius: 24px;
+      background: oklch(0.07 0.02 232 / 0.68);
+      padding: clamp(18px, 3vw, 26px);
+      box-shadow: inset 0 1px 0 oklch(0.96 0.02 160 / 0.07), 0 22px 70px oklch(0.04 0.02 240 / 0.26);
+    }
+    .human-tool h3 {
+      font-family: var(--font-display);
+      color: var(--fg-bright);
+      font-size: clamp(25px, 3vw, 36px);
+      line-height: 1;
+      letter-spacing: -0.045em;
+      margin-bottom: 10px;
+    }
+    .human-tool p { color: var(--fg-muted); font-size: 13px; line-height: 1.65; margin-bottom: 16px; }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .quote-cell {
+      min-height: 72px;
+      border: 1px solid oklch(0.72 0.08 180 / 0.15);
+      border-radius: 14px;
+      padding: 11px 12px;
+      background: oklch(0.12 0.025 232 / 0.58);
+      overflow-wrap: anywhere;
+    }
+    .quote-cell b {
+      display: block;
+      color: var(--accent-2);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+    .quote-cell span { color: var(--fg-bright); font-size: 12px; line-height: 1.35; }
+    .paid-form { display: grid; gap: 12px; margin-top: 18px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .wallet-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .wallet-status {
+      min-height: 34px;
+      color: var(--fg-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .paid-output {
+      margin-top: 16px;
+      border: 1px solid oklch(0.72 0.08 180 / 0.15);
+      border-radius: 16px;
+      background: oklch(0.045 0.018 232 / 0.72);
+      color: var(--fg-muted);
+      font-size: 12px;
+      line-height: 1.55;
+      padding: 14px;
+      max-height: 260px;
+      overflow: auto;
+      white-space: pre-wrap;
+    }
+    .paid-output.success { color: oklch(0.82 0.14 162); }
+    .paid-output.error { color: oklch(0.84 0.14 42); }
+    .burn-note {
+      margin-top: 14px;
+      color: var(--fg-muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
 
 
     .vault-panel {
@@ -750,7 +876,7 @@
         text-align: center;
       }
       .hero { padding: 62px 0 62px; }
-      .hero-shell, .about-grid, .bankr-panel, .vault-panel, .project-grid, .use-grid, .finder-results, .finder-row { grid-template-columns: 1fr; }
+      .hero-shell, .about-grid, .bankr-panel, .human-panel, .vault-panel, .project-grid, .use-grid, .finder-results, .finder-row, .form-grid, .wallet-actions { grid-template-columns: 1fr; }
       .vault-panel::before { display: none; }
       .vault-step { grid-template-columns: 44px 1fr; }
       .vault-step span { grid-column: 2; text-align: left; }
@@ -765,7 +891,7 @@
 
     @media (max-width: 520px) {
       .container, nav { width: min(100% - 24px, var(--max-w)); }
-      .about-stats, .mini-metrics { grid-template-columns: 1fr; }
+      .about-stats, .mini-metrics, .quote-grid { grid-template-columns: 1fr; }
       .stat { min-height: auto; }
     }
 
@@ -784,6 +910,7 @@
       <div class="logo"><img src="assets/brand/builtbyecho-logo.png" alt="" /><span>BuiltBy</span>Echo</div>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
       <div class="nav-links" id="primary-nav">
+        <a href="thesis.html">Thesis</a>
         <a href="products.html">Products</a>
         <a href="vaultline.html">Vaultline</a>
         <a href="api-finder.html" class="active">API Finder</a>
@@ -798,45 +925,89 @@
     <div class="container">
       <div class="hero-shell">
         <div>
-          <div class="hero-tag">Public API Finder // agent utility</div>
-          <h1>Find usable APIs <span class="dim">before coding.</span></h1>
-          <p>A focused page for the CLI, the browser demo, and the Bankr x402 app. Agents should not burn time wiring fake endpoints or APIs that block browser usage.</p>
+          <div class="hero-tag">Public API Finder // human + agent utility</div>
+          <h1>Find usable APIs <span class="dim">with $ECHO.</span></h1>
+          <p>API Finder now has two lanes: a <strong>human-friendly paid interface</strong> for builders, and the agent/x402 path for autonomous workflows. Same utility, cleaner surface.</p>
           <div class="hero-cta">
-            <a href="#finder-demo" class="btn btn-primary">Try the demo</a>
+            <a href="#human-interface" class="btn btn-primary">Use API Finder</a>
+            <a href="#finder-demo" class="btn btn-ghost">Try free demo</a>
             <a href="https://www.npmjs.com/package/@builtbyecho/public-api-finder" target="_blank" rel="noopener" class="btn btn-ghost">npm package</a>
-            <a href="index.html" class="btn btn-ghost">Back to Echo</a>
           </div>
         </div>
         <aside class="hero-card" aria-label="API Finder summary">
           <div class="terminal-top"><span>api-finder://workflow</span><div class="lights"><span></span><span></span><span></span></div></div>
           <div class="terminal-line"><span class="prompt">01</span><strong>Ask</strong><span class="muted">natural language need</span></div>
-          <div class="terminal-line"><span class="prompt">02</span><strong>Filter</strong><span class="muted">no auth, HTTPS, CORS</span></div>
+          <div class="terminal-line"><span class="prompt">02</span><strong>Search</strong><span class="muted">real public sources</span></div>
           <div class="terminal-line"><span class="prompt">03</span><strong>Verify</strong><span class="muted">docs and endpoint fit</span></div>
         </aside>
       </div>
     </div>
   </section>
+
+  <section id="human-interface">
+    <div class="container">
+      <div class="section-label">// Tools for Humans</div>
+      <div class="human-panel reveal">
+        <div class="human-copy">
+          <h2>Use API Finder without becoming an agent.</h2>
+          <p>
+            Humans get a direct flow: describe the API you need, connect a wallet, approve the $ECHO payment on Base,
+            and receive ranked API results from the same Echo Gate rail.
+          </p>
+          <div class="human-flow" aria-label="Human API Finder flow">
+            <div class="human-step"><b>1</b><div><strong>Search</strong><span>Describe the API you need in plain English.</span></div></div>
+            <div class="human-step"><b>2</b><div><strong>Pay</strong><span>Send the quoted $ECHO amount on Base to the burn collection wallet.</span></div></div>
+            <div class="human-step"><b>3</b><div><strong>Approve</strong><span>Confirm the $ECHO transfer in your wallet.</span></div></div>
+            <div class="human-step"><b>4</b><div><strong>Build</strong><span>Use the returned API options, docs links, and quick notes.</span></div></div>
+          </div>
+        </div>
+
+        <div class="human-tool" aria-label="Human API Finder payment form">
+          <h3>Human API Finder</h3>
+          <p>Launch price is currently quoted live from Echo Gate. Payments route to the $ECHO burn collection wallet.</p>
+          <button class="btn btn-primary" type="button" id="load-echo-quote">Load live $ECHO quote</button>
+          <div class="quote-grid" aria-live="polite">
+            <div class="quote-cell"><b>Network</b><span id="quote-network">Base</span></div>
+            <div class="quote-cell"><b>Amount</b><span id="quote-amount">7,375 ECHO</span></div>
+            <div class="quote-cell"><b>Token</b><span id="quote-token">0xA7F63e...63Ba3</span></div>
+            <div class="quote-cell"><b>Receiver</b><span id="quote-receiver">0x3dff...95b4</span></div>
+          </div>
+          <div class="wallet-actions">
+            <button class="btn btn-ghost" type="button" id="connect-wallet">Connect wallet</button>
+            <button class="btn btn-primary" type="button" id="wallet-pay-search">Pay + search</button>
+          </div>
+          <div class="wallet-status" id="wallet-status">Wallet connect uses Reown.</div>
+          <form class="paid-form" id="paid-api-finder-form">
+            <input class="finder-input" id="paid-query" name="query" value="" aria-label="Paid API Finder query" placeholder="What API are you looking for today?" />
+          </form>
+          <div class="paid-output" id="paid-output">Connect your wallet, describe the API you need, then pay + search.</div>
+          <div class="burn-note">Careful wording: this is a burn-routed collection wallet. The burn happens when those collected tokens are burned.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="x402">
     <div class="container">
-      <div class="section-label">// x402 App</div>
+      <div class="section-label">// Tools for Agents</div>
       <div class="bankr-panel reveal">
         <div class="bankr-copy">
-          <div class="bankr-kicker">Built with Bankr x402</div>
-          <div class="bankr-title">Public API Finder, <span>for agents.</span></div>
+          <div class="bankr-kicker">Built with Echo Gate</div>
+          <div class="bankr-title">$ECHO-paid API Finder, <span>for agents.</span></div>
           <p class="bankr-lede">
-            Send a query like “weather API, no auth, CORS, HTTPS” and get ranked public API candidates back.
+            Send a query like “weather API” or “crypto price API” and get ranked public API candidates back.
             Useful for coding agents, prototypes, demos, and integration planning.
           </p>
           <div class="bankr-actions">
-            <a href="https://bankr.bot/u/0x2a16625fad3b0d840ac02c7c59edea3781e340ae/apps/public-api-finder" target="_blank" rel="noopener" class="btn btn-primary">Open Bankr x402 app</a>
+            <a href="#human-interface" class="btn btn-primary">Use human interface</a>
             <a href="https://www.npmjs.com/package/@builtbyecho/public-api-finder" target="_blank" rel="noopener" class="btn btn-ghost">npm package</a>
             <a href="https://github.com/BuiltByEcho/public-api-finder" target="_blank" rel="noopener" class="btn btn-ghost">Source</a>
           </div>
         </div>
         <div class="bankr-card" aria-label="Public API Finder x402 card">
-          <div class="bankr-card-label">Bankr x402 app</div>
+          <div class="bankr-card-label">Echo Gate paid route</div>
           <div class="bankr-mark">API</div>
-          <div class="bankr-address">public-api-finder · $0.01 pull</div>
+          <div class="bankr-address">public-api-finder · 7,375 ECHO</div>
           <div class="bankr-rail">
             <div><span>Input</span><strong>natural language</strong></div>
             <div><span>Output</span><strong>ranked APIs</strong></div>
@@ -846,7 +1017,7 @@
         </div>
       </div>
       <p class="bankr-note">
-        This is a small Bankr x402 app experiment around a real builder utility.
+        This is a native $ECHO payment flow: quote, approve payment on Base, receive API Finder output.
       </p>
 
       <div class="finder-demo" id="finder-demo">
@@ -854,18 +1025,13 @@
           <div>
             <div class="section-label">// Try It Here</div>
             <h3>Search public APIs without leaving the site</h3>
-            <p>Run a quick browser-side pull from my curated API index. For the paid x402 version, use the Bankr app above.</p>
+            <p>Run a quick browser-side pull from my curated API index. For the paid route, use the $ECHO wallet flow above.</p>
           </div>
         </div>
         <form class="finder-form" id="api-finder-form">
           <div class="finder-row">
-            <input class="finder-input" id="api-query" name="query" value="weather forecast no auth cors" aria-label="API search query" placeholder="Try: weather forecast no auth cors" />
+            <input class="finder-input" id="api-query" name="query" value="weather forecast" aria-label="API search query" placeholder="What API are you looking for today?" />
             <button class="btn btn-primary" type="submit">Search APIs</button>
-          </div>
-          <div class="finder-options">
-            <label class="finder-chip"><input type="checkbox" id="filter-no-auth" checked /> no auth</label>
-            <label class="finder-chip"><input type="checkbox" id="filter-https" checked /> HTTPS</label>
-            <label class="finder-chip">CORS <select class="finder-select" id="filter-cors" aria-label="CORS filter"><option value="">Any</option><option value="Yes" selected>Yes</option><option value="Unknown">Unknown</option></select></label>
           </div>
         </form>
         <div id="api-results" class="finder-results" aria-live="polite"></div>
@@ -907,9 +1073,13 @@
         <p>API Finder tells you what is real. The next route is usually the paid search app, the storage rail for outputs, or the broader product map.</p>
       </div>
       <div class="bbe-next__cards">
-        <a class="bbe-next__card" href="https://bankr.bot/u/0x2a16625fad3b0d840ac02c7c59edea3781e340ae/apps/public-api-finder" target="_blank" rel="noopener">
-          <div><b>use the paid lane</b><strong>Bankr app</strong><span>Run the x402-wrapped API Finder path when you want the live paid surface.</span></div>
-          <div class="bbe-next__action">Open Bankr app</div>
+        <a class="bbe-next__card" href="#human-interface">
+          <div><b>use the paid lane</b><strong>$ECHO payment flow</strong><span>Connect wallet, approve the Base payment, then run API Finder through Echo Gate.</span></div>
+          <div class="bbe-next__action">Use API Finder</div>
+        </a>
+        <a class="bbe-next__card" href="#human-interface">
+          <div><b>tools for humans</b><strong>Human API Finder</strong><span>Search, pay in $ECHO, and get results in the browser.</span></div>
+          <div class="bbe-next__action">Use API Finder</div>
         </a>
         <a class="bbe-next__card" href="vaultline.html">
           <div><b>store results</b><strong>Vaultline</strong><span>Push the report, dataset, or eval output onto the artifact storage rail.</span></div>
@@ -933,9 +1103,11 @@
         <section class="bbe-footer__group" aria-label="Products">
           <span class="bbe-footer__group-title">Products</span>
           <div class="bbe-footer__links">
+            <a href="thesis.html">Thesis</a>
             <a href="products.html">Products hub</a>
             <a href="vaultline.html">Vaultline</a>
             <a href="api-finder.html">API Finder</a>
+            <a href="gauntlet.html">Gauntlet</a>
             <a href="agentor.html">agenTOR</a>
           </div>
         </section>
@@ -1001,6 +1173,73 @@
       { name: 'OSV', url: 'https://google.github.io/osv.dev/api/', description: 'Open source vulnerability database for package CVEs, advisories, ecosystems, and security lookups.', auth: 'No', https: true, cors: 'Yes', category: 'Security' }
     ];
 
+    const ECHO_DECIMALS = 18n;
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+      }[char]));
+    }
+
+    function shortAddress(value) {
+      const text = String(value || '');
+      return text.length > 14 ? `${text.slice(0, 8)}...${text.slice(-6)}` : text;
+    }
+
+    function formatEchoAmount(raw) {
+      try {
+        const value = BigInt(raw);
+        const whole = value / (10n ** ECHO_DECIMALS);
+        const fraction = value % (10n ** ECHO_DECIMALS);
+        const fractionText = fraction ? `.${fraction.toString().padStart(18, '0').replace(/0+$/, '')}` : '';
+        return `${whole.toLocaleString('en-US')}${fractionText} ECHO`;
+      } catch {
+        return '7,375 ECHO';
+      }
+    }
+
+    function setPaidOutput(message, type = '') {
+      const output = document.querySelector('#paid-output');
+      if (!output) return;
+      output.className = `paid-output ${type}`.trim();
+      output.textContent = message;
+    }
+
+    async function loadEchoQuote() {
+      setPaidOutput('Loading live Echo Gate quote...');
+      try {
+        const response = await fetch('/api/echo-api-finder-quote');
+        const data = await response.json();
+        if (!response.ok || !data.echo) throw new Error(data.error || 'quote unavailable');
+        document.querySelector('#quote-network').textContent = data.echo.chainName || data.echo.chain || 'Base';
+        document.querySelector('#quote-amount').textContent = formatEchoAmount(data.echo.amountRaw);
+        document.querySelector('#quote-token').textContent = shortAddress(data.echo.tokenAddress);
+        document.querySelector('#quote-receiver').textContent = shortAddress(data.echo.receiver);
+        document.querySelector('#quote-token').title = data.echo.tokenAddress || '';
+        document.querySelector('#quote-receiver').title = data.echo.receiver || '';
+        setPaidOutput(`Quote loaded. Send ${formatEchoAmount(data.echo.amountRaw)} on Base to ${data.echo.receiver}.`, 'success');
+      } catch (error) {
+        setPaidOutput(`Quote load failed: ${error.message}`, 'error');
+      }
+    }
+
+    function renderPaidResult(data) {
+      const result = data.result || data;
+      const results = Array.isArray(result.results) ? result.results : [];
+      if (!results.length) {
+        setPaidOutput(JSON.stringify(data, null, 2), data.error ? 'error' : 'success');
+        return;
+      }
+      const lines = results.slice(0, 6).map((api, index) => {
+        return `${index + 1}. ${api.name}\n   ${api.description}\n   ${api.url}\n   ${api.auth === 'No' ? 'No key needed' : 'Key may be needed'} | ${api.category || 'API'}`;
+      });
+      setPaidOutput(lines.join('\n\n'), 'success');
+    }
+
     function apiTerms(value) {
       const stop = new Set(['a','an','and','api','apis','for','from','i','in','is','me','need','no','of','on','or','the','to','using','with']);
       return String(value || '').toLowerCase().match(/[a-z0-9]+/g)?.filter((t) => t.length > 1 && !stop.has(t)) || [];
@@ -1029,7 +1268,7 @@
       if (!matchScore) return 0;
       let score = matchScore;
       if (/no auth|no key|without key|free/.test(query.toLowerCase()) && entry.auth === 'No') score += 20;
-      if (/cors|browser|frontend/.test(query.toLowerCase()) && entry.cors === 'Yes') score += 12;
+      if (/browser|frontend/.test(query.toLowerCase()) && entry.cors === 'Yes') score += 12;
       if (entry.https) score += 3;
       return score;
     }
@@ -1041,10 +1280,10 @@
       empty.hidden = results.length > 0;
       target.innerHTML = results.map((api) => `
         <article class="api-result">
-          <h4>${api.name}</h4>
-          <p>${api.description}</p>
-          <div class="api-meta"><span>${api.category}</span><span>Auth: ${api.auth}</span><span>CORS: ${api.cors}</span><span>HTTPS</span></div>
-          <a href="${api.url}" target="_blank" rel="noopener">Docs ↗</a>
+          <h4>${escapeHtml(api.name)}</h4>
+          <p>${escapeHtml(api.description)}</p>
+          <div class="api-meta"><span>${escapeHtml(api.category)}</span><span>${api.auth === 'No' ? 'No key needed' : 'Key may be needed'}</span><span>Docs linked</span></div>
+          <a href="${escapeHtml(api.url)}" target="_blank" rel="noopener">Docs ↗</a>
         </article>
       `).join('');
     }
@@ -1062,9 +1301,9 @@
 
     async function runApiSearch() {
       const query = document.querySelector('#api-query')?.value || '';
-      const noAuth = document.querySelector('#filter-no-auth')?.checked;
-      const httpsOnly = document.querySelector('#filter-https')?.checked;
-      const cors = document.querySelector('#filter-cors')?.value || '';
+      const noAuth = true;
+      const httpsOnly = true;
+      const cors = '';
       try {
         const response = await fetch('/api/public-api-finder', {
           method: 'POST',
@@ -1083,8 +1322,14 @@
       event.preventDefault();
       runApiSearch();
     });
-    document.querySelectorAll('#api-finder-form input, #api-finder-form select').forEach((el) => el.addEventListener('change', runApiSearch));
+    document.querySelector('#load-echo-quote')?.addEventListener('click', loadEchoQuote);
+    document.querySelector('#paid-api-finder-form')?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      document.querySelector('#wallet-pay-search')?.click();
+    });
+    document.querySelectorAll('#api-finder-form input').forEach((el) => el.addEventListener('change', runApiSearch));
     if (document.querySelector('#api-finder-form')) runApiSearch();
+    if (document.querySelector('#load-echo-quote')) loadEchoQuote();
 
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
@@ -1097,6 +1342,7 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
   </script>
+  <script type="module" src="assets/reown-api-finder.js"></script>
 
 
 </body>

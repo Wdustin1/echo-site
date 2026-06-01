@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Echo Gauntlet — BuiltByEcho</title>
+  <meta name="description" content="Run a wallet-paid browser-persona teardown against a public web app. Pay in USDC or ECHO on Base and receive a shareable Gauntlet report.">
+  <meta property="og:title" content="Echo Gauntlet — BuiltByEcho">
+  <meta property="og:description" content="Connect once, pay per run, and get a launch-blocker teardown from browser personas.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/brand/builtbyecho-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08110f;
+      --panel: #101b18;
+      --panel-2: #16231f;
+      --line: rgba(183, 244, 199, 0.16);
+      --text: #eff8f2;
+      --muted: #9eb5aa;
+      --green: #70f0a0;
+      --gold: #e6c96a;
+      --red: #f3a079;
+      --mono: 'IBM Plex Mono', monospace;
+      --display: 'Space Grotesk', 'Archivo', sans-serif;
+      --body: 'Archivo', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 82% 10%, rgba(112, 240, 160, 0.14), transparent 30rem),
+        radial-gradient(circle at 8% 20%, rgba(230, 201, 106, 0.12), transparent 26rem),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+    }
+    a { color: inherit; text-decoration: none; }
+    .wide { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 17, 15, 0.84);
+      backdrop-filter: blur(18px);
+    }
+    nav .wide { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 74px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; }
+    .brand img { width: 34px; height: 34px; border-radius: 10px; }
+    .brand span span { color: var(--green); }
+    .nav-links { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 13px; }
+    .nav-links a:hover { color: var(--text); }
+    .wallet-pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 10px 14px;
+      font: 700 12px var(--mono);
+      cursor: pointer;
+    }
+    .hero { padding: clamp(56px, 8vw, 104px) 0 44px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.8fr); gap: clamp(28px, 6vw, 70px); align-items: center; }
+    .kicker { color: var(--gold); font: 700 12px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 16px 0 22px; font-family: var(--display); font-size: clamp(52px, 8vw, 100px); line-height: .92; letter-spacing: -0.055em; }
+    .lede { max-width: 700px; color: var(--muted); font-size: clamp(17px, 2vw, 21px); line-height: 1.7; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 13px 18px;
+      font: 800 12px var(--mono);
+      letter-spacing: .02em;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .btn:active { transform: translateY(1px) scale(.99); }
+    .btn-primary { background: var(--green); color: #07110e; border-color: transparent; }
+    .btn-ghost { background: rgba(255,255,255,.035); color: var(--text); }
+    .btn.active { border-color: var(--green); color: var(--green); }
+    .signal-card, .tool-panel, .result-panel {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(22, 35, 31, .88), rgba(8, 17, 15, .78));
+      box-shadow: 0 28px 90px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .signal-card { padding: 24px; display: grid; gap: 12px; }
+    .signal-row { display: grid; grid-template-columns: 42px 1fr; gap: 12px; padding: 13px; border: 1px solid var(--line); border-radius: 16px; background: rgba(0,0,0,.16); }
+    .signal-row b { color: var(--green); font-family: var(--mono); }
+    .signal-row span { color: var(--muted); font-size: 13px; line-height: 1.45; }
+    section { padding: 40px 0; }
+    .tool-grid { display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(380px, 1fr); gap: 24px; align-items: stretch; }
+    .tool-copy h2 { margin: 0 0 18px; font-family: var(--display); font-size: clamp(34px, 5vw, 64px); line-height: .98; letter-spacing: -0.045em; }
+    .tool-copy p { color: var(--muted); line-height: 1.7; font-size: 16px; }
+    .tool-panel { padding: clamp(20px, 4vw, 34px); }
+    form { display: grid; gap: 18px; }
+    label, fieldset { display: grid; gap: 8px; color: var(--text); font: 800 12px var(--mono); letter-spacing: .02em; }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      padding: 14px 14px;
+      font: 500 15px var(--body);
+      outline: none;
+    }
+    input:focus, select:focus { border-color: rgba(112, 240, 160, .6); }
+    fieldset { border: 1px solid var(--line); border-radius: 18px; padding: 14px; }
+    legend { padding: 0 8px; color: var(--gold); }
+    .persona-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .persona-grid label, .toggle-row label { display: flex; gap: 8px; align-items: center; color: var(--muted); font: 600 12px var(--body); }
+    .form-row, .quote-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .pay-choice { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 0; }
+    .quote-grid { margin: 16px 0; }
+    .quote-cell { min-height: 72px; border: 1px solid var(--line); border-radius: 16px; padding: 12px; background: rgba(0,0,0,.16); overflow-wrap: anywhere; }
+    .quote-cell b { display: block; color: var(--gold); font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 7px; }
+    .quote-cell span { color: var(--text); font-size: 13px; }
+    .wallet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+    .wallet-status { min-height: 38px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .wallet-status.error { color: var(--red); }
+    .gauntlet-output {
+      min-height: 168px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(0,0,0,.18);
+      color: var(--muted);
+      white-space: pre-wrap;
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .gauntlet-output.success { color: #c8f7d6; }
+    .gauntlet-output.error { color: var(--red); }
+    .run-result { display: grid; gap: 14px; }
+    .run-result b { display: block; color: var(--green); font-family: var(--display); font-size: 26px; text-transform: uppercase; }
+    .run-result span, .run-result p { color: var(--muted); }
+    .run-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .run-links a { border: 1px solid var(--line); border-radius: 999px; padding: 10px 12px; color: var(--text); font: 800 11px var(--mono); }
+    .note-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .note { border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); line-height: 1.55; }
+    .note b { display: block; color: var(--text); margin-bottom: 8px; font-family: var(--display); }
+    footer { padding: 34px 0 50px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 900px) {
+      nav .wide { align-items: flex-start; flex-direction: column; padding: 16px 0; }
+      .nav-links { flex-wrap: wrap; }
+      .hero-grid, .tool-grid, .note-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .form-row, .quote-grid, .wallet-actions, .persona-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wide">
+      <a class="brand" href="index.html"><img src="assets/brand/builtbyecho-logo.png" alt=""><span>BuiltBy<span>Echo</span></span></a>
+      <div class="nav-links">
+        <a href="thesis.html">Thesis</a>
+        <a href="products.html">Products</a>
+        <a href="api-finder.html">API Finder</a>
+        <a href="gauntlet.html">Gauntlet</a>
+        <a href="skills.html">Skills</a>
+        <button class="wallet-pill" type="button" id="connect-wallet" data-wallet-connect>Connect wallet</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="wide hero-grid">
+        <div>
+          <div class="kicker">Echo Gauntlet // human wallet checkout</div>
+          <h1>Test the site before users find the cracks.</h1>
+          <p class="lede">Paste a public URL, approve a Base payment, and Gauntlet runs browser personas against the page. You get the same shareable teardown agents receive from x402, without touching a CLI.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#run">Run Gauntlet</a>
+            <a class="btn btn-ghost" href="https://echo-gauntlet.46.202.177.190.sslip.io/" target="_blank" rel="noopener">Worker UI</a>
+          </div>
+        </div>
+        <aside class="signal-card">
+          <div class="signal-row"><b>01</b><span>Connect once through the global BuiltByEcho wallet layer.</span></div>
+          <div class="signal-row"><b>02</b><span>Approve USDC or ECHO on Base for this run only.</span></div>
+          <div class="signal-row"><b>03</b><span>Gauntlet verifies payment, starts the run, and returns report links.</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="run">
+      <div class="wide tool-grid">
+        <div class="tool-copy">
+          <div class="kicker">Tools for humans</div>
+          <h2>One wallet. Tool-by-tool approvals.</h2>
+          <p>The wallet connection is shared with the rest of the BuiltByEcho site. Each tool still asks for its own transaction approval, so a user can pay for exactly the action they are taking.</p>
+          <div class="note-grid">
+            <div class="note"><b>USDC default</b>Stable $2.50 Base payment for public testing.</div>
+            <div class="note"><b>ECHO lane</b>Token payment path for the BuiltByEcho tool network.</div>
+            <div class="note"><b>Agent lane</b>Bankr x402 remains live for autonomous clients.</div>
+          </div>
+        </div>
+
+        <div class="tool-panel">
+          <form id="gauntlet-form">
+            <label>
+              Target URL
+              <input id="target-url" name="url" type="url" placeholder="https://your-app.example" required>
+            </label>
+            <div class="form-row">
+              <label>
+                Timeout
+                <select id="timeout-ms" name="timeoutMs">
+                  <option value="15000">15 seconds</option>
+                  <option value="20000" selected>20 seconds</option>
+                  <option value="30000">30 seconds</option>
+                </select>
+              </label>
+              <label>
+                Analysis
+                <select id="llm" name="llm">
+                  <option value="">Browser evidence</option>
+                  <option value="1">Add Echo analysis</option>
+                </select>
+              </label>
+            </div>
+            <fieldset>
+              <legend>Personas</legend>
+              <div class="persona-grid">
+                <label><input type="checkbox" name="persona" value="first_time_visitor" checked> First visitor</label>
+                <label><input type="checkbox" name="persona" value="impatient_buyer" checked> Impatient buyer</label>
+                <label><input type="checkbox" name="persona" value="mobile_user" checked> Mobile user</label>
+                <label><input type="checkbox" name="persona" value="accessibility_scan" checked> Accessibility</label>
+                <label><input type="checkbox" name="persona" value="confused_input" checked> Confused input</label>
+              </div>
+            </fieldset>
+            <div>
+              <div class="kicker">Payment token</div>
+              <div class="pay-choice">
+                <button class="btn btn-ghost active" type="button" data-payment-token="usdc">USDC</button>
+                <button class="btn btn-ghost" type="button" data-payment-token="echo">ECHO</button>
+              </div>
+              <div class="quote-grid" aria-live="polite">
+                <div class="quote-cell"><b>Network</b><span id="quote-network">Base</span></div>
+                <div class="quote-cell"><b>Amount</b><span id="quote-amount">$2.50 USDC</span></div>
+                <div class="quote-cell"><b>Token</b><span id="quote-token">Loading</span></div>
+                <div class="quote-cell"><b>Receiver</b><span id="quote-receiver">Loading</span></div>
+              </div>
+            </div>
+            <div class="wallet-actions">
+              <button class="btn btn-ghost" type="button" data-wallet-connect data-wallet-status-target="#gauntlet-status">Connect wallet</button>
+              <button class="btn btn-primary" type="submit" id="wallet-pay-gauntlet">Pay + run</button>
+            </div>
+            <div class="wallet-status" id="gauntlet-status">Connect once, then approve one transaction per Gauntlet run.</div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wide result-panel" style="padding: clamp(20px, 4vw, 34px);">
+        <div class="kicker">Latest result</div>
+        <div class="gauntlet-output" id="gauntlet-output">Paste a URL, choose USDC or ECHO, then approve the transaction. The report links appear here after the run starts.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wide">BuiltByEcho. Browser evidence, wallet checkout, agent-native rails.</div>
+  </footer>
+
+  <script type="module" src="assets/gauntlet.js"></script>
+</body>
+</html>

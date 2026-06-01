@@ -246,8 +246,9 @@
 
     .choice-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
       margin-top: 34px;
+      scroll-margin-top: 110px;
     }
 
     .choice-card, .product-card, .feature-card, .path-card, .closing-panel {
@@ -625,6 +626,7 @@
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
       <div class="nav-links" id="primary-nav">
         <a href="index.html#story">Story</a>
+        <a href="thesis.html">Thesis</a>
         <a href="products.html" class="active">Products</a>
         <a href="skills.html">Skills</a>
         <a href="index.html#proof">Proof</a>
@@ -664,6 +666,18 @@
             <h2>API Finder</h2>
             <p>Find real public APIs before an agent builds around a fake endpoint.</p>
             <span>Open API Finder</span>
+          </a>
+          <a class="choice-card" href="api-finder.html#human-interface">
+            <b>Tools for humans</b>
+            <h2>Human Finder</h2>
+            <p>Search, connect a wallet, pay in $ECHO on Base, and get API results in the browser.</p>
+            <span>Use the interface</span>
+          </a>
+          <a class="choice-card" href="gauntlet.html">
+            <b>Test a launch</b>
+            <h2>Gauntlet</h2>
+            <p>Connect once, pay with USDC or ECHO on Base, and run browser personas against a public URL.</p>
+            <span>Run Gauntlet</span>
           </a>
           <a class="choice-card" href="skills/echo-gate/SKILL.md">
             <b>Control tools</b>
@@ -712,17 +726,32 @@
           <div class="feature-side">
             <article class="product-card">
               <div class="product-label">Public API Finder</div>
-              <div class="product-rail"><span>finder rail</span><span>source checks</span></div>
+              <div class="product-rail"><span>tools for humans</span><span>agent rail</span></div>
               <h3>Find the real API first.</h3>
-              <p>A searchable API finder for agents and builders, with auth, HTTPS, CORS, docs, category, and fit checks.</p>
+              <p>A searchable API finder for humans and agents, with a browser payment flow and plain-language results.</p>
               <div class="product-stats">
-                <div><b>Best for</b><span>API sourcing before build</span></div>
-                <div><b>Output</b><span>Provider + docs + auth fit</span></div>
+                <div><b>Human flow</b><span>Wallet approval + $ECHO payment</span></div>
+                <div><b>Output</b><span>API options + docs links</span></div>
               </div>
-              <div class="tag-row"><span class="tag">source finding</span><span class="tag">integration</span><span class="tag">Bankr x402</span></div>
+              <div class="tag-row"><span class="tag">source finding</span><span class="tag">$ECHO paid</span><span class="tag">Echo Gate</span></div>
               <div class="card-actions">
-                <a class="mini-link" href="api-finder.html">Open finder</a>
+                <a class="mini-link" href="api-finder.html#human-interface">Use finder</a>
                 <a class="mini-link" href="https://www.npmjs.com/package/@builtbyecho/public-api-finder" target="_blank" rel="noopener">npm</a>
+              </div>
+            </article>
+            <article class="product-card">
+              <div class="product-label">Echo Gauntlet</div>
+              <div class="product-rail"><span>wallet checkout</span><span>browser personas</span></div>
+              <h3>Find launch blockers before users do.</h3>
+              <p>A human wallet flow for Gauntlet: paste a URL, approve USDC or ECHO on Base, and get a shareable teardown.</p>
+              <div class="product-stats">
+                <div><b>Human flow</b><span>Global wallet + per-run approval</span></div>
+                <div><b>Output</b><span>Share page + report links</span></div>
+              </div>
+              <div class="tag-row"><span class="tag">QA</span><span class="tag">USDC/ECHO</span><span class="tag">Base</span></div>
+              <div class="card-actions">
+                <a class="mini-link" href="gauntlet.html">Run Gauntlet</a>
+                <a class="mini-link" href="https://echo-gauntlet.46.202.177.190.sslip.io/" target="_blank" rel="noopener">Worker</a>
               </div>
             </article>
             <article class="product-card">
@@ -823,9 +852,11 @@
         <section class="bbe-footer__group" aria-label="Products">
           <span class="bbe-footer__group-title">Products</span>
           <div class="bbe-footer__links">
+            <a href="thesis.html">Thesis</a>
             <a href="products.html">Products hub</a>
             <a href="vaultline.html">Vaultline</a>
             <a href="api-finder.html">API Finder</a>
+            <a href="gauntlet.html">Gauntlet</a>
             <a href="agentor.html">agenTOR</a>
           </div>
         </section>
