@@ -637,6 +637,9 @@ dt,
 
 .partner-dashboard.coming-soon {
   border-style: dashed;
+  background:
+    radial-gradient(circle at 14% 20%, oklch(0.72 0.018 220 / .12), transparent 34%),
+    oklch(0.11 0.018 226 / .82);
 }
 
 .partner-dashboard.coming-soon::before {
@@ -662,8 +665,9 @@ dt,
 
 .partner-dashboard.coming-soon button,
 .partner-dashboard.coming-soon p {
-  filter: blur(2.4px);
-  opacity: .58;
+  filter: blur(4px);
+  opacity: .38;
+  user-select: none;
 }
 
 .partner-dashboard.coming-soon button {

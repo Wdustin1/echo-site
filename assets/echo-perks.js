@@ -139,7 +139,8 @@ async function connectAndReadBalance() {
     state.balance = echoBalance;
     state.balances = { ECHO: echoBalance, BNKR: bankrBalance, DARKSOL: darksolBalance, MIROSHARK: mirosharkBalance };
     setStatus(`Connected ${shortAddress(state.wallet)} on Base.`);
-    setNotice(`Found ${formatEcho(echoBalance)} ECHO, ${formatEcho(bankrBalance)} BNKR, ${formatEcho(darksolBalance)} DARKSOL, and ${formatEcho(mirosharkBalance)} MiroShark. Perks updated.`);
+    const hiddenPartnerBalance = mirosharkBalance > 0 ? " plus one coming-soon partner balance" : "";
+    setNotice(`Found ${formatEcho(echoBalance)} ECHO, ${formatEcho(bankrBalance)} BNKR, and ${formatEcho(darksolBalance)} DARKSOL${hiddenPartnerBalance}. Perks updated.`);
   } catch (error) {
     setStatus(readableWalletError(error));
     setError(readableWalletError(error));
@@ -332,17 +333,25 @@ function resetDemo() {
 
 function visiblePerks() {
   const claimed = walletClaimIds();
-  return state.perks.filter((perk) => {
+  return publicPerks().filter((perk) => {
     if (state.partnerFilter !== "all" && (perk.partnerId || "builtbyecho") !== state.partnerFilter) return false;
     if (state.filter === "all") return true;
     return perkState(perk, state.balance, claimed, currentBalances()) === state.filter;
   });
 }
 
+function publicPerks() {
+  return state.perks.filter((perk) => !isComingSoonPartner(perk.partnerId || "builtbyecho"));
+}
+
+function isComingSoonPartner(partnerId) {
+  return partnerById(partnerId)?.status === "coming-soon";
+}
+
 function eligiblePartnerIds() {
   const balances = currentBalances();
-  return partnersForPerks(state.perks)
-    .filter((partner) => state.perks.some((perk) => (perk.partnerId || "builtbyecho") === partner.id && isPartnerPerkEligible(perk, balances)))
+  return partnersForPerks(publicPerks())
+    .filter((partner) => publicPerks().some((perk) => (perk.partnerId || "builtbyecho") === partner.id && isPartnerPerkEligible(perk, balances)))
     .map((partner) => partner.id);
 }
 
@@ -365,7 +374,7 @@ function render() {
   const tier = tierForBalance(state.balance);
   const claimedIds = walletClaimIds();
   const balances = currentBalances();
-  const summary = summarizePerks(state.perks, state.balance, claimedIds, balances);
+  const summary = summarizePerks(publicPerks(), state.balance, claimedIds, balances);
   const claims = state.claims.filter((claim) => claim.wallet === claimWallet()).slice(0, 5);
   const matchedPartners = eligiblePartnerIds();
   const hasWallet = Boolean(state.wallet);
@@ -531,17 +540,19 @@ function partnerDashboardCard(partner, balances) {
   const active = state.partnerFilter === partner.id;
   const comingSoon = partner.status === "coming-soon";
   const isEligible = available > 0;
+  const cardAccent = comingSoon ? "oklch(0.62 0.034 220)" : partner.accent;
+  const cardAccent2 = comingSoon ? "oklch(0.48 0.03 226)" : partner.accent2;
   return `
-    <article class="partner-dashboard ${active ? "active" : ""} ${comingSoon ? "coming-soon" : ""}" style="--partner-accent:${partner.accent};--partner-accent-2:${partner.accent2}">
+    <article class="partner-dashboard ${active ? "active" : ""} ${comingSoon ? "coming-soon" : ""}" style="--partner-accent:${cardAccent};--partner-accent-2:${cardAccent2}">
       <button type="button" ${comingSoon ? "" : `data-partner="${partner.id}"`} aria-pressed="${active ? "true" : "false"}" ${comingSoon ? "disabled" : ""}>
-        <span class="partner-mark">${partner.logo ? `<img src="${partner.logo}" alt="" />` : partner.shortName.slice(0, 2)}</span>
+        <span class="partner-mark">${comingSoon ? "??" : partner.logo ? `<img src="${partner.logo}" alt="" />` : partner.shortName.slice(0, 2)}</span>
         <span>
-          <b>${partner.name}</b>
+          <b>${comingSoon ? "Partner room" : partner.name}</b>
           <small>${comingSoon ? "Coming soon" : isEligible ? `${available} perk${available === 1 ? "" : "s"} ready` : partner.requirement}</small>
         </span>
         <em>${comingSoon ? "soon" : balance ? `${formatEcho(balance)} ${partner.displayTokenSymbol || partner.tokenSymbol}` : locked ? "locked" : "open"}</em>
       </button>
-      <p>${partner.tagline}</p>
+      <p>${comingSoon ? "A new partner room is being finalized." : partner.tagline}</p>
     </article>
   `;
 }
@@ -635,10 +646,15 @@ function requirementText(perk) {
 
 function walletSummary(balances) {
   const detected = Object.entries(balances)
-    .filter(([, value]) => Number(value || 0) > 0)
+    .filter(([token, value]) => Number(value || 0) > 0 && !isComingSoonPartnerToken(token))
     .map(([token, value]) => `${formatEcho(value)} ${displayTokenSymbol(token)}`);
   if (!detected.length) return "No eligible token balance detected yet.";
   return `${detected.join(" + ")} detected.`;
+}
+
+function isComingSoonPartnerToken(token) {
+  const symbol = String(token || "").toUpperCase();
+  return partnersForPerks(state.perks).some((partner) => partner.status === "coming-soon" && partner.tokenSymbol === symbol);
 }
 
 function displayTokenSymbol(token) {
