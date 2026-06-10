@@ -635,6 +635,45 @@ dt,
   transform: rotate(3deg) translate(-10px, -8px);
 }
 
+.partner-dashboard.coming-soon {
+  border-style: dashed;
+}
+
+.partner-dashboard.coming-soon::before {
+  content: "Coming soon";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid color-mix(in oklch, var(--partner-accent), white 10%);
+  border-radius: 999px;
+  background: oklch(0.06 0.018 232 / .82);
+  color: var(--partner-accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.partner-dashboard.coming-soon button,
+.partner-dashboard.coming-soon p {
+  filter: blur(2.4px);
+  opacity: .58;
+}
+
+.partner-dashboard.coming-soon button {
+  cursor: not-allowed;
+}
+
+.partner-dashboard.coming-soon:hover::after {
+  transform: rotate(12deg);
+}
+
 .partner-dashboard button {
   position: relative;
   z-index: 1;

@@ -529,16 +529,17 @@ function partnerDashboardCard(partner, balances) {
   const locked = partnerPerks.filter((perk) => perkState(perk, state.balance, walletClaimIds(), balances) === "locked").length;
   const balance = Number(balances[partner.tokenSymbol] || 0);
   const active = state.partnerFilter === partner.id;
+  const comingSoon = partner.status === "coming-soon";
   const isEligible = available > 0;
   return `
-    <article class="partner-dashboard ${active ? "active" : ""}" style="--partner-accent:${partner.accent};--partner-accent-2:${partner.accent2}">
-      <button type="button" data-partner="${partner.id}" aria-pressed="${active ? "true" : "false"}">
+    <article class="partner-dashboard ${active ? "active" : ""} ${comingSoon ? "coming-soon" : ""}" style="--partner-accent:${partner.accent};--partner-accent-2:${partner.accent2}">
+      <button type="button" ${comingSoon ? "" : `data-partner="${partner.id}"`} aria-pressed="${active ? "true" : "false"}" ${comingSoon ? "disabled" : ""}>
         <span class="partner-mark">${partner.logo ? `<img src="${partner.logo}" alt="" />` : partner.shortName.slice(0, 2)}</span>
         <span>
           <b>${partner.name}</b>
-          <small>${isEligible ? `${available} perk${available === 1 ? "" : "s"} ready` : partner.requirement}</small>
+          <small>${comingSoon ? "Coming soon" : isEligible ? `${available} perk${available === 1 ? "" : "s"} ready` : partner.requirement}</small>
         </span>
-        <em>${balance ? `${formatEcho(balance)} ${partner.displayTokenSymbol || partner.tokenSymbol}` : locked ? "locked" : "open"}</em>
+        <em>${comingSoon ? "soon" : balance ? `${formatEcho(balance)} ${partner.displayTokenSymbol || partner.tokenSymbol}` : locked ? "locked" : "open"}</em>
       </button>
       <p>${partner.tagline}</p>
     </article>
