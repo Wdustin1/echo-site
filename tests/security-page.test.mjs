@@ -35,3 +35,10 @@ test('security page keeps the first scan lightweight and lazy-loads deeper analy
   assert.match(securityHtml, /fetch\(`\$\{API\}\/api\/deep-analysis\?address=/);
   assert.doesNotMatch(securityHtml, /Promise\.all\(\[\s*fetch\(`\$\{API\}\/api\/scan[\s\S]*api\/launch-card/);
 });
+
+test('security page documents quick-first agent API usage', () => {
+  assert.match(securityHtml, /Quick \+ deep reports/);
+  assert.match(securityHtml, /api\/deep-analysis\?address=0x/);
+  assert.match(securityHtml, /Agent skills/);
+  assert.match(securityHtml, /docs\/agent-skills\/echo-shield-token-triage\/SKILL\.md/);
+});

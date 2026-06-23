@@ -399,19 +399,21 @@
         <h2 style="margin-top:14px;font-size:clamp(36px,4.8vw,66px);letter-spacing:-.05em;">Use it from Bankr, Discord, X, or any agent.</h2>
         <div class="api-grid">
           <article class="api-card">
-            <h3>Risk report</h3>
-            <p>Structured JSON report with token, score, contract, holder, liquidity, launch, and history fields.</p>
-            <pre>GET https://shield.builtbyecho.xyz/api/scan?address=0x...</pre>
+            <h3>Quick + deep reports</h3>
+            <p>Agents should call the quick report first, then trigger Deep Echo Analysis only after explicit user intent.</p>
+            <pre>GET https://shield.builtbyecho.xyz/api/scan?address=0x...
+GET https://shield.builtbyecho.xyz/api/deep-analysis?address=0x...</pre>
           </article>
           <article class="api-card">
             <h3>Launch card</h3>
-            <p>Shareable image for social posts and bot replies. JSON, PNG, and SVG formats are available.</p>
+            <p>Shareable image for social posts and bot replies. Reuse the quick scan card URL when available.</p>
             <pre>GET https://shield.builtbyecho.xyz/api/launch-card?address=0x...&format=png</pre>
           </article>
           <article class="api-card">
-            <h3>Cohort summary</h3>
-            <p>Live scan-memory summary across Bankr, Clanker/Farcaster, Doppler, Virtuals, and DEX-only launches.</p>
-            <pre>GET https://shield.builtbyecho.xyz/api/launch-cohorts</pre>
+            <h3>Agent skills</h3>
+            <p>Copyable SKILL.md files teach agents the quick-first flow, card handling, caveats, and source-status language.</p>
+            <pre>docs/agent-integration.md
+docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
           </article>
         </div>
       </div>
