@@ -3,13 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "scripts": {
-    "worker:miroshark": "node workers/miroshark-credit-worker.mjs"
-  },
   "dependencies": {
-    "@builtbyecho/public-api-finder": "^0.5.11",
-    "@x402/core": "^2.16.0",
-    "@x402/evm": "^2.16.0",
-    "viem": "^2.53.1"
+    "@builtbyecho/public-api-finder": "^0.5.11"
   }
 }

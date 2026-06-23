@@ -108,47 +108,6 @@ export async function createClaim({
   return { claim, persistence: 'redis', created: true };
 }
 
-export async function findClaim(wallet, perkId) {
-  const normalizedWallet = normalizeAddress(wallet);
-  const id = makeClaimId(normalizedWallet, perkId);
-  if (!redisConfigured()) return null;
-  const stored = await redis(['GET', claimKeyFor(id)]);
-  return stored ? JSON.parse(stored) : null;
-}
-
-export async function listClaimsForWallet(wallet) {
-  const normalizedWallet = normalizeAddress(wallet);
-  if (!redisConfigured()) return [];
-  const claims = (await listClaims()).filter((claim) => String(claim.wallet || '').toLowerCase() === normalizedWallet);
-  return claims.sort((a, b) => String(b.createdAt || '').localeCompare(String(a.createdAt || '')));
-}
-
-export async function listClaims(limit = 500) {
-  if (!redisConfigured()) return [];
-  const stop = Math.max(0, Number(limit || 500) - 1);
-  const keys = await redis(['LRANGE', CLAIMS_INDEX_KEY, '0', String(stop)]);
-  const claims = [];
-  for (const key of keys || []) {
-    const stored = await redis(['GET', key]);
-    if (!stored) continue;
-    try {
-      claims.push(JSON.parse(stored));
-    } catch {
-      // Ignore corrupt individual claim rows; the rest of the ledger should remain usable.
-    }
-  }
-  return claims;
-}
-
-export async function updateClaim(claim) {
-  if (!redisConfigured()) return { claim, persistence: 'not_configured' };
-  const id = cleanText(claim?.id, 220);
-  if (!id) throw new Error('invalid_claim');
-  const updated = { ...claim, updatedAt: new Date().toISOString() };
-  await redis(['SET', claimKeyFor(id), JSON.stringify(updated)]);
-  return { claim: updated, persistence: 'redis' };
-}
-
 function isToolCreditPerk(perk) {
   const text = `${perk?.type || ''} ${perk?.deliverable || ''} ${perk?.title || ''}`.toLowerCase();
   return text.includes('tool credit') || text.includes('partner credit') || text.includes('dual-holder credit');
