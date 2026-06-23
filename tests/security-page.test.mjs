@@ -37,6 +37,11 @@ test('security page keeps the first scan lightweight and lazy-loads deeper analy
 });
 
 test('security page documents quick-first agent API usage', () => {
+  assert.match(securityHtml, /Agents start here/);
+  assert.match(securityHtml, /Plug Echo Shield into your agent without wasting deep-scan calls/);
+  assert.match(securityHtml, /https:\/\/github\.com\/Wdustin1\/echo-shield-base\/blob\/main\/docs\/agent-integration\.md/);
+  assert.match(securityHtml, /https:\/\/github\.com\/Wdustin1\/echo-shield-base\/blob\/main\/docs\/agent-skills\/echo-shield-token-triage\/SKILL\.md/);
+  assert.match(securityHtml, /https:\/\/github\.com\/Wdustin1\/echo-shield-base\/blob\/main\/docs\/agent-skills\/echo-shield-launch-card\/SKILL\.md/);
   assert.match(securityHtml, /Quick \+ deep reports/);
   assert.match(securityHtml, /api\/deep-analysis\?address=0x/);
   assert.match(securityHtml, /Agent skills/);

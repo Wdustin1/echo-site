@@ -99,6 +99,17 @@
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; padding: 12px 18px; border-radius: 999px; border: 1px solid var(--line); font-family: var(--font-mono); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
     .btn-primary { background: var(--green); color: oklch(0.08 0.02 232); border-color: transparent; }
     .btn-ghost { background: oklch(0.18 0.036 226 / 0.74); color: var(--ink); }
+    .agent-start { position: relative; display: grid; gap: 16px; margin-top: 24px; padding: clamp(18px, 2.4vw, 24px); border: 1px solid oklch(0.81 0.17 159 / 0.42); border-radius: 28px; background: linear-gradient(135deg, oklch(0.16 0.04 226 / 0.88), oklch(0.09 0.026 232 / 0.74)); box-shadow: 0 22px 70px oklch(0.03 0.02 232 / 0.28), inset 0 1px 0 oklch(0.92 0.02 160 / 0.10); overflow: hidden; }
+    .agent-start::before { content: ""; position: absolute; inset: -30% 42% auto -12%; height: 170px; background: radial-gradient(circle, oklch(0.81 0.17 159 / 0.28), transparent 64%); pointer-events: none; }
+    .agent-start > * { position: relative; z-index: 1; }
+    .agent-start-kicker { color: var(--green); font: 900 11px var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+    .agent-start h2 { max-width: 760px; font-size: clamp(28px, 3.4vw, 46px); line-height: .96; letter-spacing: -.045em; }
+    .agent-start p { max-width: 760px; color: oklch(0.82 0.035 180); }
+    .agent-start-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .agent-link { display: grid; gap: 8px; min-height: 112px; padding: 14px; border: 1px solid oklch(0.78 0.12 212 / 0.24); border-radius: 18px; background: oklch(0.08 0.022 232 / 0.62); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    .agent-link:hover { transform: translateY(-2px); border-color: oklch(0.81 0.17 159 / 0.44); background: oklch(0.13 0.032 226 / 0.74); }
+    .agent-link strong { color: var(--ink); font-family: var(--font-display); font-size: 18px; line-height: 1.05; }
+    .agent-link span { color: var(--ink-dim); font: 700 11px/1.35 var(--font-mono); overflow-wrap: anywhere; }
     .panel { border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(150deg, var(--panel-2), oklch(0.1 0.024 232 / 0.88)); box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.3), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08); }
     .status-panel { padding: 22px; }
     .status-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 18px; }
@@ -217,6 +228,7 @@
       .hero-grid, .scanner-grid, .api-grid, .watchtower-grid { grid-template-columns: 1fr; }
       .metric-grid, .risk-ladder { grid-template-columns: 1fr; }
       .mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-start-links { grid-template-columns: 1fr; }
       .result-hero, .scan-steps { grid-template-columns: 1fr; }
     }
   </style>
@@ -250,6 +262,25 @@
             <a class="btn btn-primary" href="#scanner">Run a scan</a>
             <a class="btn btn-ghost" href="https://shield.builtbyecho.xyz/api/launch-cohorts" target="_blank" rel="noopener">Live cohort API</a>
           </div>
+          <section class="agent-start" aria-labelledby="agent-start-title">
+            <div class="agent-start-kicker">Agents start here</div>
+            <h2 id="agent-start-title">Plug Echo Shield into your agent without wasting deep-scan calls.</h2>
+            <p>Use the quick scan first, reuse the returned launch-card URL, and only trigger <strong>Deeper Echo Analysis</strong> when a user explicitly asks for the full provider pass.</p>
+            <div class="agent-start-links" aria-label="Echo Shield agent documentation and skills">
+              <a class="agent-link" href="https://github.com/Wdustin1/echo-shield-base/blob/main/docs/agent-integration.md" target="_blank" rel="noopener">
+                <strong>Agent docs</strong>
+                <span>docs/agent-integration.md</span>
+              </a>
+              <a class="agent-link" href="https://github.com/Wdustin1/echo-shield-base/blob/main/docs/agent-skills/echo-shield-token-triage/SKILL.md" target="_blank" rel="noopener">
+                <strong>Token triage skill</strong>
+                <span>echo-shield-token-triage/SKILL.md</span>
+              </a>
+              <a class="agent-link" href="https://github.com/Wdustin1/echo-shield-base/blob/main/docs/agent-skills/echo-shield-launch-card/SKILL.md" target="_blank" rel="noopener">
+                <strong>Launch card skill</strong>
+                <span>echo-shield-launch-card/SKILL.md</span>
+              </a>
+            </div>
+          </section>
           <p class="notice">No wallet connection. No trading advice. No custody. Echo only reads public Base data and reports launch-hygiene signals.</p>
         </div>
         <aside class="panel status-panel" aria-label="Live Echo Security status">
