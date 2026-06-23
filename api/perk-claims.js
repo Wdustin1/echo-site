@@ -2,6 +2,7 @@ import {
   createClaim,
   findPerk,
   json,
+  listClaimsForWallet,
   listPerks,
   parseBody,
   readRequiredTokenBalance,
@@ -9,7 +10,8 @@ import {
 } from './_perks.js';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return json(res, 405, { ok: false, error: 'POST required' });
+  if (req.method === 'GET') return getClaims(req, res);
+  if (req.method !== 'POST') return json(res, 405, { ok: false, error: 'GET or POST required' });
 
   try {
     const body = parseBody(req);
@@ -54,11 +56,30 @@ export default async function handler(req, res) {
       ...result,
     });
   } catch (error) {
-    const message = error?.message || 'claim_failed';
-    const status = message === 'invalid_wallet' ? 400 : 500;
-    return json(res, status, {
+    return json(res, errorStatus(error), {
       ok: false,
-      error: message,
+      error: error?.message || 'claim_failed',
     });
   }
+}
+
+async function getClaims(req, res) {
+  try {
+    const url = new URL(req.url || '/', 'https://builtbyecho.local');
+    const claims = await listClaimsForWallet(url.searchParams.get('wallet'));
+    return json(res, 200, {
+      ok: true,
+      claims,
+      persistence: claims.length ? 'redis' : 'empty',
+    });
+  } catch (error) {
+    return json(res, errorStatus(error), {
+      ok: false,
+      error: error?.message || 'claims_lookup_failed',
+    });
+  }
+}
+
+function errorStatus(error) {
+  return error?.message === 'invalid_wallet' ? 400 : 500;
 }

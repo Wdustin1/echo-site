@@ -31,6 +31,13 @@ const DEMO_WALLET = "0xEch0000000000000000000000000000000Perks";
 const DEMO_BALANCE = 12_750_000;
 const PERKS_KEY = "echo-perks:v1:site:perks";
 const CLAIMS_KEY = "echo-perks:v1:site:claims";
+const FORCE_DEFAULT_PERK_IDS = new Set(["miroshark-paid-call", "miroshark-echo-boost-credit"]);
+const MIROSHARK_ACTIVE_STATUSES = new Set([
+  "miroshark run queued",
+  "miroshark run paying",
+  "miroshark run submitted",
+  "miroshark run running",
+]);
 const params = new URLSearchParams(window.location.search);
 const PREVIEW_BANKR = params.get("preview") === "bankr";
 
@@ -42,6 +49,7 @@ const state = {
   filter: "all",
   partnerFilter: "all",
   claimDraft: null,
+  runDraft: null,
   loading: false,
   notice: "",
   error: "",
@@ -57,6 +65,7 @@ subscribeWallet((wallet) => {
 
 render();
 loadServerPerks();
+setInterval(() => refreshActiveMirosharkClaims({ silent: true }), 30000);
 if (PREVIEW_BANKR) {
   usePreviewWallet();
 }
@@ -66,11 +75,19 @@ function loadPerks() {
   if (!stored) return DEFAULT_PERKS;
   try {
     const parsed = JSON.parse(stored);
-    const storedIds = new Set(parsed.map((perk) => perk.id));
-    return [...DEFAULT_PERKS.filter((perk) => !storedIds.has(perk.id)), ...parsed];
+    return mergePerks(parsed);
   } catch {
     return DEFAULT_PERKS;
   }
+}
+
+function mergePerks(perks) {
+  const defaultById = new Map(DEFAULT_PERKS.map((perk) => [perk.id, perk]));
+  const storedIds = new Set(perks.map((perk) => perk.id));
+  return [
+    ...DEFAULT_PERKS.filter((perk) => !storedIds.has(perk.id)),
+    ...perks.map((perk) => (FORCE_DEFAULT_PERK_IDS.has(perk.id) ? { ...perk, ...defaultById.get(perk.id) } : perk)),
+  ];
 }
 
 function savePerks() {
@@ -111,6 +128,7 @@ function setNotice(message) {
   state.notice = message;
   state.error = "";
   state.claimDraft = null;
+  state.runDraft = null;
   render();
 }
 
@@ -124,7 +142,7 @@ async function connectAndReadBalance() {
   state.loading = true;
   render();
   try {
-    setStatus("Opening BuiltByEcho wallet connect...");
+    setStatus("Opening BuiltByEcho Privy login...");
     await connectWallet();
     const provider = await waitForProvider();
     await ensureBaseNetwork(provider);
@@ -139,8 +157,10 @@ async function connectAndReadBalance() {
     state.balance = echoBalance;
     state.balances = { ECHO: echoBalance, BNKR: bankrBalance, DARKSOL: darksolBalance, MIROSHARK: mirosharkBalance };
     setStatus(`Connected ${shortAddress(state.wallet)} on Base.`);
-    const hiddenPartnerBalance = mirosharkBalance > 0 ? " plus one coming-soon partner balance" : "";
-    setNotice(`Found ${formatEcho(echoBalance)} ECHO, ${formatEcho(bankrBalance)} BNKR, and ${formatEcho(darksolBalance)} DARKSOL${hiddenPartnerBalance}. Perks updated.`);
+    await loadServerClaims();
+    await refreshActiveMirosharkClaims({ silent: true });
+    const mirosharkNotice = mirosharkBalance > 0 ? `, and ${formatEcho(mirosharkBalance)} MiroShark` : "";
+    setNotice(`Found ${formatEcho(echoBalance)} ECHO, ${formatEcho(bankrBalance)} BNKR, ${formatEcho(darksolBalance)} DARKSOL${mirosharkNotice}. Perks updated.`);
   } catch (error) {
     setStatus(readableWalletError(error));
     setError(readableWalletError(error));
@@ -175,12 +195,25 @@ async function loadServerPerks() {
     if (!response.ok) return;
     const body = await response.json();
     if (!body.ok || !Array.isArray(body.perks)) return;
-    const serverIds = new Set(body.perks.map((perk) => perk.id));
-    state.perks = [...DEFAULT_PERKS.filter((perk) => !serverIds.has(perk.id)), ...body.perks];
+    state.perks = mergePerks(body.perks);
     savePerks();
     render();
   } catch {
     // Static local preview has no serverless API. Local perks are enough there.
+  }
+}
+
+async function loadServerClaims() {
+  if (!state.wallet || state.wallet === DEMO_WALLET) return;
+  try {
+    const params = new URLSearchParams({ wallet: state.wallet });
+    const response = await fetch(`/api/perk-claims?${params.toString()}`, { headers: { accept: "application/json" } });
+    if (!response.ok) return;
+    const body = await response.json();
+    if (!body.ok || !Array.isArray(body.claims)) return;
+    body.claims.forEach(upsertClaim);
+  } catch {
+    // Claims still work from local receipts if the server is unavailable.
   }
 }
 
@@ -196,6 +229,20 @@ function openClaimForm(perkId) {
   state.error = "";
   render();
   app.querySelector("[data-claim-intake]")?.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function openMirosharkRunForm(perkId) {
+  const claim = claimForPerk(perkId);
+  if (!claim || !isUnusedMirosharkCredit(claim)) {
+    setError("This MiroShark credit is already queued or used.");
+    return;
+  }
+  state.runDraft = { perkId };
+  state.claimDraft = null;
+  state.notice = "";
+  state.error = "";
+  render();
+  app.querySelector("[data-miroshark-run-intake]")?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 async function claimPerk(form) {
@@ -240,7 +287,7 @@ async function claimPerk(form) {
       }
       upsertClaim(body.claim);
       state.loading = false;
-      setNotice(credit ? `${perk.title} claimed. Tool credit is ready for use.` : `${perk.title} claimed. Fulfillment request created.`);
+      setNotice(claimNotice(perk, credit));
       return;
     }
   } catch (error) {
@@ -265,7 +312,7 @@ async function claimPerk(form) {
     createdAt: new Date().toISOString(),
     status: credit ? "tool credit available" : "pending fulfillment",
   });
-  setNotice(credit ? `${perk.title} claimed. Tool credit is ready for use.` : `${perk.title} claimed. Fulfillment is logged for admin review.`);
+  setNotice(claimNotice(perk, credit));
   state.loading = false;
   render();
 }
@@ -425,6 +472,7 @@ function render() {
     ${state.notice ? `<div class="perks-notice wide">${state.notice}</div>` : ""}
     ${state.error ? `<div class="perks-notice perks-error wide">${state.error}</div>` : ""}
     ${claimIntake()}
+    ${mirosharkRunIntake()}
 
     ${holderView(claims, summary, hasWallet)}
   `;
@@ -475,9 +523,187 @@ function claimIntake() {
   `;
 }
 
+function mirosharkRunIntake() {
+  if (!state.runDraft) return "";
+  const perk = state.perks.find((item) => item.id === state.runDraft.perkId);
+  const claim = claimForPerk(state.runDraft.perkId);
+  if (!perk || !claim) return "";
+  return `
+    <section class="wide perks-panel fulfillment-panel" data-miroshark-run-intake>
+      <div class="fulfillment-copy">
+        <p class="section-kicker">Use credit</p>
+        <h2>${escapeHtml(perk.title)}</h2>
+        <p>Enter one MiroShark run input. Echo queues the run, fronts the x402 charge from the Echo wallet, and keeps this credit from being used twice.</p>
+      </div>
+      <form class="claim-form" data-miroshark-run-form>
+        <input type="hidden" name="perkId" value="${escapeAttribute(perk.id)}" />
+        <label class="claim-note">
+          Prompt
+          <textarea name="prompt" rows="4" placeholder="Scenario, question, or brief to simulate"></textarea>
+        </label>
+        <label>
+          URL
+          <input name="url" inputmode="url" placeholder="https://example.com/post-or-page" />
+        </label>
+        <label>
+          Prediction market optional
+          <input name="predictionMarket" placeholder="YES/NO market question" />
+        </label>
+        <label class="claim-note">
+          Article
+          <textarea name="article" rows="5" placeholder="Paste article text instead of prompt or URL"></textarea>
+        </label>
+        <label class="checkbox-line">
+          <input name="deepResearch" type="checkbox" value="1" />
+          Deep research
+        </label>
+        <div class="perk-actions">
+          <button class="btn btn-primary" type="submit" ${state.loading ? "disabled" : ""}>Queue run</button>
+          <button class="btn btn-secondary" type="button" data-cancel-run>Cancel</button>
+        </div>
+      </form>
+    </section>
+  `;
+}
+
+async function submitMirosharkRun(form) {
+  const data = new FormData(form);
+  const perkId = String(data.get("perkId") || "");
+  const claim = claimForPerk(perkId);
+  if (!claim || !isUnusedMirosharkCredit(claim)) {
+    setError("This MiroShark credit is already queued or used.");
+    return;
+  }
+
+  const payload = {
+    wallet: claimWallet(),
+    perkId,
+    prompt: String(data.get("prompt") || "").trim(),
+    url: String(data.get("url") || "").trim(),
+    article: String(data.get("article") || "").trim(),
+    predictionMarket: String(data.get("predictionMarket") || "").trim(),
+    deepResearch: Boolean(data.get("deepResearch")),
+  };
+  const supplied = [payload.prompt, payload.url, payload.article].filter(Boolean);
+  if (supplied.length !== 1) {
+    setError("Add exactly one input: prompt, URL, or article.");
+    return;
+  }
+
+  state.loading = true;
+  render();
+  try {
+    if (state.wallet && state.wallet !== DEMO_WALLET) {
+      const response = await fetch("/api/miroshark-credit-runs", {
+        method: "POST",
+        headers: { "content-type": "application/json", accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const body = await response.json();
+      if (!response.ok || !body.ok) throw new Error(body.error || `miroshark_run_http_${response.status}`);
+      upsertClaim(body.claim);
+      state.loading = false;
+      setNotice("MiroShark run queued. Echo will front the x402 run and reconcile the partner refund.");
+      refreshActiveMirosharkClaims({ silent: true });
+      return;
+    }
+  } catch (error) {
+    setError(`MiroShark run queue failed: ${error.message}. Demo queue still works locally.`);
+    state.loading = false;
+    render();
+    return;
+  }
+
+  upsertClaim({
+    ...claim,
+    status: "miroshark run queued",
+    usedAt: new Date().toISOString(),
+    mirosharkRun: {
+      id: `demo_miroshark_${Date.now().toString(36)}`,
+      status: "queued_for_echo_wallet",
+      payer: "echo_wallet",
+      refundPath: "affiliate_refund",
+      input: {
+        ...(payload.prompt ? { prompt: payload.prompt } : {}),
+        ...(payload.url ? { url: payload.url } : {}),
+        ...(payload.article ? { article: payload.article } : {}),
+        ...(payload.deepResearch ? { deep_research: true } : {}),
+        ...(payload.predictionMarket ? { prediction_market: payload.predictionMarket } : {}),
+      },
+      createdAt: new Date().toISOString(),
+    },
+  });
+  state.loading = false;
+  setNotice("Demo MiroShark run queued. Echo wallet payment is tracked against this credit.");
+}
+
+async function refreshActiveMirosharkClaims({ silent = false } = {}) {
+  if (!state.wallet || state.wallet === DEMO_WALLET) return;
+  const activeClaims = state.claims.filter((claim) => claim.wallet === claimWallet() && isActiveMirosharkClaim(claim));
+  if (!activeClaims.length) return;
+
+  try {
+    const refreshed = await Promise.all(
+      activeClaims.map(async (claim) => {
+        const response = await fetch("/api/miroshark-credit-status", {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({ wallet: claimWallet(), perkId: claim.perkId }),
+        });
+        const body = await response.json();
+        if (!response.ok || !body.ok) throw new Error(body.error || `miroshark_status_http_${response.status}`);
+        return body.claim;
+      }),
+    );
+    refreshed.filter(Boolean).forEach(upsertClaim);
+    if (!silent) setNotice("MiroShark run status refreshed.");
+    else render();
+  } catch (error) {
+    if (!silent) setError(`MiroShark status refresh failed: ${error.message}`);
+  }
+}
+
 function isToolCreditPerk(perk) {
   const text = `${perk?.type || ""} ${perk?.deliverable || ""} ${perk?.title || ""}`.toLowerCase();
   return text.includes("tool credit") || text.includes("partner credit") || text.includes("dual-holder credit");
+}
+
+function isMirosharkPerk(perkOrId) {
+  const perk = typeof perkOrId === "string" ? state.perks.find((item) => item.id === perkOrId) : perkOrId;
+  return (perk?.partnerId || "").toLowerCase() === "miroshark";
+}
+
+function claimForPerk(perkId) {
+  return state.claims.find((claim) => claim.wallet === claimWallet() && claim.perkId === perkId);
+}
+
+function isUnusedMirosharkCredit(claim) {
+  return ["tool credit available", "miroshark credit available"].includes(String(claim?.status || "").toLowerCase());
+}
+
+function isActiveMirosharkClaim(claim) {
+  return isMirosharkPerk(claim?.perkId) && MIROSHARK_ACTIVE_STATUSES.has(String(claim?.status || "").toLowerCase());
+}
+
+function mirosharkRunLink(run) {
+  return run?.shareUrl || run?.reportUrl || run?.waitUrl || run?.statusUrl || run?.result?.data?.share_url || run?.result?.data?.wait_url || run?.result?.data?.status_url || "";
+}
+
+function mirosharkRunSummary(claim) {
+  const run = claim?.mirosharkRun || {};
+  const status = String(run.status || claim?.status || "").replaceAll("_", " ");
+  const progress = Number(run.progress || run.statusData?.data?.progress || 0);
+  const stage = run.currentStage || run.statusData?.data?.current_stage || "";
+  const message = run.message || run.statusData?.data?.message || "";
+  const completed = String(claim?.status || "").toLowerCase() === "miroshark run completed";
+  const failed = String(claim?.status || "").toLowerCase() === "miroshark run failed";
+  const link = mirosharkRunLink(run);
+  return { run, status, progress, stage, message, completed, failed, link };
+}
+
+function claimNotice(perk, credit) {
+  if (isMirosharkPerk(perk)) return `${perk.title} claimed. Use credit when ready; Echo will front the MiroShark run and track the refund path.`;
+  return credit ? `${perk.title} claimed. Tool credit is ready for use.` : `${perk.title} claimed. Fulfillment request created.`;
 }
 
 function holderView(claims, summary, hasWallet) {
@@ -606,9 +832,15 @@ function partnerDetailPanel() {
 function perkCard(perk) {
   const stateName = perkState(perk, state.balance, walletClaimIds(), currentBalances());
   const partner = partnerById(perk.partnerId || "builtbyecho");
+  const claim = claimForPerk(perk.id);
+  const mirosharkUnused = isMirosharkPerk(perk) && isUnusedMirosharkCredit(claim);
   const actionLabel =
     stateName === "claimed"
-      ? "Claimed"
+      ? isMirosharkPerk(perk)
+        ? mirosharkUnused
+          ? "Use credit"
+          : "Run queued"
+        : "Claimed"
       : stateName === "locked"
         ? `Needs ${requirementText(perk)}`
         : stateName === "preview"
@@ -628,8 +860,9 @@ function perkCard(perk) {
         <div><dt>Delivers</dt><dd>${perk.deliverable}</dd></div>
         <div><dt>Window</dt><dd>${perk.expires}</dd></div>
       </dl>
+      ${stateName === "claimed" && isMirosharkPerk(perk) ? mirosharkCreditPanel(claim) : ""}
       <div class="perk-actions">
-        <button class="btn btn-primary" data-claim="${perk.id}" ${stateName === "locked" || stateName === "claimed" || stateName === "preview" ? "disabled" : ""}>
+        <button class="btn btn-primary" ${stateName === "claimed" && isMirosharkPerk(perk) ? `data-use-miroshark="${perk.id}"` : `data-claim="${perk.id}"`} ${stateName === "locked" || (stateName === "claimed" && !isMirosharkPerk(perk)) || (stateName === "claimed" && isMirosharkPerk(perk) && !mirosharkUnused) || stateName === "preview" ? "disabled" : ""}>
           ${actionLabel}
         </button>
         <button class="btn btn-secondary" data-share="${perk.id}">Share</button>
@@ -665,13 +898,51 @@ function displayTokenSymbol(token) {
 }
 
 function claimRow(claim) {
+  const miroshark = isMirosharkPerk(claim.perkId);
+  const run = miroshark ? mirosharkRunSummary(claim) : null;
   return `
-    <article class="claim-row">
-      <strong>${claim.title}</strong>
+    <article class="claim-row ${miroshark ? "miroshark-claim" : ""}">
+      <div class="claim-main">
+        <strong>${claim.title}</strong>
+        ${miroshark && run?.stage ? `<small>${escapeHtml(run.stage)}${run.message ? ` · ${escapeHtml(run.message)}` : ""}</small>` : ""}
+        ${miroshark && Number(run?.progress || 0) > 0 ? `<div class="run-progress"><span style="width:${Math.min(100, Math.max(0, run.progress))}%"></span></div>` : ""}
+      </div>
       <span>${claim.status}</span>
       <time>${new Date(claim.createdAt).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</time>
+      ${miroshark && isUnusedMirosharkCredit(claim) ? `<button class="btn btn-secondary claim-command-button" type="button" data-use-miroshark="${escapeAttribute(claim.perkId)}">Use credit</button>` : ""}
+      ${miroshark && isActiveMirosharkClaim(claim) ? `<button class="btn btn-secondary claim-command-button" type="button" data-refresh-miroshark="${escapeAttribute(claim.perkId)}">Refresh</button>` : ""}
+      ${miroshark && run?.link ? `<a class="btn btn-secondary claim-command-button" href="${escapeAttribute(run.link)}" target="_blank" rel="noopener">${run.completed ? "Open report" : "View run"}</a>` : ""}
     </article>
   `;
+}
+
+function mirosharkCreditPanel(claim) {
+  const run = mirosharkRunSummary(claim);
+  const queued = isActiveMirosharkClaim(claim);
+  const completed = run.completed;
+  const failed = run.failed;
+  return `
+    <div class="perk-command">
+      <span>${completed ? "Report ready" : failed ? "Run failed" : queued ? "Run in progress" : "Echo-fronted run"}</span>
+      ${
+        Number(run.progress || 0) > 0
+          ? `<div class="run-progress"><span style="width:${Math.min(100, Math.max(0, run.progress))}%"></span></div>`
+          : ""
+      }
+      <small>${mirosharkPanelCopy({ queued, completed, failed, run })}</small>
+      ${run.link ? `<a href="${escapeAttribute(run.link)}" target="_blank" rel="noopener">${completed ? "Open MiroShark report" : "Open MiroShark run"}</a>` : ""}
+    </div>
+  `;
+}
+
+function mirosharkPanelCopy({ queued, completed, failed, run }) {
+  if (completed) return "MiroShark finished this run. The report link is saved on this claim.";
+  if (failed) return run.run?.error ? `MiroShark returned an error: ${run.run.error}` : "MiroShark returned an error for this run.";
+  if (queued) {
+    const stage = run.stage ? `${run.stage}${run.progress ? ` (${run.progress}%)` : ""}` : "waiting for status";
+    return `Echo paid the x402 run. Current MiroShark state: ${stage}.`;
+  }
+  return "Use this credit inside Echo. Echo pays the $1 x402 run from its wallet, attaches the affiliate refund marker, and records the credit as used.";
 }
 
 function bindEvents() {
@@ -693,12 +964,26 @@ function bindEvents() {
   app.querySelectorAll("[data-claim]").forEach((button) => {
     button.addEventListener("click", () => openClaimForm(button.dataset.claim));
   });
+  app.querySelectorAll("[data-use-miroshark]").forEach((button) => {
+    button.addEventListener("click", () => openMirosharkRunForm(button.dataset.useMiroshark));
+  });
+  app.querySelectorAll("[data-refresh-miroshark]").forEach((button) => {
+    button.addEventListener("click", () => refreshActiveMirosharkClaims({ silent: false }));
+  });
   app.querySelector("[data-claim-form]")?.addEventListener("submit", (event) => {
     event.preventDefault();
     claimPerk(event.currentTarget);
   });
+  app.querySelector("[data-miroshark-run-form]")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    submitMirosharkRun(event.currentTarget);
+  });
   app.querySelector("[data-cancel-claim]")?.addEventListener("click", () => {
     state.claimDraft = null;
+    render();
+  });
+  app.querySelector("[data-cancel-run]")?.addEventListener("click", () => {
+    state.runDraft = null;
     render();
   });
   app.querySelectorAll("[data-share]").forEach((button) => {
