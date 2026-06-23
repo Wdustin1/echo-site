@@ -184,7 +184,20 @@
     .preview-frame { margin-top: 16px; padding: 12px; border-radius: 24px; }
     .preview-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: var(--ink-dim); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
     .card-preview { display: block; width: 100%; border-radius: 18px; border: 1px solid var(--line); background: oklch(0.07 0.018 232); }
+    .quick-note { margin-top: 12px; padding: 12px 14px; border-radius: 18px; border: 1px solid oklch(0.78 0.12 212 / 0.24); background: oklch(0.12 0.028 226 / 0.48); color: var(--ink-dim); font-size: 14px; }
     .result-actions { margin-top: 14px; }
+    .deep-panel { display: none; margin-top: 16px; padding: 16px; border-radius: 24px; border: 1px solid oklch(0.81 0.17 159 / 0.24); background: linear-gradient(150deg, oklch(0.08 0.022 232 / 0.86), oklch(0.13 0.03 226 / 0.64)); }
+    .deep-panel.is-open { display: grid; gap: 14px; }
+    .deep-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .deep-head h4 { font-family: var(--font-display); font-size: 24px; line-height: 1; letter-spacing: -.035em; color: var(--ink); }
+    .deep-status { color: var(--ink-dim); font: 700 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .deep-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .deep-card { padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.58); min-width: 0; }
+    .deep-card span { display: block; color: var(--ink-dim); font: 800 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .deep-card b { display: block; margin-top: 5px; color: var(--ink); overflow-wrap: anywhere; }
+    .deep-list { display: grid; gap: 8px; list-style: none; }
+    .deep-list li { padding: 10px 12px; border-radius: 14px; border: 1px solid oklch(0.38 0.052 190 / 0.24); background: oklch(0.08 0.022 232 / 0.52); color: var(--ink-soft); }
+    .deep-list strong { color: var(--ink); }
     .api-section { padding: 22px 0 70px; }
 
     .api-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
@@ -314,16 +327,29 @@
                   <div class="mini"><span>Launch surface</span><b id="launch-surface">—</b></div>
                   <div class="mini"><span>Liquidity</span><b id="liquidity">—</b></div>
                   <div class="mini"><span>Holders</span><b id="holders">—</b></div>
-                  <div class="mini"><span>History</span><b id="history">—</b></div>
+                  <div class="mini"><span>Scan depth</span><b id="history">Quick</b></div>
                 </div>
+                <p class="quick-note" id="quick-note">Quick scan keeps the first result clean and cheap. Honeypot simulation, top-holder reconstruction, website content checks, and scan-memory diffs only run when you request deeper analysis.</p>
                 <div class="preview-frame">
                   <div class="preview-head"><span>Share card preview</span><span>PNG</span></div>
                   <img class="card-preview" id="card-preview" alt="Echo launch card preview" />
                 </div>
                 <div class="button-row result-actions">
                   <a class="btn btn-primary" id="png-link" href="#" target="_blank" rel="noopener">Open PNG card</a>
-                  <a class="btn btn-ghost" id="report-link" href="#" target="_blank" rel="noopener">Open report JSON</a>
+                  <button class="btn btn-ghost" id="deep-button" type="button" disabled>Deeper Echo Analysis</button>
+                  <a class="btn btn-ghost" id="report-link" href="#" target="_blank" rel="noopener">Open quick JSON</a>
                 </div>
+                <section class="deep-panel" id="deep-panel" aria-live="polite" aria-labelledby="deep-title">
+                  <div class="deep-head">
+                    <div>
+                      <h4 id="deep-title">Deeper Echo Analysis</h4>
+                      <p id="deep-summary">Run the deeper pass when you want the full breakdown.</p>
+                    </div>
+                    <span class="deep-status" id="deep-status">Idle</span>
+                  </div>
+                  <div class="deep-grid" id="deep-grid"></div>
+                  <ul class="deep-list" id="deep-list"></ul>
+                </section>
               </div>
             </div>
           </div>
@@ -410,6 +436,15 @@
     const resultKicker = document.querySelector('#result-kicker');
     const resultTitle = document.querySelector('#result-title');
     const resultMessage = document.querySelector('#result-message');
+    const deepButton = document.querySelector('#deep-button');
+    const deepPanel = document.querySelector('#deep-panel');
+    const deepStatus = document.querySelector('#deep-status');
+    const deepSummary = document.querySelector('#deep-summary');
+    const deepGrid = document.querySelector('#deep-grid');
+    const deepList = document.querySelector('#deep-list');
+    let activeAddress = '';
+    let activeQuickReport = null;
+    let deepAbort = null;
 
     document.querySelector('.menu-toggle')?.addEventListener('click', (event) => {
       const button = event.currentTarget;
@@ -441,6 +476,7 @@
     });
 
     input.addEventListener('input', () => syncLinks(input.value.trim()));
+    deepButton.addEventListener('click', () => runDeepAnalysis());
     syncLinks(input.value.trim());
     loadCohorts();
 
@@ -476,19 +512,17 @@
     async function runScan(address) {
       scanButton.disabled = true;
       scanButton.textContent = 'Scanning…';
-      setResultState('scanning', 'Scanning Base data…', 'Contract, liquidity, holders, and launch-card sources are running in parallel.');
+      activeAddress = address;
+      activeQuickReport = null;
+      resetDeepPanel();
+      setResultState('scanning', 'Running quick Echo scan…', 'Fetching the score, token basics, liquidity, holder count, and share card in one lightweight pass.');
       resultEmpty.classList.remove('hidden');
       resultCard.style.display = 'none';
       try {
-        const [scanRes, cardRes] = await Promise.all([
-          fetch(`${API}/api/scan?address=${encodeURIComponent(address)}`),
-          fetch(`${API}/api/launch-card?address=${encodeURIComponent(address)}`)
-        ]);
+        const scanRes = await fetch(`${API}/api/scan?address=${encodeURIComponent(address)}`);
         const scanData = await scanRes.json();
-        const cardData = await cardRes.json();
         if (!scanRes.ok || !scanData.ok) throw new Error(scanData.message || scanData.error || 'Scan failed');
-        if (!cardRes.ok || !cardData.ok) throw new Error(cardData.message || cardData.error || 'Launch card failed');
-        renderResult(scanData.report, cardData.card);
+        renderResult(scanData.report, scanData.card);
       } catch (error) {
         showError(error.message || 'Scan failed');
       } finally {
@@ -498,9 +532,11 @@
     }
 
     function renderResult(report, card) {
+      activeQuickReport = report;
       setResultState('idle', 'Ready when you are.', 'Submit a contract to generate an Echo report and launch card preview.');
       resultEmpty.classList.add('hidden');
       resultCard.style.display = 'grid';
+      resetDeepPanel();
       document.querySelector('#score').textContent = report.score ?? '—';
       document.querySelector('#risk').textContent = `${report.level || 'UNKNOWN'} risk`;
       document.querySelector('#token-name').textContent = `${report.token?.name || 'Token'} (${report.token?.symbol || '—'})`;
@@ -509,13 +545,75 @@
       document.querySelector('#launch-surface').textContent = card.metrics?.launchVenue || card.metrics?.launchSurface || report.launch?.surface || 'unknown';
       document.querySelector('#liquidity').textContent = formatUsd(report.primaryPair?.liquidityUsd || card.metrics?.liquidityUsd);
       document.querySelector('#holders').textContent = card.metrics?.holderCount ? card.metrics.holderCount.toLocaleString() : 'unknown';
-      document.querySelector('#history').textContent = report.history?.enabled ? `${report.history.firstSeen ? 'first seen' : 'stored'} · ${report.history.changes?.length || 0} changes` : 'not stored';
+      document.querySelector('#history').textContent = report.analysisDepth === 'quick' ? 'Quick' : 'Deep';
       cardPreview.src = card.cardUrl;
       cardPreview.alt = `Echo launch card for ${report.token?.symbol || 'token'}`;
       pngLink.href = card.cardUrl;
-      reportLink.href = card.scanUrl;
+      reportLink.href = `${API}/api/scan?address=${encodeURIComponent(report.token?.address || card.address)}`;
+      deepButton.disabled = false;
       syncLinks(report.token?.address || card.address);
       loadCohorts();
+    }
+
+    async function runDeepAnalysis() {
+      const address = activeQuickReport?.token?.address || activeAddress || input.value.trim();
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) return;
+      deepAbort?.abort();
+      deepAbort = new AbortController();
+      deepPanel.classList.add('is-open');
+      deepStatus.textContent = 'Running';
+      deepSummary.textContent = 'Pulling Honeypot.is simulation, top-holder reconstruction, website content check, scan memory, and full score buckets.';
+      deepGrid.innerHTML = '';
+      deepList.innerHTML = '<li>Deeper Echo Analysis is running. This may take a few seconds.</li>';
+      deepButton.disabled = true;
+      deepButton.textContent = 'Deep analysis running…';
+      try {
+        const res = await fetch(`${API}/api/deep-analysis?address=${encodeURIComponent(address)}`, { signal: deepAbort.signal });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'Deep analysis failed');
+        renderDeepAnalysis(data.report);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          deepStatus.textContent = 'Failed';
+          deepSummary.textContent = error.message || 'Deep Echo Analysis failed.';
+          deepList.innerHTML = '<li>Keep the quick card, then retry the deeper pass if providers recover.</li>';
+        }
+      } finally {
+        deepButton.disabled = false;
+        deepButton.textContent = 'Refresh Deeper Echo Analysis';
+      }
+    }
+
+    function renderDeepAnalysis(report) {
+      deepStatus.textContent = 'Complete';
+      document.querySelector('#history').textContent = report.history?.enabled ? `${report.history.firstSeen ? 'first seen' : 'stored'} · ${report.history.changes?.length || 0} changes` : 'deep';
+      deepSummary.textContent = report.summary || 'Full provider pass completed.';
+      const holderMap = report.holders?.echoMap;
+      const honeypot = report.security?.honeypot;
+      const cards = [
+        ['Contract source', report.security?.isOpenSource === true ? 'Open source' : report.security?.isOpenSource === false ? 'Not open source' : 'Unknown'],
+        ['Honeypot sim', honeypot?.source === 'honeypot.is' ? `${honeypot.risk || 'unknown'} · buy ${formatPct(honeypot.buyTax)} / sell ${formatPct(honeypot.sellTax)}` : 'Unavailable'],
+        ['Top 10 holders', formatPct(report.holders?.adjustedTop10Percentage ?? report.holders?.top10Percentage)],
+        ['Owner/admin', report.security?.ownerAddress ? shortAddress(report.security.ownerAddress) : 'renounced/unknown'],
+        ['Website check', report.website?.url ? `${report.website.reachable ? 'reachable' : 'unreachable'} · ${report.website.https ? 'HTTPS' : 'no HTTPS'}` : 'No website'],
+        ['Scan memory', report.history?.enabled ? `${report.history.changes?.length || 0} changes` : 'Not stored']
+      ];
+      deepGrid.innerHTML = cards.map(([label, value]) => `<div class="deep-card"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join('');
+      const bucketItems = (report.buckets || []).map((bucket) => `<li><strong>${escapeHtml(bucket.label)}:</strong> ${bucket.score}/${bucket.max} · ${escapeHtml((bucket.findings || ['No major finding.'])[0])}</li>`);
+      const mapItems = holderMap?.notes?.map((note) => `<li><strong>Echo Map:</strong> ${escapeHtml(note)}</li>`) || [];
+      const sourceItems = (report.sources || []).slice(0, 5).map((source) => `<li><strong>${escapeHtml(source.label)}:</strong> ${escapeHtml(source.status)}${source.note ? ` · ${escapeHtml(source.note)}` : ''}</li>`);
+      deepList.innerHTML = [...bucketItems, ...mapItems, ...sourceItems].join('') || '<li>No deeper findings returned.</li>';
+    }
+
+    function resetDeepPanel() {
+      deepAbort?.abort();
+      deepPanel.classList.remove('is-open');
+      deepStatus.textContent = 'Idle';
+      deepSummary.textContent = 'Run the deeper pass when you want the full breakdown.';
+      deepGrid.innerHTML = '';
+      deepList.innerHTML = '';
+      deepButton.disabled = true;
+      deepButton.textContent = 'Deeper Echo Analysis';
     }
 
     function setResultState(state, title, message) {
@@ -540,6 +638,19 @@
     function formatUsd(value) {
       if (!Number.isFinite(value)) return 'unknown';
       return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+    }
+
+    function formatPct(value) {
+      if (!Number.isFinite(value)) return 'unknown';
+      return `${Number(value).toFixed(Number(value) >= 10 ? 1 : 2)}%`;
+    }
+
+    function shortAddress(address) {
+      return typeof address === 'string' && address.length > 12 ? `${address.slice(0, 6)}…${address.slice(-4)}` : address || 'unknown';
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
     }
   </script>
 </body>

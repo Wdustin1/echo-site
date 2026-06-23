@@ -28,3 +28,10 @@ test('Vercel routes /security to the Echo Security page', () => {
     'expected /security rewrite to /security.html'
   );
 });
+
+test('security page keeps the first scan lightweight and lazy-loads deeper analysis', () => {
+  assert.match(securityHtml, /id="deep-button"[^>]*>Deeper Echo Analysis<\/button>/);
+  assert.match(securityHtml, /fetch\(`\$\{API\}\/api\/scan\?address=/);
+  assert.match(securityHtml, /fetch\(`\$\{API\}\/api\/deep-analysis\?address=/);
+  assert.doesNotMatch(securityHtml, /Promise\.all\(\[\s*fetch\(`\$\{API\}\/api\/scan[\s\S]*api\/launch-card/);
+});
