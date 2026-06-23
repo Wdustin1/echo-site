@@ -6,6 +6,7 @@
     { "source": "/public-api-finder", "destination": "/api/x402-proxy?service=public-api-finder" },
     { "source": "/agent-wormhole-open", "destination": "/api/x402-proxy?service=agent-wormhole-open" },
     { "source": "/gauntlet", "destination": "/gauntlet.html" },
-    { "source": "/perks", "destination": "/perks.html" }
+    { "source": "/perks", "destination": "/perks.html" },
+    { "source": "/security", "destination": "/security.html" }
   ]
 }
