@@ -15,8 +15,13 @@ export default async function handler(req, res) {
     const body = parseBody(req);
     const wallet = body.wallet;
     const perkId = String(body.perkId || '');
+    if (!wallet) return json(res, 400, { ok: false, error: 'invalid_wallet' });
+    if (!perkId) return json(res, 400, { ok: false, error: 'missing_perk_id' });
+
     const { perks } = await listPerks();
     const perk = findPerk(perks, perkId);
+    if (!perk) return json(res, 404, { ok: false, error: 'perk_not_found' });
+
     const { balance, balances, tokenSymbol } = await readRequiredTokenBalance(perk, wallet);
     const eligibility = validateClaimEligibility(perk, balance, balances);
     if (!eligibility.ok) {
@@ -49,9 +54,11 @@ export default async function handler(req, res) {
       ...result,
     });
   } catch (error) {
-    return json(res, 500, {
+    const message = error?.message || 'claim_failed';
+    const status = message === 'invalid_wallet' ? 400 : 500;
+    return json(res, status, {
       ok: false,
-      error: error?.message || 'claim_failed',
+      error: message,
     });
   }
 }
