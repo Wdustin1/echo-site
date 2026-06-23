@@ -327,7 +327,7 @@
                   <div class="mini"><span>Launch surface</span><b id="launch-surface">—</b></div>
                   <div class="mini"><span>Liquidity</span><b id="liquidity">—</b></div>
                   <div class="mini"><span>Holders</span><b id="holders">—</b></div>
-                  <div class="mini"><span>Scan depth</span><b id="history">Quick</b></div>
+                  <div class="mini"><span>Analysis</span><b id="history">Quick</b></div>
                 </div>
                 <p class="quick-note" id="quick-note">Quick scan keeps the first result clean and cheap. Honeypot simulation, top-holder reconstruction, website content checks, and scan-memory diffs only run when you request deeper analysis.</p>
                 <div class="preview-frame">
@@ -586,7 +586,7 @@
 
     function renderDeepAnalysis(report) {
       deepStatus.textContent = 'Complete';
-      document.querySelector('#history').textContent = report.history?.enabled ? `${report.history.firstSeen ? 'first seen' : 'stored'} · ${report.history.changes?.length || 0} changes` : 'deep';
+      document.querySelector('#history').textContent = report.history?.enabled ? `Deep · ${report.history.changes?.length || 0} changes` : 'Deep';
       deepSummary.textContent = report.summary || 'Full provider pass completed.';
       const holderMap = report.holders?.echoMap;
       const honeypot = report.security?.honeypot;
