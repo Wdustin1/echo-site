@@ -113,8 +113,23 @@
     .surface-tab { min-height: 42px; padding: 10px 14px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--ink-dim); font: 800 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
     .surface-tab[aria-selected="true"] { color: oklch(0.08 0.02 232); background: var(--green); box-shadow: 0 0 28px oklch(0.81 0.17 159 / 0.18); }
     .surface-panel[hidden] { display: none; }
-    .scanner-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 18px; align-items: start; margin-top: 24px; }
-    .form-panel, .result-panel { padding: 24px; }
+    .scanner-grid { display: grid; grid-template-columns: minmax(300px, .78fr) minmax(0, 1.22fr); gap: clamp(18px, 2.5vw, 28px); align-items: start; margin-top: 24px; }
+    .form-panel, .result-panel { position: relative; overflow: hidden; padding: clamp(20px, 2.4vw, 30px); }
+    .form-panel { display: grid; gap: 16px; align-content: start; }
+    .form-panel::after, .result-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 18% 0%, oklch(0.81 0.17 159 / 0.10), transparent 22rem);
+      opacity: .9;
+    }
+    .form-panel > *, .result-panel > * { position: relative; z-index: 1; }
+    .form-copy { padding-bottom: 4px; }
+    .form-copy h3 { font-size: clamp(25px, 2.5vw, 34px); line-height: 1; letter-spacing: -.045em; }
+    .form-copy p { margin-top: 10px; font-size: 15px; color: var(--ink-dim); }
+    .scan-field { padding: 14px; border: 1px solid var(--line); border-radius: 22px; background: oklch(0.08 0.022 232 / 0.54); }
+    .scan-field label { margin-bottom: 8px; }
     .watchtower-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr); gap: 18px; align-items: stretch; margin-top: 24px; }
     .watchtower-panel { padding: 24px; }
     .watchtower-panel h3 { font-size: clamp(28px, 3vw, 42px); letter-spacing: -.04em; }
@@ -129,22 +144,47 @@
     .address-input { width: 100%; min-height: 54px; padding: 0 16px; border: 1px solid var(--line); border-radius: 16px; background: oklch(0.08 0.022 232 / 0.86); color: var(--ink); font: 700 14px var(--font-mono); outline: none; }
     .address-input:focus { border-color: var(--green); box-shadow: 0 0 0 6px oklch(0.81 0.17 159 / 0.12); }
     .helper { margin-top: 10px; color: var(--ink-dim); font-size: 14px; }
-    .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-    .example-chip { padding: 8px 10px; border-radius: 999px; border: 1px solid var(--line); background: oklch(0.12 0.028 226 / 0.72); color: var(--ink-soft); font: 700 11px var(--font-mono); cursor: pointer; }
-    .result-empty { display: grid; place-items: center; min-height: 360px; border: 1px dashed var(--line); border-radius: 24px; color: var(--ink-dim); text-align: center; padding: 28px; }
-    .result-card { display: none; gap: 18px; }
-    .score-row { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 16px; }
-    .score { font: 800 clamp(54px, 8vw, 88px)/.9 var(--font-display); color: var(--green); letter-spacing: -.06em; }
-    .risk { display: inline-flex; padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--ink); font: 800 12px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
-    .token-name { font-size: 30px; letter-spacing: -.03em; }
-    .token-meta { margin-top: 4px; font: 700 12px var(--font-mono); color: var(--ink-dim); overflow-wrap: anywhere; }
-    .summary { margin-top: 14px; padding: 14px; border-radius: 18px; background: oklch(0.1 0.024 232 / 0.62); border: 1px solid var(--line); }
-    .mini-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
-    .mini { padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.56); }
+    .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid oklch(0.38 0.052 190 / 0.22); }
+    .example-chip { padding: 8px 10px; border-radius: 999px; border: 1px solid var(--line); background: oklch(0.12 0.028 226 / 0.72); color: var(--ink-soft); font: 700 11px var(--font-mono); cursor: pointer; transition: transform .18s ease, border-color .18s ease, color .18s ease; }
+    .example-chip:hover { transform: translateY(-1px); border-color: oklch(0.81 0.17 159 / 0.36); color: var(--ink); }
+    .result-empty { display: grid; place-items: center; min-height: 430px; border: 1px solid oklch(0.38 0.052 190 / 0.26); border-radius: 24px; color: var(--ink-dim); text-align: center; padding: clamp(24px, 4vw, 44px); background: linear-gradient(180deg, oklch(0.075 0.022 232 / 0.72), oklch(0.1 0.024 232 / 0.52)); }
+    .empty-state { width: min(100%, 440px); display: grid; gap: 12px; justify-items: center; }
+    .empty-orb { width: 58px; height: 58px; border-radius: 22px; border: 1px solid oklch(0.81 0.17 159 / 0.34); background: radial-gradient(circle at 35% 30%, oklch(0.81 0.17 159 / 0.45), transparent 48%), oklch(0.08 0.022 232 / 0.92); box-shadow: 0 0 46px oklch(0.81 0.17 159 / 0.18); }
+    .result-kicker { font: 800 11px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--green); }
+    .result-empty h3 { font-size: clamp(27px, 3vw, 42px); line-height: 1; letter-spacing: -.045em; }
+    .result-empty p:not(.result-kicker) { max-width: 34rem; }
+    .scan-progress { display: none; width: min(100%, 360px); height: 8px; margin-top: 8px; border-radius: 999px; overflow: hidden; border: 1px solid var(--line); background: oklch(0.06 0.018 232 / 0.9); }
+    .scan-progress span { display: block; width: 42%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, transparent, var(--green), var(--cyan)); animation: scan-sweep 1.45s ease-in-out infinite; }
+    .scan-steps { display: none; width: min(100%, 430px); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+    .scan-steps span { padding: 9px 10px; border: 1px solid var(--line); border-radius: 14px; background: oklch(0.1 0.024 232 / 0.62); color: var(--ink-soft); font: 700 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+    .result-empty.is-scanning { border-style: solid; border-color: oklch(0.81 0.17 159 / 0.36); }
+    .result-empty.is-scanning .scan-progress, .result-empty.is-scanning .scan-steps { display: grid; }
+    .result-empty.is-scanning .empty-orb { animation: orb-pulse 1.6s ease-in-out infinite; }
+    .result-empty.is-error { border-color: oklch(0.69 0.16 28 / 0.42); }
+    .result-empty.is-error .result-kicker { color: var(--red); }
+    .result-empty.is-error .empty-orb { border-color: oklch(0.69 0.16 28 / 0.36); background: radial-gradient(circle at 35% 30%, oklch(0.69 0.16 28 / 0.38), transparent 48%), oklch(0.08 0.022 232 / 0.92); }
+    @keyframes scan-sweep { 0% { transform: translateX(-110%); } 55%, 100% { transform: translateX(250%); } }
+    @keyframes orb-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 38px oklch(0.81 0.17 159 / 0.16); } 50% { transform: scale(1.04); box-shadow: 0 0 62px oklch(0.81 0.17 159 / 0.3); } }
+    .result-card { display: none; gap: 16px; }
+    .result-hero { display: grid; grid-template-columns: minmax(150px, .58fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+    .score-lockup, .token-lockup, .summary, .mini, .preview-frame { border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.56); }
+    .score-lockup { display: grid; align-content: center; gap: 10px; min-height: 150px; padding: 18px; border-radius: 24px; }
+    .score { font: 800 clamp(58px, 8vw, 96px)/.82 var(--font-display); color: var(--green); letter-spacing: -.065em; }
+    .risk { display: inline-flex; width: fit-content; padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--ink); font: 800 12px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .token-lockup { display: grid; align-content: center; padding: 18px; border-radius: 24px; }
+    .token-name { font-size: clamp(27px, 3vw, 40px); line-height: 1; letter-spacing: -.045em; }
+    .token-meta { margin-top: 10px; font: 700 12px var(--font-mono); color: var(--ink-dim); overflow-wrap: anywhere; }
+    .summary { margin-top: 16px; padding: 16px; border-radius: 20px; color: var(--ink-soft); }
+    .mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .mini { padding: 12px; border-radius: 16px; min-width: 0; }
     .mini span { display: block; color: var(--ink-dim); font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
     .mini b { display: block; margin-top: 4px; color: var(--ink); overflow-wrap: anywhere; }
-    .card-preview { width: 100%; margin-top: 18px; border-radius: 24px; border: 1px solid var(--line); background: oklch(0.07 0.018 232); }
+    .preview-frame { margin-top: 16px; padding: 12px; border-radius: 24px; }
+    .preview-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: var(--ink-dim); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .card-preview { display: block; width: 100%; border-radius: 18px; border: 1px solid var(--line); background: oklch(0.07 0.018 232); }
+    .result-actions { margin-top: 14px; }
     .api-section { padding: 22px 0 70px; }
+
     .api-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
     .api-card { padding: 18px; border-radius: 24px; border: 1px solid var(--line); background: oklch(0.14 0.03 226 / 0.72); }
     .api-card h3 { font-size: 22px; }
@@ -160,7 +200,9 @@
       .nav-links { grid-column: 1 / -1; display: none; flex-wrap: wrap; padding-top: 8px; }
       .nav-links.open { display: flex; }
       .hero-grid, .scanner-grid, .api-grid, .watchtower-grid { grid-template-columns: 1fr; }
-      .metric-grid, .mini-grid, .risk-ladder { grid-template-columns: 1fr; }
+      .metric-grid, .risk-ladder { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .result-hero, .scan-steps { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -225,13 +267,19 @@
         <div class="surface-panel" id="scanner-panel" role="tabpanel" aria-labelledby="scanner-tab" data-security-panel="scanner">
           <div class="scanner-grid">
             <form class="panel form-panel" id="scan-form">
-              <label for="address">Base token contract</label>
-              <input class="address-input" id="address" name="address" autocomplete="off" spellcheck="false" placeholder="0x…" value="0x4ed4e862860bed51a9570b96d89af5e1b0efefed" />
-              <p class="helper">Runs against <code>shield.builtbyecho.xyz</code>. Reports may take a few seconds because providers are queried live.</p>
-              <div class="examples" aria-label="Example token addresses">
-                <button class="example-chip" type="button" data-address="0x4ed4e862860bed51a9570b96d89af5e1b0efefed">DEGEN</button>
-                <button class="example-chip" type="button" data-address="0x940181a94A35A4569E4529A3CDfB74e38FD98631">AERO</button>
-                <button class="example-chip" type="button" data-address="0x7afE438411ee3959C7De6f7fB76bf9C769320bA3">BLOCKTRONICS</button>
+              <div class="form-copy">
+                <h3>Clean scan console.</h3>
+                <p>Input stays on the left. The right side becomes a focused status/readout area while Echo queries live Base data.</p>
+              </div>
+              <div class="scan-field">
+                <label for="address">Base token contract</label>
+                <input class="address-input" id="address" name="address" autocomplete="off" spellcheck="false" placeholder="0x…" value="0x4ed4e862860bed51a9570b96d89af5e1b0efefed" />
+                <p class="helper">Runs against <code>shield.builtbyecho.xyz</code>. Live providers can take a few seconds.</p>
+                <div class="examples" aria-label="Example token addresses">
+                  <button class="example-chip" type="button" data-address="0x4ed4e862860bed51a9570b96d89af5e1b0efefed">DEGEN</button>
+                  <button class="example-chip" type="button" data-address="0x940181a94A35A4569E4529A3CDfB74e38FD98631">AERO</button>
+                  <button class="example-chip" type="button" data-address="0x7afE438411ee3959C7De6f7fB76bf9C769320bA3">BLOCKTRONICS</button>
+                </div>
               </div>
               <div class="button-row">
                 <button class="btn btn-primary" type="submit" id="scan-button">Scan token</button>
@@ -241,15 +289,23 @@
 
             <div class="panel result-panel" aria-live="polite">
               <div class="result-empty" id="result-empty">
-                <div>
-                  <h3>Ready when you are.</h3>
-                  <p>Submit a contract to generate an Echo report and launch card preview.</p>
+                <div class="empty-state">
+                  <div class="empty-orb" aria-hidden="true"></div>
+                  <p class="result-kicker" id="result-kicker">Awaiting contract</p>
+                  <h3 id="result-title">Ready when you are.</h3>
+                  <p id="result-message">Submit a contract to generate an Echo report and launch card preview.</p>
+                  <div class="scan-progress" id="scan-progress" aria-hidden="true"><span></span></div>
+                  <div class="scan-steps" id="scan-steps" aria-hidden="true">
+                    <span>Contract</span>
+                    <span>Liquidity</span>
+                    <span>Holders</span>
+                  </div>
                 </div>
               </div>
               <div class="result-card" id="result-card">
-                <div class="score-row">
-                  <div><div class="score" id="score">—</div><span class="risk" id="risk">—</span></div>
-                  <div style="text-align:right"><h3 class="token-name" id="token-name">Token</h3><div class="token-meta" id="token-meta">—</div></div>
+                <div class="result-hero">
+                  <div class="score-lockup"><div class="score" id="score">—</div><span class="risk" id="risk">—</span></div>
+                  <div class="token-lockup"><h3 class="token-name" id="token-name">Token</h3><div class="token-meta" id="token-meta">—</div></div>
                 </div>
                 <p class="summary" id="summary">—</p>
                 <div class="mini-grid">
@@ -258,8 +314,11 @@
                   <div class="mini"><span>Holders</span><b id="holders">—</b></div>
                   <div class="mini"><span>History</span><b id="history">—</b></div>
                 </div>
-                <img class="card-preview" id="card-preview" alt="Echo launch card preview" />
-                <div class="button-row">
+                <div class="preview-frame">
+                  <div class="preview-head"><span>Share card preview</span><span>PNG</span></div>
+                  <img class="card-preview" id="card-preview" alt="Echo launch card preview" />
+                </div>
+                <div class="button-row result-actions">
                   <a class="btn btn-primary" id="png-link" href="#" target="_blank" rel="noopener">Open PNG card</a>
                   <a class="btn btn-ghost" id="report-link" href="#" target="_blank" rel="noopener">Open report JSON</a>
                 </div>
@@ -346,6 +405,9 @@
     const pngLink = document.querySelector('#png-link');
     const reportLink = document.querySelector('#report-link');
     const cardPreview = document.querySelector('#card-preview');
+    const resultKicker = document.querySelector('#result-kicker');
+    const resultTitle = document.querySelector('#result-title');
+    const resultMessage = document.querySelector('#result-message');
 
     document.querySelector('.menu-toggle')?.addEventListener('click', (event) => {
       const button = event.currentTarget;
@@ -412,8 +474,8 @@
     async function runScan(address) {
       scanButton.disabled = true;
       scanButton.textContent = 'Scanning…';
+      setResultState('scanning', 'Scanning Base data…', 'Contract, liquidity, holders, and launch-card sources are running in parallel.');
       resultEmpty.classList.remove('hidden');
-      resultEmpty.querySelector('p').textContent = 'Querying public Base data providers. This can take a few seconds.';
       resultCard.style.display = 'none';
       try {
         const [scanRes, cardRes] = await Promise.all([
@@ -434,8 +496,9 @@
     }
 
     function renderResult(report, card) {
+      setResultState('idle', 'Ready when you are.', 'Submit a contract to generate an Echo report and launch card preview.');
       resultEmpty.classList.add('hidden');
-      resultCard.style.display = 'block';
+      resultCard.style.display = 'grid';
       document.querySelector('#score').textContent = report.score ?? '—';
       document.querySelector('#risk').textContent = `${report.level || 'UNKNOWN'} risk`;
       document.querySelector('#token-name').textContent = `${report.token?.name || 'Token'} (${report.token?.symbol || '—'})`;
@@ -453,10 +516,17 @@
       loadCohorts();
     }
 
+    function setResultState(state, title, message) {
+      resultEmpty.classList.toggle('is-scanning', state === 'scanning');
+      resultEmpty.classList.toggle('is-error', state === 'error');
+      resultKicker.textContent = state === 'scanning' ? 'Scan running' : state === 'error' ? 'Needs attention' : 'Awaiting contract';
+      resultTitle.textContent = title;
+      resultMessage.textContent = message;
+    }
+
     function showError(message) {
+      setResultState('error', 'Scan did not complete.', message);
       resultEmpty.classList.remove('hidden');
-      resultEmpty.querySelector('h3').textContent = 'Scan did not complete.';
-      resultEmpty.querySelector('p').textContent = message;
       resultCard.style.display = 'none';
     }
 
