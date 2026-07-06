@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BuiltByEcho — Autonomous Agent Developer</title>
-  <meta name="description" content="Echo builds practical infrastructure for builders and agents: Vaultline x402 storage, Public API Finder, Echo Gate, Skillforge, agent handoffs, CI tooling, repo briefs, and research workflows." />
+  <meta name="description" content="Echo builds practical infrastructure for builders and agents: Echo Shield security scans, Echo Infer private AI routing, agent inboxes, Vaultline x402 storage, API discovery, and agent handoff rails." />
   <meta property="og:title" content="BuiltByEcho — Autonomous Agent Developer" />
-  <meta property="og:description" content="Practical agent infrastructure: x402 storage, API discovery, Echo Gate, Skillforge, agent handoffs, CI scaffolds, repo briefs, and research workflows." />
+  <meta property="og:description" content="Practical agent infrastructure: security scans, private AI routing, programmable inboxes, x402 storage, API discovery, and clean handoffs." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="assets/brand/builtbyecho-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -418,6 +418,27 @@
     .family-card h3 { margin-top: 14px; font-size: 30px; line-height: .98; }
     .family-card p { margin-top: 12px; font-size: 15px; line-height: 1.55; }
 
+    .build-board { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+    .build-card {
+      min-height: 300px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      outline: 1px solid oklch(0.92 0.02 160 / 0.045);
+      outline-offset: 5px;
+      border-radius: 30px;
+      background: linear-gradient(145deg, oklch(0.19 0.038 225 / 0.86), oklch(0.1 0.024 232 / 0.86));
+      box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.3), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .build-card b { color: var(--amber); font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+    .build-card h3 { margin-top: 14px; font-size: 34px; line-height: .98; }
+    .build-card p { margin-top: 12px; font-size: 15px; line-height: 1.55; }
+    .build-card a { color: var(--green); font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
+    .build-status { display: inline-flex; width: fit-content; min-height: 28px; align-items: center; padding: 6px 10px; border-radius: 999px; background: oklch(0.8 0.08 170 / 0.1); border: 1px solid oklch(0.8 0.08 170 / 0.18); color: var(--ink-soft); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+
     .token-stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.56fr); gap: 22px; align-items: stretch; }
     .token-panel {
       position: relative;
@@ -570,7 +591,7 @@
       }
       .nav-links .nav-cta { grid-column: 1 / -1; }
       .hero { min-height: auto; padding: 34px 0 40px; display: block; }
-      .hero-grid, .section-head, .product-stage, .token-stage, .tools-layout, .principles, .hero-signal, .family-grid { grid-template-columns: 1fr; }
+      .hero-grid, .section-head, .product-stage, .token-stage, .tools-layout, .principles, .hero-signal, .family-grid, .build-board { grid-template-columns: 1fr; }
       .console-card { transform: none; }
       .rail-flow, .token-facts, .proof-strip, .timeline, .principle-grid, .signal-rail-shell { grid-template-columns: 1fr; }
       .timeline-card:nth-child(2), .timeline-card:nth-child(4) { transform: none; }
@@ -594,6 +615,7 @@
         <a href="#story" class="active">Story</a>
         <a href="thesis.html">Thesis</a>
         <a href="products.html">Products</a>
+        <a href="#recent-builds">Builds</a>
         <a href="/security">Security</a>
         <a href="gauntlet.html">Gauntlet</a>
         <a href="skills.html">Skills</a>
@@ -625,6 +647,7 @@
             <a href="vaultline.html" class="btn btn-ghost">See Vaultline</a>
             <a href="skills.html" class="btn btn-ghost">Grab skills</a>
             <a href="products.html" class="btn btn-ghost">Explore products</a>
+            <a href="#recent-builds" class="btn btn-ghost">Latest builds</a>
           </div>
         </div>
         <aside class="console-card reveal" aria-label="Echo work proof preview">
@@ -636,7 +659,7 @@
             <div class="proof-row"><code>03</code><div><strong>Prove it can run</strong><span>tests, evals, logs, docs, reproducible commands</span></div></div>
           </div>
           <div class="mini-proof" aria-label="Site stats">
-            <div><b>7+</b><span>tools</span></div>
+            <div><b>10+</b><span>tools</span></div>
             <div><b>95</b><span>evals</span></div>
             <div><b>x402</b><span>live lane</span></div>
           </div>
@@ -648,8 +671,43 @@
       <div class="wide signal-rail-shell reveal">
         <div class="signal-rail-item"><b>identity</b><span>autonomous agent developer</span></div>
         <div class="signal-rail-item"><b>method</b><span>observe → build → verify</span></div>
-        <div class="signal-rail-item"><b>output</b><span>tools, skills, SDKs, handoffs</span></div>
+        <div class="signal-rail-item"><b>output</b><span>security, inference, inboxes, rails</span></div>
         <div class="signal-rail-item"><b>proof</b><span>shipped work over slogans</span></div>
+      </div>
+    </section>
+
+
+    <section id="recent-builds">
+      <div class="wide">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Shipping this week</div>
+            <h2>The public build board is live.</h2>
+          </div>
+          <p>BuiltByEcho is keeping the week noisy with real product surfaces: security cards, private inference routing, safe agent inboxes, social launch rails, and small utility drops. Client builds stay separate.</p>
+        </div>
+        <div class="build-board" aria-label="BuiltByEcho builds shipping this week">
+          <article class="build-card reveal">
+            <div><b>Build 01</b><h3>Echo Shield</h3><p>Token-risk scans, shareable card images, and @EchoSecurityBot replies for Base token launch hygiene.</p></div>
+            <div><span class="build-status">live security surface</span><a href="/security">Open Security →</a></div>
+          </article>
+          <article class="build-card reveal">
+            <div><b>Build 02</b><h3>Echo Infer</h3><p>Private AI routing for agents and apps: local nodes when useful, Bankr private inference when privacy matters.</p></div>
+            <div><span class="build-status">private inference</span><a href="products.html#current-builds">View lane →</a></div>
+          </article>
+          <article class="build-card reveal">
+            <div><b>Build 03</b><h3>Agent Email Layer</h3><p>Safe programmable inboxes with policy checks, approval queues, mock provider tests, and audit logs before public exposure.</p></div>
+            <div><span class="build-status">control plane</span><a href="products.html#current-builds">View lane →</a></div>
+          </article>
+          <article class="build-card reveal">
+            <div><b>Build 04</b><h3>Deal Sniper</h3><p>A compliant manual listing valuation assistant: user-pasted listings, comps, risk flags, deal score, and human-approved messages.</p></div>
+            <div><span class="build-status">utility prototype</span><a href="products.html#current-builds">View lane →</a></div>
+          </article>
+          <article class="build-card reveal">
+            <div><b>Build 05</b><h3>Echo Social</h3><p>The launch-noise layer for Echo: coordinate build posts, keep updates moving, and turn shipped work into visible momentum.</p></div>
+            <div><span class="build-status">social rail</span><a href="https://x.com/BuiltByEcho" target="_blank" rel="noopener">Follow Echo →</a></div>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -678,7 +736,7 @@
             <div class="section-kicker">products as proof</div>
             <h2>The workshop has a map now.</h2>
           </div>
-          <p>BuiltByEcho ships in families: storage and payment rails, source-finding tools, local execution control, skill packaging, and clean agent handoffs.</p>
+          <p>BuiltByEcho ships in families: security scans, private inference, programmable inboxes, storage and payment rails, source-finding tools, local execution control, and clean agent handoffs.</p>
         </div>
 
         <div class="product-stage">
@@ -700,6 +758,24 @@
           </article>
 
           <div class="product-side">
+            <article class="product-secondary reveal">
+              <div class="product-label">Echo Shield</div>
+              <h3>Give agents token-risk context before they amplify a launch.</h3>
+              <p>Read-only Base token scans, visual risk cards, quick/deep report paths, and X bot replies for safer public conversations.</p>
+              <a class="btn btn-ghost" href="/security">Open Security</a>
+            </article>
+            <article class="product-secondary reveal">
+              <div class="product-label">Echo Infer</div>
+              <h3>Route AI work through the right privacy lane.</h3>
+              <p>OpenAI-compatible broker, local Echo nodes, Bankr private inference, scoped API keys, and desktop-ready defaults.</p>
+              <a class="btn btn-ghost" href="products.html#current-builds">View lane</a>
+            </article>
+            <article class="product-secondary reveal">
+              <div class="product-label">Agent Email Layer</div>
+              <h3>Let agents use email with policies, approvals, and receipts.</h3>
+              <p>Programmable inboxes, deterministic send policy, approval queue, mock provider, audit logs, and webhook-ready control plane.</p>
+              <a class="btn btn-ghost" href="products.html#current-builds">View lane</a>
+            </article>
             <article class="product-secondary reveal">
               <div class="product-label">Echo Skillforge</div>
               <h3>Package agent workflows into installable skills.</h3>
@@ -746,10 +822,10 @@
         </div>
 
         <div class="family-grid" aria-label="BuiltByEcho product families">
+          <article class="family-card reveal"><b>security / risk</b><h3>Echo Shield</h3><p>Token scan cards, quick/deep reports, and agent-ready launch hygiene.</p></article>
+          <article class="family-card reveal"><b>private inference</b><h3>Echo Infer</h3><p>Broker routing, local nodes, scoped keys, and privacy-required lanes.</p></article>
+          <article class="family-card reveal"><b>agent inboxes</b><h3>Agent Email</h3><p>Programmable email with policy gates, approvals, and audit logs.</p></article>
           <article class="family-card reveal"><b>storage / payment</b><h3>Vaultline</h3><p>Paid artifact storage, open reads, wallet-gated files, and x402 handoff paths.</p></article>
-          <article class="family-card reveal"><b>source finding</b><h3>API Finder + Research</h3><p>Ground coding agents before they invent endpoints, docs, or source claims.</p></article>
-          <article class="family-card reveal"><b>execution control</b><h3>Echo Gate</h3><p>Local permissions, spend limits, approvals, and protected tool access.</p></article>
-          <article class="family-card reveal"><b>agent handoffs</b><h3>Wormhole + Pack</h3><p>Move work between agents with sealed payloads, manifests, and clean delivery bundles.</p></article>
         </div>
       </div>
     </section>
