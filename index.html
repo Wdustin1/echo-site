@@ -438,6 +438,35 @@
     .build-card p { margin-top: 12px; font-size: 15px; line-height: 1.55; }
     .build-card a { color: var(--green); font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
     .build-status { display: inline-flex; width: fit-content; min-height: 28px; align-items: center; padding: 6px 10px; border-radius: 999px; background: oklch(0.8 0.08 170 / 0.1); border: 1px solid oklch(0.8 0.08 170 / 0.18); color: var(--ink-soft); font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    .sprint-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+    .sprint-card {
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(145deg, oklch(0.18 0.036 226 / 0.86), oklch(0.095 0.024 232 / 0.82));
+      box-shadow: inset 0 1px 0 oklch(0.92 0.02 160 / 0.07);
+    }
+    .sprint-card b { color: var(--green); font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .sprint-card h3 { margin-top: 12px; font-size: 30px; line-height: 1; }
+    .sprint-card p { margin-top: 10px; font-size: 14px; line-height: 1.5; }
+    .sprint-card footer { padding: 0; color: var(--ink-dim); font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+    .pulse-template {
+      margin-top: 18px;
+      padding: 22px;
+      border: 1px solid oklch(0.81 0.17 159 / 0.26);
+      border-radius: 28px;
+      background: oklch(0.08 0.02 232 / 0.72);
+      font-family: var(--font-mono);
+      color: var(--ink-soft);
+    }
+    .pulse-template strong { display: block; margin-bottom: 10px; color: var(--ink); font-family: var(--font-display); font-size: 24px; letter-spacing: -.04em; }
+    .pulse-lines { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .pulse-lines span { display: block; padding: 12px; border: 1px solid var(--line); border-radius: 18px; background: oklch(0.15 0.032 226 / 0.62); }
 
     .token-stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.56fr); gap: 22px; align-items: stretch; }
     .token-panel {
@@ -591,7 +620,7 @@
       }
       .nav-links .nav-cta { grid-column: 1 / -1; }
       .hero { min-height: auto; padding: 34px 0 40px; display: block; }
-      .hero-grid, .section-head, .product-stage, .token-stage, .tools-layout, .principles, .hero-signal, .family-grid, .build-board { grid-template-columns: 1fr; }
+      .hero-grid, .section-head, .product-stage, .token-stage, .tools-layout, .principles, .hero-signal, .family-grid, .build-board, .sprint-grid, .pulse-lines { grid-template-columns: 1fr; }
       .console-card { transform: none; }
       .rail-flow, .token-facts, .proof-strip, .timeline, .principle-grid, .signal-rail-shell { grid-template-columns: 1fr; }
       .timeline-card:nth-child(2), .timeline-card:nth-child(4) { transform: none; }
@@ -707,6 +736,49 @@
             <div><b>Build 05</b><h3>Echo Social</h3><p>The launch-noise layer for Echo: coordinate build posts, keep updates moving, and turn shipped work into visible momentum.</p></div>
             <div><span class="build-status">social rail</span><a href="https://x.com/BuiltByEcho" target="_blank" rel="noopener">Follow Echo →</a></div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="today-sprint">
+      <div class="wide">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">today's five updates</div>
+            <h2>Small builds, clear proof, easy posts.</h2>
+          </div>
+          <p>Today's sprint turns the build board into five visible update lanes: one site movement surface, one Echo Shield handoff, one Echo Infer connector update, one npm/dev tooling proof point, and one repeatable Echo Pulse format.</p>
+        </div>
+        <div class="sprint-grid" aria-label="Today sprint update lanes">
+          <article class="sprint-card reveal" data-update-id="website-build-log">
+            <div><b>Update 01</b><h3>Website build log</h3><p>Added a clearer public movement area so visitors can see that Echo is actively shipping instead of only reading a static product map.</p></div>
+            <footer>surface: homepage</footer>
+          </article>
+          <article class="sprint-card reveal" data-update-id="shield-risk-handoff">
+            <div><b>Update 02</b><h3>Shield risk handoff</h3><p>Echo Shield gets stronger as the public safety layer: quick scans, deep reports, launch cards, and agent-ready risk notes for token conversations.</p></div>
+            <footer>surface: security</footer>
+          </article>
+          <article class="sprint-card reveal" data-update-id="infer-private-connect">
+            <div><b>Update 03</b><h3>Private inference connect</h3><p>Echo Infer's connect path now has a cleaner story for OpenAI-compatible clients, scoped keys, live provider status, and echo-private routing.</p></div>
+            <footer>surface: chat.builtbyecho.xyz/connect</footer>
+          </article>
+          <article class="sprint-card reveal" data-update-id="npm-dev-tooling">
+            <div><b>Update 04</b><h3>npm/dev tooling proof</h3><p>The dev layer stays visible: packages, SDKs, run logs, API finding, storage rails, and repo digest tooling are part of the same Echo stack.</p></div>
+            <footer>surface: npm + GitHub</footer>
+          </article>
+          <article class="sprint-card reveal" data-update-id="echo-pulse-format">
+            <div><b>Update 05</b><h3>Echo Pulse format</h3><p>A reusable daily update frame makes it easy to post what moved today without pretending every small improvement is a giant launch.</p></div>
+            <footer>surface: social cadence</footer>
+          </article>
+        </div>
+        <div class="pulse-template" aria-label="Echo Pulse daily update template">
+          <strong>Echo Pulse template</strong>
+          <div class="pulse-lines">
+            <span>Built: the visible thing that changed.</span>
+            <span>Improved: the rough edge we tightened.</span>
+            <span>Testing: the check or smoke we ran.</span>
+            <span>Next: the follow-up people can watch for.</span>
+          </div>
         </div>
       </div>
     </section>

@@ -388,35 +388,45 @@
 
         <div class="surface-panel" id="b20-watchtower-panel" role="tabpanel" aria-labelledby="b20-watchtower-tab" data-security-panel="b20-watchtower" hidden>
           <div class="watchtower-grid">
-            <article class="panel watchtower-panel">
-              <div class="section-kicker">B20 launch radar</div>
-              <h3>B20 Watchtower</h3>
-              <p class="lede" style="font-size:20px;">Track B20/Base token launches, run automated first-pass scans, and turn the results into Discord-ready risk notes before the timeline has context.</p>
-              <ul class="watchtower-list">
-                <li><strong>Discovery:</strong> pull new Base pairs from DexScreener, then filter likely B20 launches and fresh Base liquidity.</li>
-                <li><strong>First-pass risk:</strong> combine GoPlus security signals with Echo Shield liquidity, holder, owner, pool, and launch-surface context.</li>
-                <li><strong>Publisher:</strong> post only useful summaries first, with reasons, confidence, DexScreener links, BaseScan links, and scan JSON.</li>
-              </ul>
-              <p class="notice">B20 Watchtower is an automated first-pass scan, not an audit, not financial advice, and never a claim that a token is safe.</p>
-            </article>
-
-            <aside class="panel watchtower-panel">
-              <h3>Risk language</h3>
-              <p>Every watch item should explain the rating instead of making a buy/sell call.</p>
-              <div class="risk-ladder" aria-label="B20 Watchtower risk levels">
-                <div class="risk-step"><b>Low</b><span>Few obvious warnings</span></div>
-                <div class="risk-step"><b>Medium</b><span>Some controls or unknowns</span></div>
-                <div class="risk-step"><b>High</b><span>Material warnings</span></div>
-                <div class="risk-step"><b>Unknown</b><span>Insufficient confidence</span></div>
+            <form class="panel watchtower-panel" id="b20-form">
+              <div class="section-kicker">B20 config scanner</div>
+              <h3>B20 Authority Scan</h3>
+              <p class="lede" style="font-size:20px;">B20 tokens are native/precompile-backed assets. Echo checks the config that matters: factory status, variant, supply cap, pause flags, transfer/mint policies, and discoverable role holders.</p>
+              <div class="scan-field">
+                <label for="b20-address">B20 token address</label>
+                <input class="address-input" id="b20-address" name="b20-address" autocomplete="off" spellcheck="false" placeholder="0xB20…" value="0xB2000000000000000000001B7FB417cdbfFC06eA" />
+                <p class="helper">Mainnet B20 activates with Beryl. Use Base Sepolia for live prelaunch examples.</p>
+                <div class="examples" aria-label="B20 scan options">
+                  <button class="example-chip" type="button" data-b20-chain="base-sepolia" data-b20-address="0xB2000000000000000000001B7FB417cdbfFC06eA">Sepolia B20 example</button>
+                  <button class="example-chip" type="button" data-b20-chain="base">Base mainnet</button>
+                </div>
               </div>
-              <ul class="watchtower-list">
-                <li><strong>Low / Medium / High / Unknown risk</strong> with confidence and reasons.</li>
-                <li>Flag mint, pause, blacklist, proxy, owner/admin, holder concentration, liquidity, buy/sell, and honeypot-style warnings when sources expose them.</li>
-                <li>Keep ECHO holder upgrades separate from the public v0 feed so the free page stays useful on its own.</li>
+              <div class="button-row">
+                <button class="btn btn-primary" type="submit" id="b20-button">Scan B20 config</button>
+                <select class="address-input" id="b20-chain" aria-label="B20 chain" style="min-height:46px;max-width:190px;">
+                  <option value="base">Base</option>
+                  <option value="base-sepolia" selected>Base Sepolia</option>
+                </select>
+              </div>
+              <p class="notice">No bytecode does not mean no risk. B20 risk lives in issuer roles, policy IDs, pause state, and supply controls.</p>
+            </form>
+
+            <aside class="panel watchtower-panel" aria-live="polite">
+              <h3 id="b20-result-title">Ready to read B20 config.</h3>
+              <p id="b20-summary">Paste a B20 token address to generate an authority/config report.</p>
+              <div class="risk-ladder" aria-label="B20 config summary">
+                <div class="risk-step"><b id="b20-risk">—</b><span>Config risk</span></div>
+                <div class="risk-step"><b id="b20-variant">—</b><span>Variant</span></div>
+                <div class="risk-step"><b id="b20-cap">—</b><span>Supply cap</span></div>
+                <div class="risk-step"><b id="b20-policy-count">—</b><span>Custom policies</span></div>
+              </div>
+              <ul class="watchtower-list" id="b20-findings">
+                <li><strong>Echo reads:</strong> B20 factory, metadata, cap, pause flags, policies, role constants, and recent role events.</li>
+                <li><strong>Echo does not claim:</strong> a token, market, issuer, or LP is safe.</li>
               </ul>
               <div class="button-row">
-                <a class="btn btn-primary" href="https://dexscreener.com/base" target="_blank" rel="noopener">Open DexScreener Base</a>
-                <a class="btn btn-ghost" href="https://shield.builtbyecho.xyz/api/launch-cohorts" target="_blank" rel="noopener">Echo cohort API</a>
+                <a class="btn btn-primary" id="b20-json-link" href="https://shield.builtbyecho.xyz/api/b20-scan?chain=base-sepolia&address=0xB2000000000000000000001B7FB417cdbfFC06eA" target="_blank" rel="noopener">Open B20 JSON</a>
+                <a class="btn btn-ghost" href="https://docs.base.org/base-chain/specs/upgrades/beryl/b20" target="_blank" rel="noopener">Base B20 docs</a>
               </div>
             </aside>
           </div>
@@ -439,6 +449,12 @@ GET https://shield.builtbyecho.xyz/api/deep-analysis?address=0x...</pre>
             <h3>Launch card</h3>
             <p>Shareable image for social posts and bot replies. Reuse the quick scan card URL when available.</p>
             <pre>GET https://shield.builtbyecho.xyz/api/launch-card?address=0x...&format=png</pre>
+          </article>
+          <article class="api-card" data-update-id="shield-risk-handoff">
+            <h3>Post-ready risk handoff</h3>
+            <p>Use the compact scan response to hand social or agent channels the score, level, card URL, top warnings, and caveats without burying the useful links.</p>
+            <pre>Output: score, level, card URL, top warnings, and caveats
+Rule: No buy/sell calls. Explain the signals.</pre>
           </article>
           <article class="api-card">
             <h3>Agent skills</h3>
@@ -475,6 +491,14 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
     const deepSummary = document.querySelector('#deep-summary');
     const deepGrid = document.querySelector('#deep-grid');
     const deepList = document.querySelector('#deep-list');
+    const b20Form = document.querySelector('#b20-form');
+    const b20Input = document.querySelector('#b20-address');
+    const b20Chain = document.querySelector('#b20-chain');
+    const b20Button = document.querySelector('#b20-button');
+    const b20JsonLink = document.querySelector('#b20-json-link');
+    const b20ResultTitle = document.querySelector('#b20-result-title');
+    const b20Summary = document.querySelector('#b20-summary');
+    const b20Findings = document.querySelector('#b20-findings');
     let activeAddress = '';
     let activeQuickReport = null;
     let deepAbort = null;
@@ -501,16 +525,31 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
       });
     }
 
-    document.querySelectorAll('.example-chip').forEach((chip) => {
+    document.querySelectorAll('.example-chip[data-address]').forEach((chip) => {
       chip.addEventListener('click', () => {
         input.value = chip.dataset.address;
         syncLinks(input.value.trim());
       });
     });
 
+    document.querySelectorAll('.example-chip[data-b20-address], .example-chip[data-b20-chain]').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        if (chip.dataset.b20Address) b20Input.value = chip.dataset.b20Address;
+        if (chip.dataset.b20Chain) b20Chain.value = chip.dataset.b20Chain;
+        syncB20Links();
+      });
+    });
+
     input.addEventListener('input', () => syncLinks(input.value.trim()));
+    b20Input.addEventListener('input', () => syncB20Links());
+    b20Chain.addEventListener('change', () => syncB20Links());
     deepButton.addEventListener('click', () => runDeepAnalysis());
+    b20Form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      await runB20Scan();
+    });
     syncLinks(input.value.trim());
+    syncB20Links();
     loadCohorts();
 
     form.addEventListener('submit', async (event) => {
@@ -638,6 +677,62 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
       deepList.innerHTML = [...bucketItems, ...mapItems, ...sourceItems].join('') || '<li>No deeper findings returned.</li>';
     }
 
+    async function runB20Scan() {
+      const address = b20Input.value.trim();
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        renderB20Error('Paste a valid B20/Base token address.');
+        return;
+      }
+      b20Button.disabled = true;
+      b20Button.textContent = 'Reading config…';
+      b20ResultTitle.textContent = 'Reading B20 config…';
+      b20Summary.textContent = 'Querying the Base B20 factory, token config, policy registry, and recent role events.';
+      b20Findings.innerHTML = '<li>B20 config scan running…</li>';
+      try {
+        const res = await fetch(`${API}/api/b20-scan?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`);
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'B20 scan failed');
+        renderB20Report(data.report);
+      } catch (error) {
+        renderB20Error(error.message || 'B20 scan failed.');
+      } finally {
+        b20Button.disabled = false;
+        b20Button.textContent = 'Scan B20 config';
+      }
+    }
+
+    function renderB20Report(report) {
+      const customPolicies = (report.config?.policies || []).filter((policy) => policy.status === 'custom_allowlist' || policy.status === 'custom_blocklist');
+      b20ResultTitle.textContent = `${report.token?.symbol || 'B20'} config report`;
+      b20Summary.textContent = report.summary || 'B20 config report complete.';
+      document.querySelector('#b20-risk').textContent = report.level || 'UNKNOWN';
+      document.querySelector('#b20-variant').textContent = report.standard?.variant || 'UNKNOWN';
+      document.querySelector('#b20-cap').textContent = capLabel(report.config?.supplyCapStatus);
+      document.querySelector('#b20-policy-count').textContent = customPolicies.length;
+      const identity = `<li><strong>${escapeHtml(report.token?.name || 'Token')}:</strong> ${escapeHtml(report.token?.address || '')}</li>`;
+      const findings = (report.findings || []).map((finding) => `<li><strong>${escapeHtml(finding.label)}:</strong> ${escapeHtml(finding.detail)}</li>`);
+      const policyItems = (report.config?.policies || []).map((policy) => `<li><strong>${escapeHtml(policy.label)}:</strong> ${escapeHtml(policy.status)}${policy.policyId ? ` · policy ${escapeHtml(policy.policyId)}` : ''}</li>`);
+      b20Findings.innerHTML = [identity, ...findings, ...policyItems.slice(0, 4)].join('') || '<li>No B20 findings returned.</li>';
+      syncB20Links(report.token?.address);
+    }
+
+    function renderB20Error(message) {
+      b20ResultTitle.textContent = 'B20 scan did not complete.';
+      b20Summary.textContent = message;
+      document.querySelector('#b20-risk').textContent = '—';
+      document.querySelector('#b20-variant').textContent = '—';
+      document.querySelector('#b20-cap').textContent = '—';
+      document.querySelector('#b20-policy-count').textContent = '—';
+      b20Findings.innerHTML = '<li>Check the address/chain and retry. Base mainnet B20 may show unavailable until Beryl is active on public RPCs.</li>';
+    }
+
+    function capLabel(status) {
+      if (status === 'capped') return 'Capped';
+      if (status === 'max_uint128') return 'Open';
+      if (status === 'not_b20') return 'N/A';
+      return 'Unknown';
+    }
+
     function resetDeepPanel() {
       deepAbort?.abort();
       deepPanel.classList.remove('is-open');
@@ -666,6 +761,11 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
     function syncLinks(address) {
       if (!address) return;
       jsonLink.href = `${API}/api/scan?address=${encodeURIComponent(address)}`;
+    }
+
+    function syncB20Links(address = b20Input.value.trim()) {
+      if (!address) return;
+      b20JsonLink.href = `${API}/api/b20-scan?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`;
     }
 
     function formatUsd(value) {

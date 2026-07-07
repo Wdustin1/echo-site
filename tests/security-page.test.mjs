@@ -51,6 +51,13 @@ test('security page documents quick-first agent API usage', () => {
   assert.match(securityHtml, /docs\/agent-skills\/echo-shield-token-triage\/SKILL\.md/);
 });
 
+test('security page includes a post-ready risk handoff surface', () => {
+  assert.match(securityHtml, /data-update-id="shield-risk-handoff"/);
+  assert.match(securityHtml, /Post-ready risk handoff/);
+  assert.match(securityHtml, /score, level, card URL, top warnings, and caveats/);
+  assert.match(securityHtml, /No buy\/sell calls/);
+});
+
 test('public Echo Shield docs and skill files are committed for linked agent entrypoints', () => {
   assert.match(agentDocs, /# Echo Shield Agent Integration Guide/);
   assert.match(agentDocs, /Do \*\*not\*\* call `\/api\/deep-analysis` automatically/);
