@@ -13,11 +13,11 @@ const pulseFeed = JSON.parse(readFileSync(join(repoRoot, 'data', 'echo-pulse-202
 
 test('homepage exposes the July 8 shipping board', () => {
   assert.match(indexHtml, /id="july-8-sprint"/);
-  assert.match(indexHtml, /data-update-id="pulse-command-center"/);
-  assert.match(indexHtml, /data-update-id="social-handoff-pack"/);
-  assert.match(indexHtml, /data-update-id="pulse-json-feed"/);
+  assert.match(indexHtml, /data-update-id="pulse-update-system"/);
+  assert.match(indexHtml, /data-update-id="windows-desktop-release"/);
   assert.match(indexHtml, /data-update-id="shield-reply-kit"/);
   assert.match(indexHtml, /data-update-id="product-hotlinks"/);
+  assert.match(indexHtml, /data-update-id="npm-dev-tooling"/);
   assert.match(indexHtml, /updates.html#july-8/);
 });
 
@@ -25,9 +25,9 @@ test('updates page gives social manager a copy-ready July 8 pack', () => {
   assert.match(updatesHtml, /id="july-8"/);
   assert.match(updatesHtml, /Social manager handoff/);
   assert.match(updatesHtml, /Copy-ready posts/);
-  assert.match(updatesHtml, /Homepage command center/);
+  assert.match(updatesHtml, /Echo Pulse update system/);
+  assert.match(updatesHtml, /Windows desktop beta release/);
   assert.match(updatesHtml, /Shield reply kit/);
-  assert.match(updatesHtml, /Machine-readable Echo Pulse feed/);
   assert.match(updatesHtml, /No fake roadmap language/);
 });
 
@@ -35,11 +35,11 @@ test('daily Echo Pulse JSON feed has five real builds and social copy', () => {
   assert.equal(pulseFeed.date, '2026-07-08');
   assert.equal(pulseFeed.builds.length, 5);
   assert.deepEqual(pulseFeed.builds.map((build) => build.id), [
-    'pulse-command-center',
-    'social-handoff-pack',
-    'pulse-json-feed',
+    'pulse-update-system',
+    'windows-desktop-release',
     'shield-reply-kit',
     'product-hotlinks',
+    'npm-dev-tooling',
   ]);
   for (const build of pulseFeed.builds) {
     assert.equal(build.status, 'shipped');
@@ -62,4 +62,5 @@ test('products page exposes product hotlinks for social follow-up', () => {
   assert.match(productsHtml, /Echo Shield scanner/);
   assert.match(productsHtml, /npm developer lane/);
   assert.match(productsHtml, /Echo Pulse pack/);
+  assert.match(productsHtml, /Windows desktop beta/);
 });

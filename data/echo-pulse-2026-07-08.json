@@ -1,31 +1,23 @@
 {
   "date": "2026-07-08",
   "title": "Echo Pulse — five real builds shipped",
-  "summary": "A copy-ready daily update package for the BuiltByEcho social loop: homepage command center, social handoff pack, JSON feed, Shield reply kit, and product hotlinks.",
+  "summary": "A copy-ready daily update package for the BuiltByEcho social loop: combined Pulse proof system, Windows desktop beta release, Shield reply kit, product hotlinks, and npm/dev tooling proof.",
   "builds": [
     {
-      "id": "pulse-command-center",
+      "id": "pulse-update-system",
       "status": "shipped",
-      "name": "Homepage command center",
-      "proofUrl": "https://builtbyecho.xyz/#july-8-sprint",
-      "shortUpdate": "Added a fresh July 8 shipping board to the homepage so the community can see five new real builds in one place.",
-      "socialPost": "Echo Pulse update: we added a fresh command center to the BuiltByEcho homepage. Today’s five builds are now grouped in one public board, with proof links and a clean path for people to see what actually moved instead of hearing vague roadmap talk."
-    },
-    {
-      "id": "social-handoff-pack",
-      "status": "shipped",
-      "name": "Social manager handoff pack",
+      "name": "Echo Pulse update system",
       "proofUrl": "https://builtbyecho.xyz/updates.html#july-8",
-      "shortUpdate": "Created a dedicated updates page with copy-ready posts, proof links, and social-safe framing.",
-      "socialPost": "We built a dedicated Echo Pulse handoff page for the social team. The page turns shipped work into copy-ready posts with proof links, safe language, and no fake roadmap claims. That means every update can point back to something real."
+      "shortUpdate": "Combined the homepage command center, social handoff page, and machine-readable JSON feed into one proof-backed Echo Pulse update system.",
+      "socialPost": "Echo Pulse update: we combined the homepage board, social handoff page, and machine-readable JSON feed into one update system. The community gets a public proof board, the social team gets copy-ready posts, and agents/dashboards get structured data from the same source of truth."
     },
     {
-      "id": "pulse-json-feed",
+      "id": "windows-desktop-release",
       "status": "shipped",
-      "name": "Machine-readable Echo Pulse feed",
-      "proofUrl": "https://builtbyecho.xyz/data/echo-pulse-2026-07-08.json",
-      "shortUpdate": "Published today’s five builds as a JSON feed so agents and dashboards can reuse the update pack.",
-      "socialPost": "Echo Pulse is now more than a post format. Today’s update pack also ships as a machine-readable JSON feed, giving agents, dashboards, and future automation a clean source of truth for what shipped, where the proof lives, and how to talk about it."
+      "name": "Windows desktop beta release",
+      "proofUrl": "https://github.com/BuiltByEcho/echo-infer-desktop/releases/tag/v1.0.0-beta.1",
+      "shortUpdate": "Released Echo Infer Desktop v1.0.0-beta.1 for Windows as an unsigned beta installer with verified build, typecheck, targeted tests, packaging, and downloaded-asset checksum match.",
+      "socialPost": "Echo Infer Desktop now has a Windows beta release. We packaged the desktop client, ran targeted provider/branding/close-policy tests, typecheck, production build, Windows NSIS packaging, and verified the published installer by downloading it back and matching the checksum."
     },
     {
       "id": "shield-reply-kit",
@@ -40,8 +32,16 @@
       "status": "shipped",
       "name": "Product follow-up hotlinks",
       "proofUrl": "https://builtbyecho.xyz/products.html#product-hotlinks",
-      "shortUpdate": "Added product hotlinks so social posts can route people to Shield, the npm lane, the update pack, and current builds fast.",
-      "socialPost": "The Products page now has a social follow-up hotlinks section. When a post mentions Echo Shield, npm tooling, current builds, or the Echo Pulse pack, there is a clean destination to send people instead of leaving them hunting through the site."
+      "shortUpdate": "Added product hotlinks so social posts can route people to Shield, the desktop beta, npm tooling, the update pack, and current builds fast.",
+      "socialPost": "The Products page now has a social follow-up hotlinks section. When a post mentions Echo Shield, the Windows desktop beta, npm tooling, current builds, or the Echo Pulse pack, there is a clean destination to send people instead of leaving them hunting through the site."
+    },
+    {
+      "id": "npm-dev-tooling",
+      "status": "shipped",
+      "name": "npm/dev tooling proof",
+      "proofUrl": "https://builtbyecho.xyz/products.html#npm-dev-tools",
+      "shortUpdate": "Kept the developer tooling lane visible with package links for briefs, run logs, API finding, repo digests, and storage SDKs.",
+      "socialPost": "Echo is also shipping the less-flashy rails that make agent work repeatable: repo briefs, run logs, API discovery, repo digests, and storage SDKs. The npm/dev tooling lane is now visible from the Products page so builders can follow the actual stack."
     }
   ]
 }

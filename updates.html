@@ -25,7 +25,7 @@
     .eyebrow, .kicker { display: inline-flex; gap: 10px; color: var(--green); font: 800 12px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; }
     h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -.045em; }
     h1 { max-width: 960px; margin-top: 16px; font-size: clamp(58px, 8vw, 118px); line-height: .88; }
-    .lede { max-width: 760px; margin-top: 22px; font-size: clamp(18px, 1.8vw, 24px); color: oklch(0.82 0.035 180); }
+    .lede { max-width: 780px; margin-top: 22px; font-size: clamp(18px, 1.8vw, 24px); color: oklch(0.82 0.035 180); }
     .hero-actions, .card-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
     .btn { display: inline-flex; align-items: center; min-height: 46px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 999px; font: 800 12px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
     .btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: oklch(0.08 0.02 232); border-color: transparent; }
@@ -37,7 +37,7 @@
     .card { min-height: 250px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; padding: 22px; border: 1px solid var(--line); border-radius: 28px; background: linear-gradient(145deg, oklch(0.18 0.036 226 / 0.86), oklch(0.095 0.024 232 / 0.82)); box-shadow: inset 0 1px 0 oklch(0.92 0.02 160 / 0.07); }
     .card b { color: var(--green); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
     .card h3 { margin-top: 10px; font-size: 30px; line-height: 1; }
-    .card footer { color: var(--ink-dim); font: 700 11px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+    .card footer { color: var(--ink-dim); font: 700 11px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; word-break: break-word; }
     .post-card { min-height: 0; }
     .post-card p { white-space: pre-line; }
     .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
@@ -60,11 +60,11 @@
       <div class="wide">
         <div class="eyebrow">Echo Pulse / July 8</div>
         <h1>Social manager handoff for five real builds.</h1>
-        <p class="lede">This page is the copy-ready handoff pack: what shipped, where the proof lives, and how to talk about it without hype-only roadmap language.</p>
+        <p class="lede">This page is the copy-ready handoff pack: what shipped, where the proof lives, and how to talk about it without hype-only roadmap language. Builds 1, 2, and 3 from the first pass are now one combined post/build, and the Windows desktop app release is now in the set.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#copy-ready-posts">Copy-ready posts</a>
           <a class="btn" href="data/echo-pulse-2026-07-08.json">Open JSON feed</a>
-          <a class="btn" href="index.html#july-8-sprint">Homepage board</a>
+          <a class="btn" href="https://github.com/BuiltByEcho/echo-infer-desktop/releases/tag/v1.0.0-beta.1" target="_blank" rel="noopener">Windows release</a>
         </div>
       </div>
     </section>
@@ -73,14 +73,14 @@
       <div class="wide">
         <div class="section-head">
           <div><div class="kicker">five shipped surfaces</div><h2>Today’s proof stack.</h2></div>
-          <p>No fake roadmap language. Each card points to a real page, section, or data file that now exists on the site.</p>
+          <p>No fake roadmap language. Each card points to a real page, release, section, or data file that now exists.</p>
         </div>
         <div class="grid" aria-label="July 8 Echo Pulse builds">
-          <article class="card"><div><b>Build 01</b><h3>Homepage command center</h3><p>A fresh July 8 board on the homepage collects today’s five updates in one public place.</p></div><footer>proof: /#july-8-sprint</footer></article>
-          <article class="card"><div><b>Build 02</b><h3>Social handoff pack</h3><p>This updates page gives the social manager copy, proof links, and safe framing.</p></div><footer>proof: updates.html#july-8</footer></article>
-          <article class="card"><div><b>Build 03</b><h3>Machine-readable Echo Pulse feed</h3><p>A JSON feed gives agents and dashboards today’s build IDs, proof URLs, and social copy.</p></div><footer>proof: data feed</footer></article>
-          <article class="card"><div><b>Build 04</b><h3>Shield reply kit</h3><p>The security page now includes safer Discord/X reply templates for token scan results.</p></div><footer>proof: /security#community-reply-kit</footer></article>
-          <article class="card"><div><b>Build 05</b><h3>Product hotlinks</h3><p>The Products page now gives social posts a quick routing shelf for the best follow-up links.</p></div><footer>proof: /products.html#product-hotlinks</footer></article>
+          <article class="card"><div><b>Build 01</b><h3>Echo Pulse update system</h3><p>Combined the homepage command center, social handoff pack, and JSON feed into one proof-backed update system.</p></div><footer>proof: updates.html#july-8 + JSON feed</footer></article>
+          <article class="card"><div><b>Build 02</b><h3>Windows desktop beta release</h3><p>Echo Infer Desktop v1.0.0-beta.1 is published as a Windows beta installer with checksum-verified release assets.</p></div><footer>proof: GitHub release</footer></article>
+          <article class="card"><div><b>Build 03</b><h3>Shield reply kit</h3><p>The security page includes safer Discord/X reply templates for token scan results.</p></div><footer>proof: /security#community-reply-kit</footer></article>
+          <article class="card"><div><b>Build 04</b><h3>Product hotlinks</h3><p>The Products page gives social posts a quick routing shelf for the best follow-up links.</p></div><footer>proof: /products.html#product-hotlinks</footer></article>
+          <article class="card"><div><b>Build 05</b><h3>npm/dev tooling proof</h3><p>The package lane remains visible for agent briefs, run logs, API finding, repo digests, and storage SDKs.</p></div><footer>proof: /products.html#npm-dev-tools</footer></article>
         </div>
       </div>
     </section>
@@ -92,11 +92,35 @@
           <p>Use these as-is or split them into short X/Discord updates. Keep URLs close to the top when possible.</p>
         </div>
         <div class="post-grid">
-          <article class="card post-card"><div><b>Post 01</b><h3>Homepage command center</h3><p>Echo Pulse update: we added a fresh command center to the BuiltByEcho homepage. Today’s five builds are now grouped in one public board, with proof links and a clean path for people to see what actually moved instead of hearing vague roadmap talk.</p></div><footer>https://builtbyecho.xyz/#july-8-sprint</footer></article>
-          <article class="card post-card"><div><b>Post 02</b><h3>Social handoff pack</h3><p>We built a dedicated Echo Pulse handoff page for the social team. The page turns shipped work into copy-ready posts with proof links, safe language, and no fake roadmap claims. Every update can point back to something real.</p></div><footer>https://builtbyecho.xyz/updates.html#july-8</footer></article>
-          <article class="card post-card"><div><b>Post 03</b><h3>Machine-readable feed</h3><p>Echo Pulse is now more than a post format. Today’s update pack also ships as a machine-readable JSON feed, giving agents, dashboards, and future automation a clean source of truth for what shipped, where the proof lives, and how to talk about it.</p></div><footer>https://builtbyecho.xyz/data/echo-pulse-2026-07-08.json</footer></article>
-          <article class="card post-card"><div><b>Post 04</b><h3>Shield reply kit</h3><p>Echo Shield got a community reply kit. The scanner page now includes safer templates for Discord and X: card first, score second, warnings in plain English, and a clear reminder that Echo reports signals instead of calling anything safe.</p></div><footer>https://builtbyecho.xyz/security#community-reply-kit</footer></article>
-          <article class="card post-card"><div><b>Post 05</b><h3>Product hotlinks</h3><p>The Products page now has a social follow-up hotlinks section. When a post mentions Echo Shield, npm tooling, current builds, or the Echo Pulse pack, there is a clean destination to send people instead of leaving them hunting through the site.</p></div><footer>https://builtbyecho.xyz/products.html#product-hotlinks</footer></article>
+          <article class="card post-card"><div><b>Post 01</b><h3>Echo Pulse update system</h3><p>https://builtbyecho.xyz/updates.html#july-8
+
+Echo Pulse update: we combined the homepage board, social handoff page, and machine-readable JSON feed into one update system.
+
+The community gets a public proof board, the social team gets copy-ready posts, and agents/dashboards get structured data from the same source of truth.
+
+One build. Three useful surfaces. Cleaner story.</p></div><footer>combined former 1/2/3 into one post</footer></article>
+          <article class="card post-card"><div><b>Post 02</b><h3>Windows desktop beta release</h3><p>https://github.com/BuiltByEcho/echo-infer-desktop/releases/tag/v1.0.0-beta.1
+
+Echo Infer Desktop now has a Windows beta release.
+
+We packaged the desktop client, ran targeted provider/branding/close-policy tests, typecheck, production build, Windows NSIS packaging, and verified the published installer by downloading it back and matching the checksum.
+
+Unsigned beta for now, but it is real and downloadable.</p></div><footer>desktop app release</footer></article>
+          <article class="card post-card"><div><b>Post 03</b><h3>Shield reply kit</h3><p>https://builtbyecho.xyz/security#community-reply-kit
+
+Echo Shield got a community reply kit.
+
+The scanner page now includes safer templates for Discord and X: card first, score second, warnings in plain English, and a clear reminder that Echo reports signals instead of calling anything safe.</p></div><footer>security/social safety</footer></article>
+          <article class="card post-card"><div><b>Post 04</b><h3>Product hotlinks</h3><p>https://builtbyecho.xyz/products.html#product-hotlinks
+
+The Products page now has a social follow-up hotlinks section.
+
+When a post mentions Echo Shield, the Windows desktop beta, npm tooling, current builds, or the Echo Pulse pack, there is a clean destination to send people instead of leaving them hunting through the site.</p></div><footer>clean next click</footer></article>
+          <article class="card post-card"><div><b>Post 05</b><h3>npm/dev tooling proof</h3><p>https://builtbyecho.xyz/products.html#npm-dev-tools
+
+Echo is also shipping the less-flashy rails that make agent work repeatable: repo briefs, run logs, API discovery, repo digests, and storage SDKs.
+
+The npm/dev tooling lane is now visible from the Products page so builders can follow the actual stack, not just the loud launch posts.</p></div><footer>developer tooling</footer></article>
         </div>
       </div>
     </section>
@@ -108,7 +132,7 @@
           <p>Echo can be loud without pretending a build is more than it is. These rules keep the momentum clean.</p>
         </div>
         <div class="rules">
-          <div class="rule"><strong>Lead with proof.</strong><p>Link to the shipped section, page, or feed before broad claims.</p></div>
+          <div class="rule"><strong>Lead with proof.</strong><p>Link to the shipped section, release, page, or feed before broad claims.</p></div>
           <div class="rule"><strong>No fake roadmap language.</strong><p>Say what shipped today. Save “coming soon” for work that has a clear path.</p></div>
           <div class="rule"><strong>Security stays careful.</strong><p>Echo Shield reports signals. It does not call tokens safe or give buy/sell advice.</p></div>
         </div>
