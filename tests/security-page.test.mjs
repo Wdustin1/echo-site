@@ -30,18 +30,21 @@ test('security page includes tab switching script for the tabbed surface', () =>
   assert.match(securityHtml, /activateSecurityTab/);
 });
 
-test('security page ships a live B20 Launch Radar dashboard wired to Echo Shield API', () => {
+test('security page ships the event-indexed B20 Launch Radar wired to Echo Shield', () => {
   assert.match(securityHtml, /data-b20-dashboard="launch-radar"/);
   assert.match(securityHtml, /Every new B20 launch, decoded by Echo/);
   assert.match(securityHtml, /id="b20-radar-tracked"/);
-  assert.match(securityHtml, /id="b20-radar-clean"/);
+  assert.match(securityHtml, /id="b20-radar-scanned"/);
   assert.match(securityHtml, /id="b20-radar-changed"/);
+  assert.match(securityHtml, /id="b20-radar-coverage"/);
   assert.match(securityHtml, /id="b20-launches"/);
   assert.match(securityHtml, /id="b20-radar-status"/);
-  assert.match(securityHtml, /fetch\(`\$\{API\}\/api\/b20-launches\?limit=4`\)/);
+  assert.match(securityHtml, /fetch\(`\$\{API\}\/api\/b20-launches\?limit=20`\)/);
   assert.match(securityHtml, /renderB20LaunchRadar/);
-  assert.match(securityHtml, /Factory-confirmed/);
-  assert.match(securityHtml, /Config diff monitor next/);
+  assert.match(securityHtml, /Factory indexer live/);
+  assert.match(securityHtml, /Config diff monitor live/);
+  assert.match(securityHtml, /data\.watcher/);
+  assert.doesNotMatch(securityHtml, /seeded live scans|Seeded v1/i);
 });
 
 test('Vercel routes /security to the Echo Security page', () => {

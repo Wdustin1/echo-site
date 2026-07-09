@@ -153,6 +153,7 @@
     .b20-radar-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
     .b20-radar-head h3 { margin-top: 8px; font-size: clamp(30px, 4vw, 52px); line-height: .98; letter-spacing: -.05em; }
     .b20-radar-status { flex: 0 0 auto; color: var(--green); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .b20-radar-coverage { margin-top: 12px; color: var(--ink-dim); font: 700 11px/1.5 var(--font-mono); overflow-wrap: anywhere; }
     .b20-radar-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
     .b20-radar-metric { padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: oklch(0.08 0.022 232 / 0.58); }
     .b20-radar-metric b { display: block; color: var(--ink); font: 800 30px/1 var(--font-display); }
@@ -458,25 +459,26 @@
               <div>
                 <div class="section-kicker">B20 Launch Radar</div>
                 <h3 id="b20-radar-title">Every new B20 launch, decoded by Echo.</h3>
-                <p class="lede" style="font-size:18px;">Echo turns B20 factory launches into a readable public feed: score, cap, policy gates, pause state, role surface, cards, JSON, and bot commands.</p>
+                <p class="lede" style="font-size:18px;">Echo indexes the canonical B20 Factory, preserves every first-seen launch, scans its controls, and keeps watching for configuration changes.</p>
+                <p class="b20-radar-coverage" id="b20-radar-coverage">Connecting to the durable Base factory-event index…</p>
               </div>
-              <span class="b20-radar-status" id="b20-radar-status">Loading live scans</span>
+              <span class="b20-radar-status" id="b20-radar-status">Loading event index</span>
             </div>
             <div class="b20-radar-metrics" aria-label="B20 Launch Radar metrics">
-              <div class="b20-radar-metric"><b id="b20-radar-tracked">—</b><span>B20s tracked</span></div>
-              <div class="b20-radar-metric"><b id="b20-radar-clean">—</b><span>Clean configs</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-tracked">—</b><span>B20s indexed</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-scanned">—</b><span>Configs scanned</span></div>
               <div class="b20-radar-metric"><b id="b20-radar-attention">—</b><span>Need attention</span></div>
               <div class="b20-radar-metric"><b id="b20-radar-changed">—</b><span>Config changes</span></div>
             </div>
             <div class="b20-launches" id="b20-launches" aria-live="polite">
               <article class="b20-launch-row">
-                <div><strong>Loading B20 radar…</strong><small>Echo is refreshing seeded live scans.</small></div>
+                <div><strong>Loading B20 radar…</strong><small>Echo is reading the persisted B20Created event index.</small></div>
               </article>
             </div>
-            <div class="b20-radar-next" aria-label="B20 Watchtower next modules">
-              <article><h4>Factory-confirmed launches</h4><p>Seeded v1 uses live known B20 fixtures; the next indexer listens for factory events as they happen.</p></article>
-              <article><h4>Config diff monitor next</h4><p>Echo will compare snapshots and flag policy, pause, role, cap, and metadata changes after launch.</p></article>
-              <article><h4>Launch certificates</h4><p>Each B20 can get a permanent first-seen snapshot, public card, JSON report, and bot command.</p></article>
+            <div class="b20-radar-next" aria-label="B20 Watchtower modules">
+              <article><h4>Factory indexer live</h4><p>Echo backfilled the canonical B20Created history and tails finalized Base blocks with a durable cursor.</p></article>
+              <article><h4>Config diff monitor live</h4><p>Persisted snapshots are rescanned to flag policy, pause, role, cap, and metadata changes after launch.</p></article>
+              <article><h4>Launch certificates next</h4><p>Each indexed B20 already has first-seen proof, a public card, JSON report, BaseScan link, and bot command.</p></article>
             </div>
           </section>
         </div>
@@ -666,38 +668,47 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
 
     async function loadB20LaunchRadar() {
       try {
-        const res = await fetch(`${API}/api/b20-launches?limit=4`);
+        const res = await fetch(`${API}/api/b20-launches?limit=20`);
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'B20 Launch Radar unavailable');
         renderB20LaunchRadar(data);
       } catch (error) {
         b20RadarStatus.textContent = 'Radar check';
+        document.querySelector('#b20-radar-coverage').textContent = 'The persisted factory-event feed could not be read. Echo will retry on the next page load.';
         b20Launches.innerHTML = `<article class="b20-launch-row"><div><strong>Radar refresh failed</strong><small>${escapeHtml(error.message || 'Provider unavailable')}</small></div></article>`;
       }
     }
 
     function renderB20LaunchRadar(data) {
       const stats = data.stats || {};
-      document.querySelector('#b20-radar-tracked').textContent = stats.tracked ?? '—';
-      document.querySelector('#b20-radar-clean').textContent = stats.cleanLaunches ?? '—';
-      document.querySelector('#b20-radar-attention').textContent = stats.needsAttention ?? '—';
-      document.querySelector('#b20-radar-changed').textContent = stats.changedConfigs ?? '—';
-      b20RadarStatus.textContent = `Live · ${data.mode || 'radar'} · ${new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const watcher = data.watcher || {};
+      document.querySelector('#b20-radar-tracked').textContent = Number(stats.tracked || 0).toLocaleString();
+      document.querySelector('#b20-radar-scanned').textContent = Number(stats.scanned || 0).toLocaleString();
+      document.querySelector('#b20-radar-attention').textContent = Number(stats.needsAttention || 0).toLocaleString();
+      document.querySelector('#b20-radar-changed').textContent = Number(stats.changedConfigs || 0).toLocaleString();
+      const watcherLabel = watcher.status === 'live' ? 'Live' : watcher.status === 'catching-up' ? 'Catching up' : 'Bootstrapping';
+      b20RadarStatus.textContent = `${watcherLabel} · event indexed · ${new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const lag = Number.isFinite(watcher.lagBlocks) ? `${watcher.lagBlocks} block${watcher.lagBlocks === 1 ? '' : 's'} behind` : 'cursor starting';
+      document.querySelector('#b20-radar-coverage').textContent = `Factory ${shortAddress(watcher.factoryAddress)} · indexed through Base block ${watcher.latestIndexedBlock || 'starting'} · ${lag} · ${Number(stats.newToday || 0).toLocaleString()} launches today`;
       const launches = data.launches || [];
-      b20Launches.innerHTML = launches.map((row) => `
+      b20Launches.innerHTML = launches.map((row) => {
+        const pending = row.level === 'PENDING' || row.level === 'RETRYING';
+        const score = pending ? row.level : `${row.echoConfigScore} · ${row.level}`;
+        const supply = pending ? 'Configuration scan pending' : `${row.totalSupply || '—'} / ${row.supplyCap || row.supplyCapStatus || '—'}`;
+        return `
         <article class="b20-launch-row">
-          <div><strong>${escapeHtml(row.symbol || 'B20')}</strong><small>${escapeHtml(row.name || row.address)}</small></div>
+          <div><strong>${escapeHtml(row.symbol || 'B20')}</strong><small>${escapeHtml(row.name || row.address)} · ${escapeHtml(new Date(row.firstSeenAt).toLocaleString())}</small></div>
           <div><span class="b20-launch-chip">${escapeHtml(row.factoryProof === 'factory-confirmed' ? 'Factory-confirmed' : row.factoryProof || 'Unknown')}</span></div>
-          <div><small>Score</small><span>${escapeHtml(row.echoConfigScore)} · ${escapeHtml(row.level)}</span></div>
-          <div><small>Supply</small><span>${escapeHtml(row.totalSupply || '—')} / ${escapeHtml(row.supplyCap || row.supplyCapStatus || '—')}</span></div>
+          <div><small>Score</small><span>${escapeHtml(score)}</span></div>
+          <div><small>Supply</small><span>${escapeHtml(supply)}</span></div>
           <div><small>Controls</small><span>${escapeHtml(row.policySummary)} · pause ${escapeHtml(row.pauseState)} · roles ${escapeHtml(row.roleSurface)}</span></div>
           <div class="b20-launch-actions">
             <a href="${escapeHtml(row.cardPngUrl)}" target="_blank" rel="noopener">Card</a>
             <a href="${escapeHtml(row.reportUrl)}" target="_blank" rel="noopener">JSON</a>
             <a href="${escapeHtml(row.explorerUrl)}" target="_blank" rel="noopener">BaseScan</a>
           </div>
-        </article>
-      `).join('') || '<article class="b20-launch-row"><div><strong>No B20 launches returned.</strong><small>Try again shortly.</small></div></article>';
+        </article>`;
+      }).join('') || '<article class="b20-launch-row"><div><strong>No B20 launches returned.</strong><small>The event index is still bootstrapping.</small></div></article>';
     }
 
     async function runScan(address) {
