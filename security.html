@@ -149,6 +149,25 @@
     .watchtower-list { display: grid; gap: 10px; margin-top: 18px; list-style: none; }
     .watchtower-list li { padding: 12px 14px; border: 1px solid var(--line); border-radius: 18px; background: oklch(0.1 0.024 232 / 0.56); color: var(--ink-soft); }
     .watchtower-list strong { color: var(--ink); }
+    .b20-radar { margin-top: 18px; padding: 22px; border-radius: 30px; border: 1px solid oklch(0.81 0.17 159 / 0.30); background: linear-gradient(145deg, oklch(0.13 0.036 226 / 0.90), oklch(0.08 0.022 232 / 0.78)); }
+    .b20-radar-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .b20-radar-head h3 { margin-top: 8px; font-size: clamp(30px, 4vw, 52px); line-height: .98; letter-spacing: -.05em; }
+    .b20-radar-status { flex: 0 0 auto; color: var(--green); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .b20-radar-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+    .b20-radar-metric { padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: oklch(0.08 0.022 232 / 0.58); }
+    .b20-radar-metric b { display: block; color: var(--ink); font: 800 30px/1 var(--font-display); }
+    .b20-radar-metric span { display: block; margin-top: 6px; color: var(--ink-dim); font: 800 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .b20-launches { display: grid; gap: 10px; margin-top: 18px; }
+    .b20-launch-row { display: grid; grid-template-columns: minmax(160px, .8fr) repeat(4, minmax(96px, .55fr)) minmax(170px, .9fr); gap: 10px; align-items: center; padding: 14px; border-radius: 20px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.58); }
+    .b20-launch-row strong { display: block; color: var(--ink); font-family: var(--font-display); font-size: 20px; line-height: 1.05; }
+    .b20-launch-row span, .b20-launch-row small { color: var(--ink-dim); font: 700 11px/1.35 var(--font-mono); overflow-wrap: anywhere; }
+    .b20-launch-chip { display: inline-flex; width: fit-content; padding: 6px 9px; border-radius: 999px; border: 1px solid oklch(0.81 0.17 159 / 0.28); color: var(--green) !important; background: oklch(0.81 0.17 159 / 0.08); text-transform: uppercase; letter-spacing: .08em; }
+    .b20-launch-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .b20-launch-actions a { color: var(--ink); font: 800 10px var(--font-mono); text-transform: uppercase; border-bottom: 1px solid oklch(0.81 0.17 159 / 0.42); }
+    .b20-radar-next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+    .b20-radar-next article { padding: 14px; border-radius: 18px; border: 1px solid oklch(0.78 0.12 212 / 0.22); background: oklch(0.08 0.022 232 / 0.42); }
+    .b20-radar-next h4 { color: var(--ink); font: 800 14px var(--font-display); }
+    .b20-radar-next p { margin-top: 6px; font-size: 13px; }
     .risk-ladder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
     .risk-step { padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.56); }
     .risk-step b { display: block; color: var(--ink); font-family: var(--font-display); }
@@ -225,8 +244,9 @@
       .menu-toggle { display: inline-flex; justify-self: end; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-family: var(--font-mono); }
       .nav-links { grid-column: 1 / -1; display: none; flex-wrap: wrap; padding-top: 8px; }
       .nav-links.open { display: flex; }
-      .hero-grid, .scanner-grid, .api-grid, .watchtower-grid { grid-template-columns: 1fr; }
-      .metric-grid, .risk-ladder { grid-template-columns: 1fr; }
+      .hero-grid, .scanner-grid, .api-grid, .watchtower-grid, .b20-radar-next { grid-template-columns: 1fr; }
+      .metric-grid, .risk-ladder, .b20-radar-metrics { grid-template-columns: 1fr; }
+      .b20-launch-row { grid-template-columns: 1fr; }
       .mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .agent-start-links { grid-template-columns: 1fr; }
       .result-hero, .scan-steps { grid-template-columns: 1fr; }
@@ -432,6 +452,33 @@
               </div>
             </aside>
           </div>
+
+          <section class="b20-radar" data-b20-dashboard="launch-radar" aria-labelledby="b20-radar-title">
+            <div class="b20-radar-head">
+              <div>
+                <div class="section-kicker">B20 Launch Radar</div>
+                <h3 id="b20-radar-title">Every new B20 launch, decoded by Echo.</h3>
+                <p class="lede" style="font-size:18px;">Echo turns B20 factory launches into a readable public feed: score, cap, policy gates, pause state, role surface, cards, JSON, and bot commands.</p>
+              </div>
+              <span class="b20-radar-status" id="b20-radar-status">Loading live scans</span>
+            </div>
+            <div class="b20-radar-metrics" aria-label="B20 Launch Radar metrics">
+              <div class="b20-radar-metric"><b id="b20-radar-tracked">—</b><span>B20s tracked</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-clean">—</b><span>Clean configs</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-attention">—</b><span>Need attention</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-changed">—</b><span>Config changes</span></div>
+            </div>
+            <div class="b20-launches" id="b20-launches" aria-live="polite">
+              <article class="b20-launch-row">
+                <div><strong>Loading B20 radar…</strong><small>Echo is refreshing seeded live scans.</small></div>
+              </article>
+            </div>
+            <div class="b20-radar-next" aria-label="B20 Watchtower next modules">
+              <article><h4>Factory-confirmed launches</h4><p>Seeded v1 uses live known B20 fixtures; the next indexer listens for factory events as they happen.</p></article>
+              <article><h4>Config diff monitor next</h4><p>Echo will compare snapshots and flag policy, pause, role, cap, and metadata changes after launch.</p></article>
+              <article><h4>Launch certificates</h4><p>Each B20 can get a permanent first-seen snapshot, public card, JSON report, and bot command.</p></article>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -532,6 +579,8 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
     const b20ResultTitle = document.querySelector('#b20-result-title');
     const b20Summary = document.querySelector('#b20-summary');
     const b20Findings = document.querySelector('#b20-findings');
+    const b20RadarStatus = document.querySelector('#b20-radar-status');
+    const b20Launches = document.querySelector('#b20-launches');
     let activeAddress = '';
     let activeQuickReport = null;
     let deepAbort = null;
@@ -584,6 +633,7 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
     syncLinks(input.value.trim());
     syncB20Links();
     loadCohorts();
+    loadB20LaunchRadar();
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -612,6 +662,42 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
         document.querySelector('#metric-status').textContent = 'Check';
         document.querySelector('#cohort-updated').textContent = error.message;
       }
+    }
+
+    async function loadB20LaunchRadar() {
+      try {
+        const res = await fetch(`${API}/api/b20-launches?limit=4`);
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'B20 Launch Radar unavailable');
+        renderB20LaunchRadar(data);
+      } catch (error) {
+        b20RadarStatus.textContent = 'Radar check';
+        b20Launches.innerHTML = `<article class="b20-launch-row"><div><strong>Radar refresh failed</strong><small>${escapeHtml(error.message || 'Provider unavailable')}</small></div></article>`;
+      }
+    }
+
+    function renderB20LaunchRadar(data) {
+      const stats = data.stats || {};
+      document.querySelector('#b20-radar-tracked').textContent = stats.tracked ?? '—';
+      document.querySelector('#b20-radar-clean').textContent = stats.cleanLaunches ?? '—';
+      document.querySelector('#b20-radar-attention').textContent = stats.needsAttention ?? '—';
+      document.querySelector('#b20-radar-changed').textContent = stats.changedConfigs ?? '—';
+      b20RadarStatus.textContent = `Live · ${data.mode || 'radar'} · ${new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const launches = data.launches || [];
+      b20Launches.innerHTML = launches.map((row) => `
+        <article class="b20-launch-row">
+          <div><strong>${escapeHtml(row.symbol || 'B20')}</strong><small>${escapeHtml(row.name || row.address)}</small></div>
+          <div><span class="b20-launch-chip">${escapeHtml(row.factoryProof === 'factory-confirmed' ? 'Factory-confirmed' : row.factoryProof || 'Unknown')}</span></div>
+          <div><small>Score</small><span>${escapeHtml(row.echoConfigScore)} · ${escapeHtml(row.level)}</span></div>
+          <div><small>Supply</small><span>${escapeHtml(row.totalSupply || '—')} / ${escapeHtml(row.supplyCap || row.supplyCapStatus || '—')}</span></div>
+          <div><small>Controls</small><span>${escapeHtml(row.policySummary)} · pause ${escapeHtml(row.pauseState)} · roles ${escapeHtml(row.roleSurface)}</span></div>
+          <div class="b20-launch-actions">
+            <a href="${escapeHtml(row.cardPngUrl)}" target="_blank" rel="noopener">Card</a>
+            <a href="${escapeHtml(row.reportUrl)}" target="_blank" rel="noopener">JSON</a>
+            <a href="${escapeHtml(row.explorerUrl)}" target="_blank" rel="noopener">BaseScan</a>
+          </div>
+        </article>
+      `).join('') || '<article class="b20-launch-row"><div><strong>No B20 launches returned.</strong><small>Try again shortly.</small></div></article>';
     }
 
     async function runScan(address) {
