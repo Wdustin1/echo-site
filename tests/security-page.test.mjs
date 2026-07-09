@@ -11,13 +11,18 @@ const agentDocs = readFileSync(join(repoRoot, 'docs/echo-shield/agent-integratio
 const tokenTriageSkill = readFileSync(join(repoRoot, 'docs/echo-shield/agent-skills/echo-shield-token-triage/SKILL.md'), 'utf8');
 const launchCardSkill = readFileSync(join(repoRoot, 'docs/echo-shield/agent-skills/echo-shield-launch-card/SKILL.md'), 'utf8');
 
-test('security page exposes scanner tab and disabled B20 Watchtower coming-soon tab', () => {
+test('security page exposes scanner tab and active B20 Watchtower tab', () => {
   assert.match(securityHtml, /role="tablist"[^>]*aria-label="Echo Security surfaces"/);
   assert.match(securityHtml, /data-security-tab="scanner"/);
   assert.match(securityHtml, /id="scanner-panel"[^>]*role="tabpanel"/);
-  assert.match(securityHtml, /id="b20-watchtower-tab"[^>]*aria-disabled="true"[^>]*disabled/);
-  assert.match(securityHtml, /B20 Watchtower\s*<span class="soon">Coming soon<\/span>/);
-  assert.doesNotMatch(securityHtml, /id="b20-watchtower-tab"[^>]*data-security-tab="b20-watchtower"/);
+  assert.match(securityHtml, /id="b20-watchtower-tab"[^>]*data-security-tab="b20-watchtower"/);
+  assert.match(securityHtml, /id="b20-watchtower-panel"[^>]*role="tabpanel"/);
+  assert.match(securityHtml, /B20 Watchtower/);
+  assert.match(securityHtml, /B20 makes launches faster\. Echo Shield makes the launch controls readable\./);
+  assert.match(securityHtml, /data-b20-control="supply-cap"/);
+  assert.match(securityHtml, /data-b20-example="BCAT"/);
+  assert.doesNotMatch(securityHtml, /B20 Watchtower\s*<span class="soon">Coming soon<\/span>/);
+  assert.doesNotMatch(securityHtml, /id="b20-watchtower-tab"[^>]*disabled/);
 });
 
 test('security page includes tab switching script for the tabbed surface', () => {

@@ -307,7 +307,7 @@
         <h2 style="margin-top:14px;font-size:clamp(38px,5vw,70px);letter-spacing:-.05em;">Paste a Base contract.</h2>
         <div class="surface-tabs" role="tablist" aria-label="Echo Security surfaces">
           <button class="surface-tab" type="button" role="tab" id="scanner-tab" aria-controls="scanner-panel" aria-selected="true" data-security-tab="scanner">Token Scanner</button>
-          <button class="surface-tab" type="button" role="tab" id="b20-watchtower-tab" aria-controls="b20-watchtower-panel" aria-selected="false" aria-disabled="true" disabled>B20 Watchtower <span class="soon">Coming soon</span></button>
+          <button class="surface-tab" type="button" role="tab" id="b20-watchtower-tab" aria-controls="b20-watchtower-panel" aria-selected="false" data-security-tab="b20-watchtower">B20 Watchtower</button>
         </div>
 
         <div class="surface-panel" id="scanner-panel" role="tabpanel" aria-labelledby="scanner-tab" data-security-panel="scanner">
@@ -390,25 +390,26 @@
           <div class="watchtower-grid">
             <form class="panel watchtower-panel" id="b20-form">
               <div class="section-kicker">B20 config scanner</div>
-              <h3>B20 Authority Scan</h3>
-              <p class="lede" style="font-size:20px;">B20 tokens are native/precompile-backed assets. Echo checks the config that matters: factory status, variant, supply cap, pause flags, transfer/mint policies, and discoverable role holders.</p>
+              <h3>B20 Watchtower</h3>
+              <p class="lede" style="font-size:20px;">B20 makes launches faster. Echo Shield makes the launch controls readable. The Watchtower reads native Base B20 status, variant, supply cap, pause flags, policy gates, and discoverable role holders before a post turns into hype.</p>
               <div class="scan-field">
                 <label for="b20-address">B20 token address</label>
-                <input class="address-input" id="b20-address" name="b20-address" autocomplete="off" spellcheck="false" placeholder="0xB20…" value="0xB2000000000000000000001B7FB417cdbfFC06eA" />
-                <p class="helper">Mainnet B20 activates with Beryl. Use Base Sepolia for live prelaunch examples.</p>
+                <input class="address-input" id="b20-address" name="b20-address" autocomplete="off" spellcheck="false" placeholder="0xB20…" value="0xB20000000000000000000022AC29fDb7Aa8Ec7A1" />
+                <p class="helper">Live Base mainnet B20 fixtures are now supported. Echo confirms B20 status from the canonical factory, not launchpad labels.</p>
                 <div class="examples" aria-label="B20 scan options">
-                  <button class="example-chip" type="button" data-b20-chain="base-sepolia" data-b20-address="0xB2000000000000000000001B7FB417cdbfFC06eA">Sepolia B20 example</button>
-                  <button class="example-chip" type="button" data-b20-chain="base">Base mainnet</button>
+                  <button class="example-chip" type="button" data-b20-example="BCAT" data-b20-chain="base" data-b20-address="0xB20000000000000000000022AC29fDb7Aa8Ec7A1">BCAT live B20</button>
+                  <button class="example-chip" type="button" data-b20-example="CLAWMES" data-b20-chain="base" data-b20-address="0xB200000000000000000000010945dB4bD8DfffC0">CLAWMES live B20</button>
+                  <button class="example-chip" type="button" data-b20-example="BERYL" data-b20-chain="base" data-b20-address="0xB200000000000000000000941Ea8baA29F8b0fc5">BERYL live B20</button>
                 </div>
               </div>
               <div class="button-row">
                 <button class="btn btn-primary" type="submit" id="b20-button">Scan B20 config</button>
                 <select class="address-input" id="b20-chain" aria-label="B20 chain" style="min-height:46px;max-width:190px;">
-                  <option value="base">Base</option>
-                  <option value="base-sepolia" selected>Base Sepolia</option>
+                  <option value="base" selected>Base</option>
+                  <option value="base-sepolia">Base Sepolia</option>
                 </select>
               </div>
-              <p class="notice">No bytecode does not mean no risk. B20 risk lives in issuer roles, policy IDs, pause state, and supply controls.</p>
+              <p class="notice">B20 being native does not remove issuer controls. Echo surfaces the control profile; it does not call a token approved, risk-free, or a buy.</p>
             </form>
 
             <aside class="panel watchtower-panel" aria-live="polite">
@@ -417,7 +418,7 @@
               <div class="risk-ladder" aria-label="B20 config summary">
                 <div class="risk-step"><b id="b20-risk">—</b><span>Config risk</span></div>
                 <div class="risk-step"><b id="b20-variant">—</b><span>Variant</span></div>
-                <div class="risk-step"><b id="b20-cap">—</b><span>Supply cap</span></div>
+                <div class="risk-step" data-b20-control="supply-cap"><b id="b20-cap">—</b><span>Supply cap</span></div>
                 <div class="risk-step"><b id="b20-policy-count">—</b><span>Custom policies</span></div>
               </div>
               <ul class="watchtower-list" id="b20-findings">
@@ -425,7 +426,8 @@
                 <li><strong>Echo does not claim:</strong> a token, market, issuer, or LP is safe.</li>
               </ul>
               <div class="button-row">
-                <a class="btn btn-primary" id="b20-json-link" href="https://shield.builtbyecho.xyz/api/b20-scan?chain=base-sepolia&address=0xB2000000000000000000001B7FB417cdbfFC06eA" target="_blank" rel="noopener">Open B20 JSON</a>
+                <a class="btn btn-primary" id="b20-json-link" href="https://shield.builtbyecho.xyz/api/b20-scan?chain=base&address=0xB20000000000000000000022AC29fDb7Aa8Ec7A1" target="_blank" rel="noopener">Open B20 JSON</a>
+                <a class="btn btn-ghost" id="b20-card-link" href="https://shield.builtbyecho.xyz/api/b20-card?address=0xB20000000000000000000022AC29fDb7Aa8Ec7A1&format=png" target="_blank" rel="noopener">Open B20 card</a>
                 <a class="btn btn-ghost" href="https://docs.base.org/base-chain/specs/upgrades/beryl/b20" target="_blank" rel="noopener">Base B20 docs</a>
               </div>
             </aside>
@@ -526,6 +528,7 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
     const b20Chain = document.querySelector('#b20-chain');
     const b20Button = document.querySelector('#b20-button');
     const b20JsonLink = document.querySelector('#b20-json-link');
+    const b20CardLink = document.querySelector('#b20-card-link');
     const b20ResultTitle = document.querySelector('#b20-result-title');
     const b20Summary = document.querySelector('#b20-summary');
     const b20Findings = document.querySelector('#b20-findings');
@@ -719,7 +722,7 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
       b20Summary.textContent = 'Querying the Base B20 factory, token config, policy registry, and recent role events.';
       b20Findings.innerHTML = '<li>B20 config scan running…</li>';
       try {
-        const res = await fetch(`${API}/api/b20-scan?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`);
+        const res = await fetch(`${API}/api/b20-card?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`);
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'B20 scan failed');
         renderB20Report(data.report);
@@ -796,6 +799,7 @@ docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
     function syncB20Links(address = b20Input.value.trim()) {
       if (!address) return;
       b20JsonLink.href = `${API}/api/b20-scan?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`;
+      b20CardLink.href = `${API}/api/b20-card?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}&format=png`;
     }
 
     function formatUsd(value) {
