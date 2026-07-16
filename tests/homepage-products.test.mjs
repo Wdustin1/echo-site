@@ -20,17 +20,14 @@ test('homepage exposes a BuiltByEcho weekly build board', () => {
   assert.doesNotMatch(indexHtml, /Rallyn/);
 });
 
-test('homepage exposes the five-update today sprint and Echo Pulse format', () => {
-  assert.match(indexHtml, /id="today-sprint"/);
-  assert.match(indexHtml, /data-update-id="website-build-log"/);
-  assert.match(indexHtml, /data-update-id="shield-risk-handoff"/);
-  assert.match(indexHtml, /data-update-id="infer-private-connect"/);
-  assert.match(indexHtml, /data-update-id="npm-dev-tooling"/);
-  assert.match(indexHtml, /data-update-id="echo-pulse-format"/);
-  assert.match(indexHtml, /Built:/);
-  assert.match(indexHtml, /Improved:/);
-  assert.match(indexHtml, /Testing:/);
-  assert.match(indexHtml, /Next:/);
+test('homepage exposes five current ECHO utility paths instead of stale sprint boards', () => {
+  assert.match(indexHtml, /id="echo-utility-now"/);
+  assert.match(indexHtml, /data-utility-id="holder-perks"/);
+  assert.match(indexHtml, /data-utility-id="gauntlet-payment"/);
+  assert.match(indexHtml, /data-utility-id="holder-request-pass"/);
+  assert.match(indexHtml, /data-utility-id="contract-verification"/);
+  assert.match(indexHtml, /data-utility-id="utility-feed"/);
+  assert.doesNotMatch(indexHtml, /id="today-sprint"/);
 });
 
 test('products page promotes current BuiltByEcho product lanes without client builds', () => {

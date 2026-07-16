@@ -141,9 +141,10 @@
     .run-result span, .run-result p { color: var(--muted); }
     .run-links { display: flex; flex-wrap: wrap; gap: 10px; }
     .run-links a { border: 1px solid var(--line); border-radius: 999px; padding: 10px 12px; color: var(--text); font: 800 11px var(--mono); }
-    .note-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .note-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .note { border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); line-height: 1.55; }
     .note b { display: block; color: var(--text); margin-bottom: 8px; font-family: var(--display); }
+    .note a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
     footer { padding: 34px 0 50px; color: var(--muted); font-size: 13px; }
     @media (max-width: 900px) {
       nav .wide { align-items: flex-start; flex-direction: column; padding: 16px 0; }
@@ -165,6 +166,8 @@
         <a href="products.html">Products</a>
         <a href="api-finder.html">API Finder</a>
         <a href="gauntlet.html">Gauntlet</a>
+        <a href="/perks">Perks</a>
+        <a href="/updates">Updates</a>
         <a href="skills.html">Skills</a>
         <button class="wallet-pill" type="button" id="connect-wallet" data-wallet-connect>Connect wallet</button>
       </div>
@@ -201,6 +204,7 @@
             <div class="note"><b>USDC default</b>Stable $2.50 Base payment for public testing.</div>
             <div class="note"><b>ECHO lane</b>Token payment path for the BuiltByEcho tool network.</div>
             <div class="note"><b>Agent lane</b>Bankr x402 remains live for autonomous clients.</div>
+            <div class="note"><b>Verify first</b><a href="/api/gauntlet-quote" target="_blank" rel="noopener">Inspect live quote</a> before approving a payment.</div>
           </div>
         </div>
 

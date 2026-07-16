@@ -7,6 +7,7 @@
     { "source": "/agent-wormhole-open", "destination": "/api/x402-proxy?service=agent-wormhole-open" },
     { "source": "/gauntlet", "destination": "/gauntlet.html" },
     { "source": "/perks", "destination": "/perks.html" },
-    { "source": "/security", "destination": "/security.html" }
+    { "source": "/security", "destination": "/security.html" },
+    { "source": "/updates", "destination": "/updates.html" }
   ]
 }

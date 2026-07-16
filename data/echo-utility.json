@@ -1,0 +1,51 @@
+{
+  "date": "2026-07-16",
+  "verifiedAt": "2026-07-16T12:40:44Z",
+  "token": {
+    "name": "ECHO",
+    "symbol": "ECHO",
+    "address": "0xA7F63eB41779925803a3EEC30890742571e63Ba3"
+  },
+  "network": {
+    "name": "Base",
+    "chainId": 8453
+  },
+  "utility": [
+    {
+      "id": "holder-perks",
+      "name": "Holder and partner claims",
+      "status": "live",
+      "summary": "The holder dashboard currently exposes 11 active claim paths across BuiltByEcho, Bankr, Darksol, and MiroShark.",
+      "proofUrl": "https://www.builtbyecho.xyz/perks"
+    },
+    {
+      "id": "gauntlet-payment",
+      "name": "Gauntlet payment",
+      "status": "live",
+      "summary": "Echo Gauntlet accepts ECHO on Base for a browser-persona website teardown. The current amount is returned by the public quote endpoint.",
+      "proofUrl": "https://www.builtbyecho.xyz/api/gauntlet-quote"
+    },
+    {
+      "id": "holder-request-pass",
+      "name": "Holder Request Pass",
+      "status": "live",
+      "summary": "A wallet holding at least 1 ECHO can submit a request for a perk, tool, review, or partner reward through the holder dashboard.",
+      "proofUrl": "https://www.builtbyecho.xyz/perks"
+    },
+    {
+      "id": "dual-holder-credits",
+      "name": "Partner and dual-holder credits",
+      "status": "live",
+      "summary": "Eligible partner-token holders can claim starter tool credits, with additional claim paths for wallets that also hold ECHO.",
+      "proofUrl": "https://www.builtbyecho.xyz/perks"
+    },
+    {
+      "id": "contract-verification",
+      "name": "Contract verification",
+      "status": "live",
+      "summary": "The ECHO token contract can be verified directly on BaseScan before any wallet action.",
+      "proofUrl": "https://basescan.org/token/0xA7F63eB41779925803a3EEC30890742571e63Ba3"
+    }
+  ],
+  "disclaimer": "This feed describes current product utility. It is not a promise of price or returns and is not financial advice."
+}

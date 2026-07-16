@@ -1,0 +1,44 @@
+{
+  "date": "2026-07-16",
+  "title": "Echo Pulse — ECHO utility pass",
+  "summary": "Five small updates make current ECHO utility easier to find, verify, and share.",
+  "image": "assets/social/echo-pulse-2026-07-16-utility.png",
+  "builds": [
+    {
+      "id": "echo-utility-map",
+      "status": "ready",
+      "name": "Current utility map",
+      "proofUrl": "https://www.builtbyecho.xyz/#echo-utility-now",
+      "shortUpdate": "The homepage now puts holder claims, Gauntlet payments, contract verification, and the public utility feed in one current section."
+    },
+    {
+      "id": "holder-dashboard-refresh",
+      "status": "ready",
+      "name": "Holder dashboard refresh",
+      "proofUrl": "https://www.builtbyecho.xyz/perks",
+      "shortUpdate": "The holder dashboard removes stale sprint windows and adds direct links to Gauntlet and BaseScan from the BuiltByEcho room."
+    },
+    {
+      "id": "gauntlet-echo-proof",
+      "status": "ready",
+      "name": "Inspectable Gauntlet ECHO quote",
+      "proofUrl": "https://www.builtbyecho.xyz/api/gauntlet-quote",
+      "shortUpdate": "Gauntlet now links its public quote JSON directly so the current ECHO amount, token, network, and receiver can be checked before payment."
+    },
+    {
+      "id": "echo-utility-feed",
+      "status": "ready",
+      "name": "Machine-readable utility feed",
+      "proofUrl": "https://www.builtbyecho.xyz/data/echo-utility.json",
+      "shortUpdate": "A compact JSON feed gives agents and community tools a grounded source for current ECHO utility and proof URLs."
+    },
+    {
+      "id": "clean-updates-route",
+      "status": "ready",
+      "name": "Clean update route and share card",
+      "proofUrl": "https://www.builtbyecho.xyz/updates",
+      "shortUpdate": "The latest Echo Pulse pack now has a clean route, current metadata, copy-ready post, and a deterministic social card."
+    }
+  ],
+  "socialPost": "https://www.builtbyecho.xyz/updates\n\nSmall ECHO utility pass is live: a clearer utility map, 11 active holder claim paths, inspectable Gauntlet ECHO quotes, a clean /updates route, and a machine-readable utility feed.\n\nUse it: https://www.builtbyecho.xyz/perks"
+}

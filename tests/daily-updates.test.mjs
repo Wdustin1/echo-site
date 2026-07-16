@@ -19,24 +19,19 @@ const morningBuildIds = [
   'echo-pulse-copy-kit',
 ];
 
-test('homepage exposes the July 8 shipping board', () => {
-  assert.match(indexHtml, /id="july-8-sprint"/);
-  assert.match(indexHtml, /data-update-id="pulse-update-system"/);
-  assert.match(indexHtml, /data-update-id="windows-desktop-release"/);
-  assert.match(indexHtml, /data-update-id="shield-reply-kit"/);
-  assert.match(indexHtml, /data-update-id="product-hotlinks"/);
-  assert.match(indexHtml, /data-update-id="npm-dev-tooling"/);
-  assert.match(indexHtml, /updates.html#july-8/);
-});
-
-test('updates page gives social manager a copy-ready July 8 pack', () => {
+test('July 8 shipping board stays archived off the homepage', () => {
+  assert.doesNotMatch(indexHtml, /id="july-8-sprint"/);
   assert.match(updatesHtml, /id="july-8"/);
-  assert.match(updatesHtml, /Social manager handoff/);
-  assert.match(updatesHtml, /Copy-ready posts/);
   assert.match(updatesHtml, /Echo Pulse update system/);
   assert.match(updatesHtml, /Windows desktop beta release/);
   assert.match(updatesHtml, /Shield reply kit/);
-  assert.match(updatesHtml, /No fake roadmap language/);
+  assert.match(updatesHtml, /product hotlinks/i);
+  assert.match(updatesHtml, /npm tooling/i);
+});
+
+test('updates page keeps the July 8 JSON archive available', () => {
+  assert.match(updatesHtml, /id="july-8"/);
+  assert.match(updatesHtml, /data\/echo-pulse-2026-07-08\.json/);
 });
 
 test('daily Echo Pulse JSON feed has five real builds and social copy', () => {
@@ -64,16 +59,13 @@ test('security page includes the Echo Shield community reply kit', () => {
   assert.match(securityHtml, /Open PNG card/);
 });
 
-test('July 10 morning sprint is visible on the homepage and update pack', () => {
-  assert.match(indexHtml, /id="july-10-sprint"/);
+test('July 10 morning sprint stays available as an archived proof pack', () => {
+  assert.doesNotMatch(indexHtml, /id="july-10-sprint"/);
   assert.match(updatesHtml, /id="july-10"/);
-  assert.match(updatesHtml, /Morning shipping pack/);
-  for (const id of morningBuildIds) {
-    assert.match(indexHtml, new RegExp(`data-update-id="${id}"`));
-    assert.match(updatesHtml, new RegExp(`data-update-id="${id}"`));
-  }
-  assert.match(updatesHtml, /class="copy-post"/);
-  assert.match(updatesHtml, /navigator\.clipboard\.writeText/);
+  assert.match(updatesHtml, /data\/echo-pulse-2026-07-10\.json/);
+  assert.match(updatesHtml, /B20 Watchtower/);
+  assert.match(updatesHtml, /Reverbin agent inboxes/);
+  assert.match(updatesHtml, /Echo Infer Desktop/);
 });
 
 test('July 10 Echo Pulse feed has four proof-backed X posts and share cards', () => {
