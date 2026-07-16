@@ -71,6 +71,7 @@ test('machine-readable ECHO utility feed stays grounded in live surfaces', () =>
 test('July 16 Pulse pack contains five proof-backed updates and one X-ready post', () => {
   assert.equal(pulseFeed.date, '2026-07-16');
   assert.deepEqual(pulseFeed.builds.map((build) => build.id), updateIds);
+  assert.ok(pulseFeed.builds.every((build) => build.status === 'shipped'));
   assert.ok(pulseFeed.socialPost.length >= 120);
   assert.ok(pulseFeed.socialPost.length <= 280, `X post is ${pulseFeed.socialPost.length} characters`);
   assert.match(updatesHtml, /id="july-16"/);
