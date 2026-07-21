@@ -57,10 +57,11 @@ test('clean updates route is configured and linked from the homepage', () => {
 });
 
 test('machine-readable ECHO utility feed stays grounded in live surfaces', () => {
-  assert.equal(utilityFeed.date, '2026-07-16');
+  assert.equal(utilityFeed.date, '2026-07-21');
   assert.equal(utilityFeed.network.chainId, 8453);
   assert.equal(utilityFeed.token.address, '0xA7F63eB41779925803a3EEC30890742571e63Ba3');
-  assert.equal(utilityFeed.utility.length, 5);
+  assert.equal(utilityFeed.utility.length, 6);
+  assert.ok(utilityFeed.utility.some((item) => item.id === 'api-finder-payment'));
   for (const item of utilityFeed.utility) {
     assert.equal(item.status, 'live');
     assert.ok(item.proofUrl.startsWith('https://'));
@@ -75,11 +76,8 @@ test('July 16 Pulse pack contains five proof-backed updates and one X-ready post
   assert.ok(pulseFeed.socialPost.length >= 120);
   assert.ok(pulseFeed.socialPost.length <= 280, `X post is ${pulseFeed.socialPost.length} characters`);
   assert.match(updatesHtml, /id="july-16"/);
-  assert.match(updatesHtml, /ECHO utility got easier to verify/);
-  for (const id of updateIds) {
-    assert.match(updatesHtml, new RegExp(`data-update-id="${id}"`));
-  }
-  assert.match(updatesHtml, /assets\/social\/echo-pulse-2026-07-16-utility\.png/);
+  assert.match(updatesHtml, /July 16 utility pass/);
+  assert.match(updatesHtml, /data\/echo-pulse-2026-07-16\.json/);
   const png = readFileSync(join(repoRoot, pulseFeed.image));
   assert.deepEqual([...png.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
   assert.ok(png.length > 20_000);

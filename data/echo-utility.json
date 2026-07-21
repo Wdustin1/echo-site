@@ -1,6 +1,6 @@
 {
-  "date": "2026-07-16",
-  "verifiedAt": "2026-07-16T12:40:44Z",
+  "date": "2026-07-21",
+  "verifiedAt": "2026-07-21T12:30:02Z",
   "token": {
     "name": "ECHO",
     "symbol": "ECHO",
@@ -24,6 +24,13 @@
       "status": "live",
       "summary": "Echo Gauntlet accepts ECHO on Base for a browser-persona website teardown. The current amount is returned by the public quote endpoint.",
       "proofUrl": "https://www.builtbyecho.xyz/api/gauntlet-quote"
+    },
+    {
+      "id": "api-finder-payment",
+      "name": "Public API Finder payment",
+      "status": "live",
+      "summary": "Public API Finder accepts ECHO on Base for a ranked API search. The public quote endpoint returns the current token, amount, network, and receiver before payment.",
+      "proofUrl": "https://www.builtbyecho.xyz/api/echo-api-finder-quote"
     },
     {
       "id": "holder-request-pass",

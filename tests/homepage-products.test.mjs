@@ -20,10 +20,11 @@ test('homepage exposes a BuiltByEcho weekly build board', () => {
   assert.doesNotMatch(indexHtml, /Rallyn/);
 });
 
-test('homepage exposes five current ECHO utility paths instead of stale sprint boards', () => {
+test('homepage exposes six current ECHO utility paths instead of stale sprint boards', () => {
   assert.match(indexHtml, /id="echo-utility-now"/);
   assert.match(indexHtml, /data-utility-id="holder-perks"/);
   assert.match(indexHtml, /data-utility-id="gauntlet-payment"/);
+  assert.match(indexHtml, /data-utility-id="api-finder-payment"/);
   assert.match(indexHtml, /data-utility-id="holder-request-pass"/);
   assert.match(indexHtml, /data-utility-id="contract-verification"/);
   assert.match(indexHtml, /data-utility-id="utility-feed"/);

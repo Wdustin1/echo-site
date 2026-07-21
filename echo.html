@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use ECHO — BuiltByEcho</title>
+  <meta name="description" content="Current ECHO utility on Base: holder claims, product payments, wallet actions, public quote endpoints, and verifiable proof links." />
+  <link rel="canonical" href="https://www.builtbyecho.xyz/echo" />
+  <meta property="og:title" content="Use ECHO — BuiltByEcho" />
+  <meta property="og:description" content="See what ECHO does today, inspect live product quotes, and verify every path before acting." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.builtbyecho.xyz/echo" />
+  <meta property="og:image" content="https://www.builtbyecho.xyz/assets/social/echo-mini-drop-2026-07-21-hub.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://www.builtbyecho.xyz/assets/social/echo-mini-drop-2026-07-21-hub.png" />
+  <link rel="icon" href="assets/brand/builtbyecho-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: oklch(0.105 0.026 228); --deep: oklch(0.066 0.022 232); --panel: oklch(0.15 0.033 226);
+      --ink: oklch(0.965 0.012 150); --soft: oklch(0.78 0.034 178); --dim: oklch(0.59 0.04 190);
+      --line: oklch(0.38 0.052 190 / .38); --green: oklch(0.81 0.17 159); --cyan: oklch(0.78 0.12 212);
+      --display: "Bricolage Grotesque", system-ui, sans-serif; --body: "DM Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace; --wide: 1240px;
+    }
+    html { scroll-behavior: smooth; max-width: 100%; overflow-x: hidden; }
+    body { min-height: 100vh; max-width: 100%; overflow-x: hidden; color: var(--ink); font-family: var(--body); line-height: 1.55; background: radial-gradient(circle at 12% 3%, oklch(0.47 0.13 161 / .22), transparent 34rem), radial-gradient(circle at 88% 13%, oklch(0.44 0.12 218 / .18), transparent 31rem), linear-gradient(180deg, var(--bg), var(--deep) 72%); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .wide { width: min(var(--wide), calc(100% - 40px)); margin-inline: auto; }
+    nav { width: min(var(--wide), calc(100% - 28px)); margin: 10px auto 0; border: 1px solid var(--line); border-radius: 999px; background: oklch(0.1 0.025 229 / .78); backdrop-filter: blur(18px); }
+    .nav-inner { min-height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 10px 18px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 800 20px var(--display); }
+    .brand img { width: 30px; height: 30px; }
+    .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; color: var(--soft); font: 700 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--green); }
+    .hero { padding: clamp(64px, 9vw, 132px) 0 54px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(340px, .62fr); gap: 56px; align-items: end; }
+    .eyebrow, .kicker { color: var(--green); font: 800 12px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    h1, h2, h3 { font-family: var(--display); letter-spacing: -.045em; text-wrap: balance; }
+    h1 { max-width: 900px; margin-top: 16px; font-size: clamp(60px, 8.5vw, 118px); line-height: .86; }
+    h1 span { color: var(--green); }
+    .lede { max-width: 780px; margin-top: 25px; color: var(--soft); font-size: clamp(18px, 1.8vw, 24px); }
+    .actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 26px; }
+    .btn { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; padding: 10px 16px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: transparent; cursor: pointer; font: 800 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .btn:hover, .btn:focus-visible { border-color: var(--green); color: var(--green); outline: none; }
+    .btn-primary { border-color: transparent; color: var(--deep); background: linear-gradient(135deg, var(--green), var(--cyan)); }
+    .hero-proof { padding: 24px; border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(145deg, oklch(0.18 0.037 226 / .88), oklch(0.09 0.024 232 / .86)); box-shadow: 0 30px 90px oklch(0.03 0.02 230 / .35); }
+    .proof-label { color: var(--dim); font: 700 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    .contract { display: block; margin-top: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; color: var(--green); background: oklch(0.075 0.023 231 / .7); font: 700 12px/1.5 var(--mono); overflow-wrap: anywhere; }
+    .fact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 16px; }
+    .fact { padding: 12px; border: 1px solid var(--line); border-radius: 15px; }
+    .fact b { display: block; color: var(--green); font: 800 18px var(--display); }
+    .fact span { color: var(--dim); font: 700 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    section { padding: 46px 0 82px; }
+    .section-head { display: grid; grid-template-columns: minmax(0, .9fr) minmax(280px, .45fr); gap: 28px; align-items: end; margin-bottom: 28px; }
+    .section-head h2 { margin-top: 10px; font-size: clamp(42px, 5.8vw, 78px); line-height: .91; }
+    .section-head p, .card p, .quote-card p { color: var(--soft); }
+    .quote-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .quote-card { position: relative; overflow: hidden; min-height: 320px; padding: 28px; border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(145deg, oklch(0.18 0.037 226 / .9), oklch(0.085 0.024 232 / .9)); }
+    .quote-card::after { content: ""; position: absolute; width: 200px; height: 200px; right: -80px; bottom: -100px; border-radius: 50%; background: var(--green); filter: blur(75px); opacity: .09; pointer-events: none; }
+    .quote-card h3 { margin-top: 10px; max-width: 520px; font-size: clamp(34px, 4vw, 54px); line-height: .95; }
+    .quote-value { margin: 28px 0 8px; color: var(--green); font: 800 clamp(32px, 5vw, 64px)/1 var(--display); letter-spacing: -.045em; }
+    .quote-meta { color: var(--dim); font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .utility-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card { min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; padding: 23px; border: 1px solid var(--line); border-radius: 25px; background: oklch(0.13 0.03 228 / .72); }
+    .card b { color: var(--green); font: 800 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    .card h3 { margin: 9px 0 10px; font-size: 30px; line-height: 1; }
+    .card footer { color: var(--dim); font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+    .card footer a { color: var(--green); }
+    .proof-band { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: center; padding: 34px; border: 1px solid oklch(0.81 0.17 159 / .35); border-radius: 30px; background: linear-gradient(120deg, oklch(0.81 0.17 159 / .1), oklch(0.78 0.12 212 / .08)); }
+    .proof-band h2 { font-size: clamp(38px, 5vw, 68px); line-height: .94; }
+    .proof-band p { max-width: 760px; margin-top: 13px; color: var(--soft); }
+    .disclaimer { padding: 24px 0 70px; color: var(--dim); font: 600 12px/1.7 var(--mono); }
+    @media (max-width: 900px) {
+      nav { border-radius: 26px; }
+      .nav-inner { width: 100%; min-width: 0; align-items: flex-start; flex-direction: column; }
+      .nav-links { width: 100%; min-width: 0; gap: 10px 14px; }
+      .hero-grid, .section-head, .quote-grid, .utility-grid, .proof-band { grid-template-columns: minmax(0, 1fr); }
+      .hero-grid > *, .section-head > *, .quote-grid > *, .utility-grid > *, .proof-band > * { min-width: 0; }
+      .hero { padding-top: 54px; }
+      .proof-band .actions { margin-top: 0; }
+    }
+    @media (max-width: 540px) {
+      .wide { width: calc(100% - 26px); }
+      .nav-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .nav-links a { min-width: 0; padding: 7px 5px; border: 1px solid var(--line); border-radius: 999px; text-align: center; }
+      h1 { font-size: clamp(46px, 13vw, 52px); line-height: .91; text-wrap: wrap; }
+      .lede { font-size: 18px; overflow-wrap: anywhere; }
+      .contract { font-size: 10px; }
+      .fact-grid { grid-template-columns: 1fr; }
+      .actions .btn { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <nav aria-label="Primary navigation"><div class="nav-inner">
+    <a class="brand" href="index.html"><img src="assets/brand/builtbyecho-logo.png" alt="" />BuiltByEcho</a>
+    <div class="nav-links"><a href="/echo">ECHO</a><a href="/perks">Perks</a><a href="/gauntlet">Gauntlet</a><a href="api-finder.html">API Finder</a><a href="/updates">Updates</a><a href="data/echo-utility.json">Utility JSON</a></div>
+  </div></nav>
+
+  <main>
+    <section class="hero">
+      <div class="wide hero-grid">
+        <div>
+          <div class="eyebrow">ECHO utility / verified July 21</div>
+          <h1>What can I do with <span>ECHO</span> today?</h1>
+          <p class="lede">Use ECHO across current BuiltByEcho products, check holder and partner claims, inspect product quotes, and verify the Base contract before touching your wallet.</p>
+          <div class="actions"><a class="btn btn-primary" href="#use-echo">Use ECHO now</a><a class="btn" href="/perks">Check holder claims</a><a class="btn" href="data/echo-utility.json">Read the JSON</a></div>
+        </div>
+        <aside class="hero-proof" aria-label="ECHO contract proof">
+          <div class="proof-label">Canonical token / Base</div>
+          <code class="contract">0xA7F63eB41779925803a3EEC30890742571e63Ba3</code>
+          <div class="fact-grid"><div class="fact"><b>8453</b><span>Chain ID 8453</span></div><div class="fact"><b>6</b><span>Live paths</span></div><div class="fact"><b>2</b><span>Quoted tools</span></div></div>
+          <div class="actions"><button class="btn" type="button" data-copy-contract>Copy contract</button><button class="btn" type="button" data-add-token>Add ECHO to wallet</button><a class="btn" href="https://basescan.org/token/0xA7F63eB41779925803a3EEC30890742571e63Ba3" target="_blank" rel="noopener">BaseScan</a></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="use-echo">
+      <div class="wide">
+        <div class="section-head"><div><div class="kicker">Two product lanes</div><h2>Inspect the amount before you pay.</h2></div><p>Live amounts load from each product's public quote endpoint. A quote is not a wallet transaction; payment only happens after you approve it.</p></div>
+        <div class="quote-grid">
+          <article class="quote-card"><div class="kicker">Echo Gauntlet</div><h3>Pay for a Gauntlet teardown.</h3><p>Run a browser-persona review of a public website and receive prioritized findings.</p><div class="quote-value" data-quote-value="gauntlet">Loading…</div><div class="quote-meta" data-quote-meta="gauntlet">Public quote / Base</div><div class="actions"><a class="btn btn-primary" href="/gauntlet">Open Gauntlet</a><a class="btn" href="/api/gauntlet-quote">Inspect JSON</a></div></article>
+          <article class="quote-card"><div class="kicker">Public API Finder</div><h3>Find an API with ECHO.</h3><p>Describe the API you need and receive ranked candidates with documentation links.</p><div class="quote-value" data-quote-value="api-finder">Loading…</div><div class="quote-meta" data-quote-meta="api-finder">Public quote / Base</div><div class="actions"><a class="btn btn-primary" href="/api-finder.html#human-interface">Open API Finder</a><a class="btn" href="/api/echo-api-finder-quote">Inspect JSON</a></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wide">
+        <div class="section-head"><div><div class="kicker">Six current paths</div><h2>Utility with a next click.</h2></div><p>Every item below points to a working product surface or public proof endpoint. Availability and limits can change as products evolve.</p></div>
+        <div class="utility-grid">
+          <article class="card"><div><b>Holder access</b><h3>11 claim paths</h3><p>Match ECHO and supported partner balances to current perks and credits.</p></div><footer><a href="/perks">Open dashboard →</a></footer></article>
+          <article class="card"><div><b>Product payment</b><h3>Gauntlet</h3><p>Pay in ECHO on Base for a browser-persona website teardown.</p></div><footer><a href="/gauntlet">Use Gauntlet →</a></footer></article>
+          <article class="card"><div><b>Product payment</b><h3>API Finder</h3><p>Pay in ECHO to search and rank public APIs for a builder task.</p></div><footer><a href="/api-finder.html#human-interface">Find an API →</a></footer></article>
+          <article class="card"><div><b>Holder access</b><h3>Request Pass</h3><p>Wallets holding at least 1 ECHO can submit a perk, tool, or review request.</p></div><footer><a href="/perks">Check eligibility →</a></footer></article>
+          <article class="card"><div><b>Partner access</b><h3>Stacked credits</h3><p>Supported partner holders can unlock starter credits and dual-holder paths.</p></div><footer><a href="/perks">See partner rooms →</a></footer></article>
+          <article class="card"><div><b>Public proof</b><h3>Verify on Base</h3><p>Confirm the network and contract directly before any wallet action.</p></div><footer><a href="https://basescan.org/token/0xA7F63eB41779925803a3EEC30890742571e63Ba3" target="_blank" rel="noopener">Open BaseScan →</a></footer></article>
+        </div>
+      </div>
+    </section>
+
+    <section><div class="wide proof-band"><div><div class="kicker">Agent-readable utility</div><h2>Community tools can read the same proof.</h2><p>The public JSON feed includes the token address, Base chain ID, current utility status, summaries, and proof URLs.</p></div><div class="actions"><a class="btn btn-primary" href="data/echo-utility.json">Open utility JSON</a><a class="btn" href="/updates">Get post copy</a></div></div></section>
+  </main>
+
+  <footer class="wide disclaimer">ECHO utility is product access, claims, and payment functionality. It is not a promise of price or returns, and this page is not financial advice. Verify the Base network, contract, amount, and receiver in your wallet before approving any transaction.</footer>
+
+  <script>
+    const ECHO_CONTRACT = '0xA7F63eB41779925803a3EEC30890742571e63Ba3';
+    const formatQuote = (data) => {
+      if (data?.echo?.display) return data.echo.display;
+      const raw = String(data?.echo?.amountRaw || '');
+      const decimals = Number(data?.echo?.decimals ?? 18);
+      if (!/^\d+$/.test(raw) || raw.length <= decimals) return 'Quote available in JSON';
+      const whole = raw.slice(0, -decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return `${whole} ECHO`;
+    };
+    const loadQuote = async (key, url) => {
+      const value = document.querySelector(`[data-quote-value="${key}"]`);
+      const meta = document.querySelector(`[data-quote-meta="${key}"]`);
+      try {
+        const response = await fetch(url, { headers: { accept: 'application/json' } });
+        const data = await response.json();
+        if (!response.ok || !data.echo) throw new Error('quote unavailable');
+        value.textContent = formatQuote(data);
+        meta.textContent = `Live quote / Base / Chain ${data.echo.chainId || 8453}`;
+      } catch {
+        value.textContent = 'Open quote JSON';
+        meta.textContent = 'Live quote could not load in this browser';
+      }
+    };
+    loadQuote('gauntlet', '/api/gauntlet-quote');
+    loadQuote('api-finder', '/api/echo-api-finder-quote');
+
+    document.querySelector('[data-copy-contract]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      try { await navigator.clipboard.writeText(ECHO_CONTRACT); button.textContent = 'Copied'; }
+      catch { button.textContent = ECHO_CONTRACT; }
+      window.setTimeout(() => { button.textContent = 'Copy contract'; }, 1800);
+    });
+
+    document.querySelector('[data-add-token]')?.addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      if (!window.ethereum?.request) { button.textContent = 'Wallet extension required'; return; }
+      try {
+        const currentChain = await window.ethereum.request({ method: 'eth_chainId' });
+        if (String(currentChain).toLowerCase() !== '0x2105') {
+          button.textContent = 'Approve Base switch';
+          await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x2105' }] });
+        }
+        const added = await window.ethereum.request({ method: 'wallet_watchAsset', params: { type: 'ERC20', options: { address: ECHO_CONTRACT, symbol: 'ECHO', decimals: 18 } } });
+        button.textContent = added ? 'ECHO added' : 'Request cancelled';
+      } catch { button.textContent = 'Could not add token'; }
+      window.setTimeout(() => { button.textContent = 'Add ECHO to wallet'; }, 2200);
+    });
+  </script>
+</body>
+</html>
