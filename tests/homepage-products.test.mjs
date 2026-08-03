@@ -8,14 +8,17 @@ const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const indexHtml = readFileSync(join(repoRoot, 'index.html'), 'utf8');
 const productsHtml = readFileSync(join(repoRoot, 'products.html'), 'utf8');
 
-test('homepage exposes a BuiltByEcho weekly build board', () => {
-  assert.match(indexHtml, /id="recent-builds"/);
-  assert.match(indexHtml, /Shipping this week/);
-  assert.match(indexHtml, /Echo Shield/);
-  assert.match(indexHtml, /Echo Infer/);
-  assert.match(indexHtml, /Agent Email Layer/);
-  assert.match(indexHtml, /Deal Sniper/);
-  assert.match(indexHtml, /Echo Social/);
+test('homepage leads with four user-operable products instead of a weekly product grab bag', () => {
+  const useNow = indexHtml.match(/<section id="recent-builds">([\s\S]*?)<\/section>/)?.[1] ?? '';
+  assert.match(useNow, /Use now/);
+  assert.match(useNow, /Echo Shield/);
+  assert.match(useNow, /Vaultline/);
+  assert.match(useNow, /Public API Finder/);
+  assert.match(useNow, /Echo Gauntlet/);
+  assert.doesNotMatch(useNow, /Echo Infer/);
+  assert.doesNotMatch(useNow, /Agent Email Layer/);
+  assert.doesNotMatch(useNow, /Deal Sniper/);
+  assert.doesNotMatch(useNow, /Echo Social/);
   assert.doesNotMatch(indexHtml, /MonstaJam/);
   assert.doesNotMatch(indexHtml, /Rallyn/);
 });
@@ -31,12 +34,17 @@ test('homepage exposes six current ECHO utility paths instead of stale sprint bo
   assert.doesNotMatch(indexHtml, /id="today-sprint"/);
 });
 
-test('products page promotes current BuiltByEcho product lanes without client builds', () => {
-  assert.match(productsHtml, /id="current-builds"/);
-  assert.match(productsHtml, /Echo Shield/);
-  assert.match(productsHtml, /Echo Infer/);
-  assert.match(productsHtml, /Agent Email Layer/);
-  assert.match(productsHtml, /safe programmable inboxes/i);
+test('products page separates user-operable surfaces from developer tooling and experiments', () => {
+  const useNow = productsHtml.match(/<section id="current-builds">([\s\S]*?)<\/section>/)?.[1] ?? '';
+  assert.match(useNow, /Use now/);
+  assert.match(useNow, /Echo Shield/);
+  assert.match(useNow, /Vaultline/);
+  assert.match(useNow, /Public API Finder/);
+  assert.match(useNow, /Echo Gauntlet/);
+  assert.doesNotMatch(useNow, /Echo Infer/);
+  assert.doesNotMatch(useNow, /Agent Email Layer/);
+  assert.doesNotMatch(useNow, /Deal Sniper/);
+  assert.doesNotMatch(useNow, /Echo Social/);
   assert.doesNotMatch(productsHtml, /MonstaJam/);
   assert.doesNotMatch(productsHtml, /Rallyn/);
 });

@@ -89,5 +89,6 @@ test('products page exposes product hotlinks for social follow-up', () => {
   assert.match(productsHtml, /Echo Shield scanner/);
   assert.match(productsHtml, /npm developer lane/);
   assert.match(productsHtml, /Echo Pulse pack/);
-  assert.match(productsHtml, /Windows desktop beta/);
+  assert.match(productsHtml, /product shortlist/);
+  assert.doesNotMatch(productsHtml, /Windows desktop beta/);
 });
