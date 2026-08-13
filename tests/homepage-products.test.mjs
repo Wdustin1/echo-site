@@ -23,14 +23,14 @@ test('homepage leads with four user-operable products instead of a weekly produc
   assert.doesNotMatch(indexHtml, /Rallyn/);
 });
 
-test('homepage exposes six current ECHO utility paths instead of stale sprint boards', () => {
+test('homepage exposes four current ECHO utility paths instead of stale sprint boards', () => {
   assert.match(indexHtml, /id="echo-utility-now"/);
-  assert.match(indexHtml, /data-utility-id="holder-perks"/);
   assert.match(indexHtml, /data-utility-id="gauntlet-payment"/);
   assert.match(indexHtml, /data-utility-id="api-finder-payment"/);
-  assert.match(indexHtml, /data-utility-id="holder-request-pass"/);
   assert.match(indexHtml, /data-utility-id="contract-verification"/);
   assert.match(indexHtml, /data-utility-id="utility-feed"/);
+  assert.doesNotMatch(indexHtml, /data-utility-id="holder-perks"/);
+  assert.doesNotMatch(indexHtml, /data-utility-id="holder-request-pass"/);
   assert.doesNotMatch(indexHtml, /id="today-sprint"/);
 });
 

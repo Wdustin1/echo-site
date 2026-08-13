@@ -1,14 +1,48 @@
 {
   "rewrites": [
-    { "source": "/vaultline-upload", "destination": "/api/x402-proxy?service=vaultline-upload" },
-    { "source": "/vaultline-download", "destination": "/api/x402-proxy?service=vaultline-download" },
-    { "source": "/vaultline-list", "destination": "/api/x402-proxy?service=vaultline-list" },
-    { "source": "/public-api-finder", "destination": "/api/x402-proxy?service=public-api-finder" },
-    { "source": "/agent-wormhole-open", "destination": "/api/x402-proxy?service=agent-wormhole-open" },
-    { "source": "/gauntlet", "destination": "/gauntlet.html" },
-    { "source": "/echo", "destination": "/echo.html" },
-    { "source": "/perks", "destination": "/perks.html" },
-    { "source": "/security", "destination": "/security.html" },
-    { "source": "/updates", "destination": "/updates.html" }
+    {
+      "source": "/perks",
+      "destination": "/api/perks-retired"
+    },
+    {
+      "source": "/perks.html",
+      "destination": "/api/perks-retired"
+    },
+    {
+      "source": "/vaultline-upload",
+      "destination": "/api/x402-proxy?service=vaultline-upload"
+    },
+    {
+      "source": "/vaultline-download",
+      "destination": "/api/x402-proxy?service=vaultline-download"
+    },
+    {
+      "source": "/vaultline-list",
+      "destination": "/api/x402-proxy?service=vaultline-list"
+    },
+    {
+      "source": "/public-api-finder",
+      "destination": "/api/x402-proxy?service=public-api-finder"
+    },
+    {
+      "source": "/agent-wormhole-open",
+      "destination": "/api/x402-proxy?service=agent-wormhole-open"
+    },
+    {
+      "source": "/gauntlet",
+      "destination": "/gauntlet.html"
+    },
+    {
+      "source": "/echo",
+      "destination": "/echo.html"
+    },
+    {
+      "source": "/security",
+      "destination": "/security.html"
+    },
+    {
+      "source": "/updates",
+      "destination": "/updates.html"
+    }
   ]
 }

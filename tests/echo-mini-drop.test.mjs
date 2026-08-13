@@ -50,13 +50,10 @@ test('ECHO hub exposes two inspectable live product quote lanes', () => {
 test('machine-readable utility feed includes the verified API Finder payment path', () => {
   assert.equal(utilityFeed.date, '2026-07-21');
   assert.equal(utilityFeed.network.chainId, 8453);
-  assert.equal(utilityFeed.utility.length, 6);
+  assert.equal(utilityFeed.utility.length, 3);
   assert.deepEqual(utilityFeed.utility.map((item) => item.id), [
-    'holder-perks',
     'gauntlet-payment',
     'api-finder-payment',
-    'holder-request-pass',
-    'dual-holder-credits',
     'contract-verification',
   ]);
   const apiFinder = utilityFeed.utility.find((item) => item.id === 'api-finder-payment');

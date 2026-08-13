@@ -8,9 +8,7 @@ const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const read = (path) => readFileSync(join(repoRoot, path), 'utf8');
 const indexHtml = read('index.html');
 const updatesHtml = read('updates.html');
-const perksHtml = read('perks.html');
 const gauntletHtml = read('gauntlet.html');
-const perksCore = read('assets/echo-perks-core.js');
 const vercelConfig = JSON.parse(read('vercel.json'));
 const pulseFeed = JSON.parse(read('data/echo-pulse-2026-07-16.json'));
 const utilityFeed = JSON.parse(read('data/echo-utility.json'));
@@ -26,7 +24,7 @@ const updateIds = [
 test('homepage leads with a current ECHO utility map and archives stale sprint boards', () => {
   assert.match(indexHtml, /id="echo-utility-now"/);
   assert.match(indexHtml, /What ECHO does today/);
-  assert.match(indexHtml, /11 active claim paths/);
+  assert.match(indexHtml, /Four current utility paths/);
   assert.match(indexHtml, /Pay for Gauntlet/);
   assert.match(indexHtml, /data-copy-echo-contract/);
   assert.match(indexHtml, /data\/echo-utility\.json/);
@@ -35,18 +33,10 @@ test('homepage leads with a current ECHO utility map and archives stale sprint b
   assert.doesNotMatch(indexHtml, /id="today-sprint"/);
 });
 
-test('holder dashboard keeps live utility current and exposes proof links', () => {
-  assert.doesNotMatch(perksCore, /June sprint/);
-  assert.match(perksCore, /Rolling availability/);
-  assert.match(perksCore, /basescan\.org\/token\/0xA7F63eB41779925803a3EEC30890742571e63Ba3/);
-  assert.match(perksCore, /https:\/\/www\.builtbyecho\.xyz\/gauntlet/);
-  assert.match(perksHtml, /href="\/updates"/);
-});
-
 test('Gauntlet exposes an inspectable ECHO quote and utility navigation', () => {
   assert.match(gauntletHtml, /Inspect live quote/);
   assert.match(gauntletHtml, /href="\/api\/gauntlet-quote"/);
-  assert.match(gauntletHtml, /href="\/perks"/);
+  assert.doesNotMatch(gauntletHtml, /href="\/perks"/);
   assert.match(gauntletHtml, /href="\/updates"/);
 });
 
@@ -60,7 +50,7 @@ test('machine-readable ECHO utility feed stays grounded in live surfaces', () =>
   assert.equal(utilityFeed.date, '2026-07-21');
   assert.equal(utilityFeed.network.chainId, 8453);
   assert.equal(utilityFeed.token.address, '0xA7F63eB41779925803a3EEC30890742571e63Ba3');
-  assert.equal(utilityFeed.utility.length, 6);
+  assert.equal(utilityFeed.utility.length, 3);
   assert.ok(utilityFeed.utility.some((item) => item.id === 'api-finder-payment'));
   for (const item of utilityFeed.utility) {
     assert.equal(item.status, 'live');
