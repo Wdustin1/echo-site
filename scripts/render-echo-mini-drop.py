@@ -17,8 +17,8 @@ CARDS = [
     {
         "file": "echo-mini-drop-2026-07-21-hub.png",
         "tag": "UTILITY HUB",
-        "title": "6 live paths. One place.",
-        "detail": "Holder claims · product quotes · wallet actions",
+        "title": "4 live paths. One place.",
+        "detail": "Product quotes · contract proof · wallet actions",
         "proof": "BUILTBYECHO.XYZ/ECHO",
         "accent": GREEN,
     },

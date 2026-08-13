@@ -1,14 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/perks",
-      "destination": "/api/perks-retired"
-    },
-    {
-      "source": "/perks.html",
-      "destination": "/api/perks-retired"
-    },
-    {
       "source": "/vaultline-upload",
       "destination": "/api/x402-proxy?service=vaultline-upload"
     },

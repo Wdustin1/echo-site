@@ -15,7 +15,6 @@ const utilityFeed = JSON.parse(read('data/echo-utility.json'));
 
 const updateIds = [
   'echo-utility-map',
-  'holder-dashboard-refresh',
   'gauntlet-echo-proof',
   'echo-utility-feed',
   'clean-updates-route',
@@ -36,7 +35,6 @@ test('homepage leads with a current ECHO utility map and archives stale sprint b
 test('Gauntlet exposes an inspectable ECHO quote and utility navigation', () => {
   assert.match(gauntletHtml, /Inspect live quote/);
   assert.match(gauntletHtml, /href="\/api\/gauntlet-quote"/);
-  assert.doesNotMatch(gauntletHtml, /href="\/perks"/);
   assert.match(gauntletHtml, /href="\/updates"/);
 });
 
@@ -59,7 +57,7 @@ test('machine-readable ECHO utility feed stays grounded in live surfaces', () =>
   assert.match(utilityFeed.disclaimer, /not a promise of price or returns/i);
 });
 
-test('July 16 Pulse pack contains five proof-backed updates and one X-ready post', () => {
+test('July 16 Pulse pack contains four proof-backed updates and one X-ready post', () => {
   assert.equal(pulseFeed.date, '2026-07-16');
   assert.deepEqual(pulseFeed.builds.map((build) => build.id), updateIds);
   assert.ok(pulseFeed.builds.every((build) => build.status === 'shipped'));

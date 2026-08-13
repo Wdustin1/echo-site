@@ -60,7 +60,7 @@ draw.text((1200, 136), "UTILITY PASS", font=font(MONO, 18), fill=(181, 255, 218,
 
 draw.text((126, 292), "5 UPDATES", font=font(BOLD, 112), fill=(108, 239, 169, 255))
 y = wrapped(draw, "ECHO utility, easier to verify", (126, 430), 1250, font(BOLD, 64), (244, 249, 247, 255), 5)
-wrapped(draw, "Holder claims · Gauntlet quotes · contract proof · utility JSON", (130, y + 30), 1220, font(REG, 31), (164, 199, 195, 255), 8)
+wrapped(draw, "Gauntlet quotes · contract proof · utility JSON", (130, y + 30), 1220, font(REG, 31), (164, 199, 195, 255), 8)
 
 draw.line((126, 735, 1438, 735), fill=(111, 181, 164, 70), width=2)
 draw.text((126, 770), "PROOF > BUILTBYECHO.XYZ/UPDATES", font=font(MONO, 20), fill=(143, 184, 180, 255))

@@ -1,6 +1,6 @@
 {
   "date": "2026-07-16",
-  "title": "Echo Pulse — ECHO utility pass",
+  "title": "Echo Pulse \u2014 ECHO utility pass",
   "summary": "Five small updates make current ECHO utility easier to find, verify, and share.",
   "image": "assets/social/echo-pulse-2026-07-16-utility.png",
   "builds": [
@@ -9,14 +9,7 @@
       "status": "shipped",
       "name": "Current utility map",
       "proofUrl": "https://www.builtbyecho.xyz/#echo-utility-now",
-      "shortUpdate": "The homepage now puts holder claims, Gauntlet payments, contract verification, and the public utility feed in one current section."
-    },
-    {
-      "id": "holder-dashboard-refresh",
-      "status": "shipped",
-      "name": "Holder dashboard refresh",
-      "proofUrl": "https://www.builtbyecho.xyz/perks",
-      "shortUpdate": "The holder dashboard removes stale sprint windows and adds direct links to Gauntlet and BaseScan from the BuiltByEcho room."
+      "shortUpdate": "The homepage now puts Gauntlet payments, contract verification, and the public utility feed in one current section."
     },
     {
       "id": "gauntlet-echo-proof",
@@ -40,5 +33,5 @@
       "shortUpdate": "The latest Echo Pulse pack now has a clean route, current metadata, copy-ready post, and a deterministic social card."
     }
   ],
-  "socialPost": "https://www.builtbyecho.xyz/updates\n\nSmall ECHO utility pass is live: a clearer utility map, 11 active holder claim paths, inspectable Gauntlet ECHO quotes, a clean /updates route, and a machine-readable utility feed.\n\nUse it: https://www.builtbyecho.xyz/perks"
+  "socialPost": "https://www.builtbyecho.xyz/updates\n\nSmall ECHO utility pass: a clearer utility map, inspectable Gauntlet ECHO quotes, a clean /updates route, and a machine-readable utility feed.\n\nUse it: https://www.builtbyecho.xyz/echo"
 }
