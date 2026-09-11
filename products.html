@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BuiltByEcho Products</title>
-  <meta name="description" content="A clean map of BuiltByEcho products: Vaultline, Public API Finder, Echo Gate, Agent Wormhole, Agent Pack, Skillforge, agenTOR, and agent workflow tools." />
+  <meta name="description" content="A clean map of BuiltByEcho products: Echo Shield, Echo Infer, Agent Email Layer, Vaultline, Public API Finder, Echo Gate, Agent Wormhole, Agent Pack, Skillforge, and agent workflow tools." />
   <meta property="og:title" content="BuiltByEcho Products" />
-  <meta property="og:description" content="Find the right BuiltByEcho tool for storage, APIs, local control, agent handoffs, skills, research, and release workflows." />
+  <meta property="og:description" content="Find the right BuiltByEcho tool for token-risk scanning, private inference, safe agent inboxes, storage, APIs, local control, handoffs, and release workflows." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="assets/brand/builtbyecho-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -628,8 +628,11 @@
         <a href="index.html#story">Story</a>
         <a href="thesis.html">Thesis</a>
         <a href="products.html" class="active">Products</a>
+        <a href="#current-builds">Current builds</a>
+        <a href="/security">Security</a>
         <a href="skills.html">Skills</a>
         <a href="index.html#proof">Proof</a>
+
         <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
       </div>
     </div>
@@ -642,9 +645,10 @@
           <div>
             <div class="eyebrow">builtbyecho / product map</div>
             <h1>Find the right BuiltByEcho tool fast.</h1>
-            <p class="hero-lede">Start with the job: store artifacts, find APIs, control agent tools, or hand work to the next agent. Each path leads to the product page, docs, skill file, or package that gets you moving.</p>
+            <p class="hero-lede">Start with the job: scan token risk, store an artifact, find a real API, or test a launch before it reaches users. Developer packages and experiments live further down the map.</p>
             <div class="hero-actions" style="margin-top: 26px;">
               <a class="btn btn-primary" href="#start">Choose by job</a>
+              <a class="btn btn-ghost" href="#current-builds">Current builds</a>
               <a class="btn btn-ghost" href="#featured">Browse products</a>
               <a class="btn btn-ghost" href="skills.html">Open skills</a>
             </div>
@@ -655,6 +659,12 @@
         </div>
 
         <div class="choice-grid" id="start" aria-label="Product starting points">
+          <a class="choice-card" href="/security">
+            <b>Scan token risk</b>
+            <h2>Echo Shield</h2>
+            <p>Read-only Base token scans, launch cards, and agent-ready risk summaries before a timeline amplifies a contract.</p>
+            <span>Open Security</span>
+          </a>
           <a class="choice-card" href="vaultline.html">
             <b>Store artifacts</b>
             <h2>Vaultline</h2>
@@ -663,34 +673,55 @@
           </a>
           <a class="choice-card" href="api-finder.html">
             <b>Find APIs</b>
-            <h2>API Finder</h2>
-            <p>Find real public APIs before an agent builds around a fake endpoint.</p>
+            <h2>Public API Finder</h2>
+            <p>Find real public APIs and documentation links before an agent builds around a fake endpoint.</p>
             <span>Open API Finder</span>
-          </a>
-          <a class="choice-card" href="api-finder.html#human-interface">
-            <b>Tools for humans</b>
-            <h2>Human Finder</h2>
-            <p>Search, connect a wallet, pay in $ECHO on Base, and get API results in the browser.</p>
-            <span>Use the interface</span>
           </a>
           <a class="choice-card" href="gauntlet.html">
             <b>Test a launch</b>
-            <h2>Gauntlet</h2>
-            <p>Connect once, pay with USDC or ECHO on Base, and run browser personas against a public URL.</p>
-            <span>Run Gauntlet</span>
+            <h2>Echo Gauntlet</h2>
+            <p>Review a live quote, then pay with USDC or ECHO on Base for a browser-persona teardown of a public URL.</p>
+            <span>Open Gauntlet</span>
           </a>
-          <a class="choice-card" href="skills/echo-gate/SKILL.md">
-            <b>Control tools</b>
-            <h2>Echo Gate</h2>
-            <p>Keep tool access, approvals, spend limits, and secrets controlled locally.</p>
-            <span>Open Echo Gate</span>
-          </a>
-          <a class="choice-card" href="agent-wormhole.html">
-            <b>Hand off work</b>
-            <h2>Wormhole</h2>
-            <p>Move payloads, files, and context between agents without a messy inbox.</p>
-            <span>Open Wormhole</span>
-          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="current-builds">
+      <div class="wide">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Use now</div>
+            <h2>Four direct product paths.</h2>
+          </div>
+          <p>These surfaces are publicly usable today. Developer packages, skills, and experiments are organized separately below so a product map stays honest.</p>
+        </div>
+        <div class="path-grid" aria-label="BuiltByEcho products available now">
+          <article class="path-card">
+            <b>token-risk layer</b>
+            <h3>Echo Shield</h3>
+            <p>Read-only token-risk scans, shareable report cards, and B20 launch monitoring for Base.</p>
+            <div class="card-actions"><a class="mini-link" href="/security">Open Security</a></div>
+          </article>
+          <article class="path-card">
+            <b>storage / payment</b>
+            <h3>Vaultline</h3>
+            <p>Store, price, and retrieve agent artifacts through a live x402-ready storage rail.</p>
+            <div class="card-actions"><a class="mini-link" href="vaultline.html">Open Vaultline</a><a class="mini-link" href="vaultline-docs.html">Docs</a></div>
+          </article>
+          <article class="path-card">
+            <b>source finding</b>
+            <h3>Public API Finder</h3>
+            <p>Find real API options and documentation links before a builder or agent integrates a fake endpoint.</p>
+            <div class="card-actions"><a class="mini-link" href="api-finder.html">Open Finder</a><a class="mini-link" href="/api/echo-api-finder-quote">Inspect quote</a></div>
+          </article>
+          <article class="path-card">
+            <b>launch QA</b>
+            <h3>Echo Gauntlet</h3>
+            <p>Inspect a public site with browser personas, review the quote, then choose whether to pay and run a teardown.</p>
+            <div class="card-actions"><a class="mini-link" href="gauntlet.html">Open Gauntlet</a><a class="mini-link" href="/api/gauntlet-quote">Inspect quote</a></div>
+          </article>
         </div>
       </div>
     </section>
@@ -702,7 +733,7 @@
             <div class="section-kicker">featured products</div>
             <h2>The core stack.</h2>
           </div>
-          <p>Most visitors should start here: artifact storage, API discovery, and local tool control. The handoff and release tools sit underneath that workflow.</p>
+          <p>The long-running core is still here: artifact storage, API discovery, local tool control, handoffs, and release rails. The shortlist above shows the public surfaces with a direct next step.</p>
         </div>
 
         <div class="featured-grid">
@@ -770,6 +801,89 @@
               </div>
             </article>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="npm-dev-tools">
+      <div class="wide">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">npm package lane</div>
+            <h2>The developer tooling layer is visible now.</h2>
+          </div>
+          <p>Echo also ships the less-flashy rails that make agent work easier to repeat: briefs, run logs, API discovery, repo digests, and storage SDKs.</p>
+        </div>
+        <div class="path-grid" aria-label="BuiltByEcho npm developer tooling">
+          <article class="path-card">
+            <b>repo briefing</b>
+            <h3>@builtbyecho/agent-brief</h3>
+            <p>Turns repo context, commands, risks, and handoff notes into a clean starting point for coding agents.</p>
+            <div class="card-actions"><a class="mini-link" href="https://www.npmjs.com/package/@builtbyecho/agent-brief" target="_blank" rel="noopener">npm</a></div>
+          </article>
+          <article class="path-card">
+            <b>run receipts</b>
+            <h3>agent-runlog</h3>
+            <p>Captures what an agent ran and what passed so updates can point to evidence instead of vibes.</p>
+            <div class="card-actions"><a class="mini-link" href="https://www.npmjs.com/package/agent-runlog" target="_blank" rel="noopener">npm</a></div>
+          </article>
+          <article class="path-card">
+            <b>source finding</b>
+            <h3>public-api-finder</h3>
+            <p>Finds real public APIs before a builder or agent wastes time integrating a fake endpoint.</p>
+            <div class="card-actions"><a class="mini-link" href="https://www.npmjs.com/package/public-api-finder" target="_blank" rel="noopener">npm</a></div>
+          </article>
+          <article class="path-card">
+            <b>repo digest</b>
+            <h3>@builtbyecho/git-digest</h3>
+            <p>Summarizes repo structure and recent changes so agents can orient quickly before editing.</p>
+            <div class="card-actions"><a class="mini-link" href="https://www.npmjs.com/package/@builtbyecho/git-digest" target="_blank" rel="noopener">npm</a></div>
+          </article>
+          <article class="path-card">
+            <b>storage sdk</b>
+            <h3>@builtbyecho/agent-storage-sdk</h3>
+            <p>Gives agent artifacts a reusable storage handoff path instead of leaving outputs scattered in chats.</p>
+            <div class="card-actions"><a class="mini-link" href="https://www.npmjs.com/package/@builtbyecho/agent-storage-sdk" target="_blank" rel="noopener">npm</a></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="product-hotlinks">
+      <div class="wide">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">Social follow-up hotlinks</div>
+            <h2>Give every update a clean destination.</h2>
+          </div>
+          <p>When a post lands, route people straight to the useful surface: the scanner, npm developer lane, product shortlist, or the Echo Pulse pack.</p>
+        </div>
+        <div class="path-grid" aria-label="Social follow-up hotlinks">
+          <article class="path-card">
+            <b>security scan</b>
+            <h3>Echo Shield scanner</h3>
+            <p>Use this when a post mentions token-risk checks, launch cards, or community scan replies.</p>
+            <div class="card-actions"><a class="mini-link" href="/security">Open scanner</a><a class="mini-link" href="security.html#community-reply-kit">Reply kit</a></div>
+          </article>
+          <article class="path-card">
+            <b>developer proof</b>
+            <h3>npm developer lane</h3>
+            <p>Use this when a post mentions agent packages, SDKs, run logs, API finding, storage, or repo utilities.</p>
+            <div class="card-actions"><a class="mini-link" href="#npm-dev-tools">Open npm lane</a><a class="mini-link" href="https://www.npmjs.com/~builtbyecho" target="_blank" rel="noopener">npm profile</a></div>
+          </article>
+          <article class="path-card">
+            <b>daily update pack</b>
+            <h3>Echo Pulse pack</h3>
+            <p>Use this when the social manager needs today’s copy-ready posts, proof links, and JSON feed.</p>
+            <div class="card-actions"><a class="mini-link" href="updates.html#july-8">Open pack</a><a class="mini-link" href="data/echo-pulse-2026-07-08.json">JSON feed</a></div>
+          </article>
+
+          <article class="path-card">
+            <b>product map</b>
+            <h3>Current builds</h3>
+            <p>Use this when a post needs to explain the bigger Echo stack without mixing in client projects.</p>
+            <div class="card-actions"><a class="mini-link" href="#current-builds">Open products available now</a><a class="mini-link" href="index.html#recent-builds">Homepage shortlist</a></div>
+          </article>
         </div>
       </div>
     </section>
@@ -856,6 +970,8 @@
             <a href="products.html">Products hub</a>
             <a href="vaultline.html">Vaultline</a>
             <a href="api-finder.html">API Finder</a>
+            <a href="/security">Echo Shield</a>
+            <a href="products.html#current-builds">Current builds</a>
             <a href="gauntlet.html">Gauntlet</a>
             <a href="agentor.html">agenTOR</a>
           </div>

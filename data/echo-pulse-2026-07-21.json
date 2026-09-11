@@ -1,0 +1,35 @@
+{
+  "date": "2026-07-21",
+  "title": "ECHO mini-drop \u2014 utility people can use",
+  "summary": "Three small ECHO updates add a canonical utility hub, two live product quote inspectors, and wallet-ready token actions.",
+  "builds": [
+    {
+      "id": "echo-utility-hub",
+      "status": "shipped",
+      "name": "Canonical ECHO utility hub",
+      "proofUrl": "https://www.builtbyecho.xyz/echo",
+      "image": "assets/social/echo-mini-drop-2026-07-21-hub.png",
+      "shortUpdate": "A clean ECHO page now groups four current utility paths, contract proof, wallet actions, and machine-readable data.",
+      "socialPost": "https://www.builtbyecho.xyz/echo\n\nECHO has a new home. One page now shows 4 current utility paths, 2 live product quote lanes, wallet actions, Base contract proof, and agent-readable JSON.\n\nUse ECHO, don't just explain it."
+    },
+    {
+      "id": "dual-echo-quotes",
+      "status": "shipped",
+      "name": "Two live ECHO quote inspectors",
+      "proofUrl": "https://www.builtbyecho.xyz/echo#use-echo",
+      "image": "assets/social/echo-mini-drop-2026-07-21-quotes.png",
+      "shortUpdate": "The new hub loads current ECHO amounts from the public Gauntlet and Public API Finder quote endpoints before a wallet action.",
+      "socialPost": "https://www.builtbyecho.xyz/echo#use-echo\n\nTwo BuiltByEcho tools now expose live ECHO quotes on Base: Gauntlet for website teardowns and Public API Finder for ranked API searches. Inspect the amount first. Approve only when you're ready."
+    },
+    {
+      "id": "echo-wallet-actions",
+      "status": "shipped",
+      "name": "Wallet actions and public utility data",
+      "proofUrl": "https://www.builtbyecho.xyz/data/echo-utility.json",
+      "image": "assets/social/echo-mini-drop-2026-07-21-json.png",
+      "shortUpdate": "Visitors can copy the canonical contract, request Add Token from a wallet extension, and read current verified utility paths from public JSON.",
+      "socialPost": "https://www.builtbyecho.xyz/data/echo-utility.json\n\nECHO utility is now machine-readable. Agents and community tools can read the Base contract, chain ID, current paths, status, summaries, and proof URLs from one public JSON feed.\n\nNo vague roadmap required."
+    }
+  ],
+  "disclaimer": "These posts describe current product utility. They do not promise token price or returns and are not financial advice."
+}

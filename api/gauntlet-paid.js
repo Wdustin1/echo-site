@@ -24,6 +24,14 @@ export default async function handler(req, res) {
     const paymentToken = String(body.paymentToken || 'usdc').toLowerCase();
     const walletAddress = body.walletAddress ? normalizeAddress(body.walletAddress) : '';
     if (!url) return json(res, 400, { error: 'url is required' });
+    let target;
+    try { target = new URL(url); } catch { return json(res, 400, { error: 'valid http or https URL is required' }); }
+    if (!['http:', 'https:'].includes(target.protocol) || target.username || target.password) {
+      return json(res, 400, { error: 'valid http or https URL is required' });
+    }
+    if (!['echo', 'usdc'].includes(paymentToken)) return json(res, 400, { error: 'paymentToken must be echo or usdc' });
+    const apiKey = process.env.ECHO_GAUNTLET_API_KEY;
+    if (!apiKey) return json(res, 503, { error: 'gauntlet is not configured' });
 
     const tokenAddress = paymentToken === 'echo' ? ECHO_TOKEN_ADDRESS : USDC_TOKEN_ADDRESS;
     const minimumAmountRaw = paymentToken === 'echo' ? ECHO_AMOUNT_RAW : USDC_AMOUNT_RAW;
@@ -49,9 +57,6 @@ export default async function handler(req, res) {
       const status = reservation.reason === 'payment_tx_already_used' ? 409 : 500;
       return json(res, status, { error: 'payment replay protection failed', reason: reservation.reason });
     }
-
-    const apiKey = process.env.ECHO_GAUNTLET_API_KEY;
-    if (!apiKey) return json(res, 500, { error: 'gauntlet is not configured' });
 
     const upstream = await fetch(`${GAUNTLET_URL.replace(/\/+$/, '')}/runs`, {
       method: 'POST',

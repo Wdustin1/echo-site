@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Echo Security — Base Token Safety Scanner</title>
+  <meta name="description" content="Call Echo Security to scan Base token contracts, generate shareable launch cards, and compare launch hygiene across Bankr, Clanker/Farcaster, Doppler, Virtuals, and DEX-only launches." />
+  <meta property="og:title" content="Echo Security — Base Token Safety Scanner" />
+  <meta property="og:description" content="Paste a Base token contract to get an Echo risk score, public launch-card image, scan JSON, and launch-surface cohort context." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/brand/builtbyecho-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site-unify.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: oklch(0.118 0.026 226);
+      --bg-deep: oklch(0.075 0.022 232);
+      --ink: oklch(0.965 0.012 150);
+      --ink-soft: oklch(0.77 0.034 178);
+      --ink-dim: oklch(0.58 0.04 190);
+      --panel: oklch(0.17 0.034 226 / 0.84);
+      --panel-2: oklch(0.215 0.04 224 / 0.90);
+      --line: oklch(0.38 0.052 190 / 0.36);
+      --line-strong: oklch(0.67 0.12 166 / 0.48);
+      --green: oklch(0.81 0.17 159);
+      --cyan: oklch(0.78 0.12 212);
+      --amber: oklch(0.84 0.14 88);
+      --red: oklch(0.69 0.16 28);
+      --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+      --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --max: 1180px;
+      --wide: 1380px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background:
+        radial-gradient(circle at 16% 4%, oklch(0.48 0.12 165 / 0.22), transparent 32rem),
+        radial-gradient(circle at 78% 10%, oklch(0.48 0.12 218 / 0.18), transparent 34rem),
+        linear-gradient(180deg, var(--bg), var(--bg-deep) 72%);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.32;
+      background-image:
+        linear-gradient(oklch(0.9 0.02 180 / 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, oklch(0.9 0.02 180 / 0.05) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(circle at 50% 10%, black, transparent 74%);
+    }
+    a { color: inherit; text-decoration: none; }
+    p { color: var(--ink-soft); }
+    .container { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .wide { width: min(var(--wide), calc(100% - 40px)); margin: 0 auto; }
+    nav {
+      position: sticky;
+      top: 14px;
+      z-index: 100;
+      width: min(var(--wide), calc(100% - 28px));
+      margin: 8px auto 0;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: oklch(0.105 0.026 228 / 0.72);
+      backdrop-filter: blur(20px) saturate(1.25);
+      box-shadow: 0 18px 60px oklch(0.03 0.02 232 / 0.42);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 10px 14px 10px 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 800; font-size: 20px; white-space: nowrap; }
+    .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 14px; background: oklch(0.08 0.02 232 / 0.72); border: 1px solid oklch(0.81 0.17 159 / 0.38); overflow: hidden; }
+    .brand-mark img { width: 23px; height: 23px; display: block; }
+    .menu-toggle { display: none; }
+    .nav-links { display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 12px; }
+    .nav-links a { color: var(--ink-dim); padding: 9px 12px; border-radius: 999px; transition: color .18s ease, background .18s ease; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); background: oklch(0.82 0.1 170 / 0.09); }
+    .nav-cta { color: oklch(0.08 0.02 232) !important; background: var(--green); font-weight: 700; }
+    .hero { position: relative; padding: clamp(56px, 8vw, 110px) 0 40px; overflow: hidden; }
+    .hero::after { content: "SECURITY"; position: absolute; right: max(18px, calc((100vw - var(--wide)) / 2)); bottom: -28px; z-index: -1; color: oklch(0.92 0.02 160 / 0.04); font-family: var(--font-display); font-size: clamp(86px, 17vw, 230px); font-weight: 800; line-height: .8; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, .74fr); gap: clamp(24px, 4vw, 54px); align-items: center; }
+    .eyebrow, .section-kicker { display: inline-flex; align-items: center; gap: 12px; color: var(--green); font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow::before, .section-kicker::before { content: ""; width: 34px; height: 1px; background: currentColor; box-shadow: 0 0 18px currentColor; }
+    h1, h2, h3 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; }
+    h1 { max-width: 940px; margin-top: 18px; font-size: clamp(54px, 8.2vw, 112px); line-height: .88; font-weight: 800; letter-spacing: -.055em; }
+    h1 .dim { display: block; color: oklch(0.74 0.07 178); }
+    .lede { max-width: 780px; margin-top: 22px; font-size: clamp(18px, 1.7vw, 23px); color: oklch(0.82 0.035 180); }
+    .hero-actions, .button-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 46px; padding: 12px 18px; border-radius: 999px; border: 1px solid var(--line); font-family: var(--font-mono); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+    .btn-primary { background: var(--green); color: oklch(0.08 0.02 232); border-color: transparent; }
+    .btn-ghost { background: oklch(0.18 0.036 226 / 0.74); color: var(--ink); }
+    .agent-start { position: relative; display: grid; gap: 16px; margin-top: 24px; padding: clamp(18px, 2.4vw, 24px); border: 1px solid oklch(0.81 0.17 159 / 0.42); border-radius: 28px; background: linear-gradient(135deg, oklch(0.16 0.04 226 / 0.88), oklch(0.09 0.026 232 / 0.74)); box-shadow: 0 22px 70px oklch(0.03 0.02 232 / 0.28), inset 0 1px 0 oklch(0.92 0.02 160 / 0.10); overflow: hidden; }
+    .agent-start::before { content: ""; position: absolute; inset: -30% 42% auto -12%; height: 170px; background: radial-gradient(circle, oklch(0.81 0.17 159 / 0.28), transparent 64%); pointer-events: none; }
+    .agent-start > * { position: relative; z-index: 1; }
+    .agent-start-kicker { color: var(--green); font: 900 11px var(--font-mono); letter-spacing: .16em; text-transform: uppercase; }
+    .agent-start h2 { max-width: 760px; font-size: clamp(28px, 3.4vw, 46px); line-height: .96; letter-spacing: -.045em; }
+    .agent-start p { max-width: 760px; color: oklch(0.82 0.035 180); }
+    .agent-start-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .agent-link { display: grid; gap: 8px; min-height: 112px; padding: 14px; border: 1px solid oklch(0.78 0.12 212 / 0.24); border-radius: 18px; background: oklch(0.08 0.022 232 / 0.62); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+    .agent-link:hover { transform: translateY(-2px); border-color: oklch(0.81 0.17 159 / 0.44); background: oklch(0.13 0.032 226 / 0.74); }
+    .agent-link strong { color: var(--ink); font-family: var(--font-display); font-size: 18px; line-height: 1.05; }
+    .agent-link span { color: var(--ink-dim); font: 700 11px/1.35 var(--font-mono); overflow-wrap: anywhere; }
+    .panel { border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(150deg, var(--panel-2), oklch(0.1 0.024 232 / 0.88)); box-shadow: 0 24px 90px oklch(0.035 0.02 232 / 0.3), inset 0 1px 0 oklch(0.92 0.02 160 / 0.08); }
+    .status-panel { padding: 22px; }
+    .status-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 18px; }
+    .live-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 11px; border-radius: 999px; border: 1px solid oklch(0.81 0.17 159 / 0.28); color: var(--green); font-family: var(--font-mono); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .live-pill::before { content: ""; width: 8px; height: 8px; border-radius: 999px; background: var(--green); box-shadow: 0 0 18px var(--green); }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .metric { padding: 14px; border-radius: 20px; border: 1px solid oklch(0.38 0.052 190 / 0.28); background: oklch(0.1 0.024 232 / 0.56); }
+    .metric b { display: block; color: var(--ink); font-family: var(--font-display); font-size: 32px; line-height: 1; }
+    .metric span { display: block; margin-top: 6px; color: var(--ink-dim); font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
+    .scanner { padding: clamp(28px, 4vw, 46px) 0; }
+    .surface-tabs { display: inline-flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; padding: 8px; border: 1px solid var(--line); border-radius: 999px; background: oklch(0.08 0.022 232 / 0.62); }
+    .surface-tab { min-height: 42px; padding: 10px 14px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--ink-dim); font: 800 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+    .surface-tab[aria-selected="true"] { color: oklch(0.08 0.02 232); background: var(--green); box-shadow: 0 0 28px oklch(0.81 0.17 159 / 0.18); }
+    .surface-tab:disabled { cursor: not-allowed; color: oklch(0.58 0.04 190 / 0.64); border-color: oklch(0.38 0.052 190 / 0.22); background: oklch(0.1 0.024 232 / 0.5); }
+    .surface-tab .soon { margin-left: 6px; color: var(--green); }
+    .surface-panel[hidden] { display: none; }
+    .scanner-grid { display: grid; grid-template-columns: minmax(300px, .78fr) minmax(0, 1.22fr); gap: clamp(18px, 2.5vw, 28px); align-items: start; margin-top: 24px; }
+    .form-panel, .result-panel { position: relative; overflow: hidden; padding: clamp(20px, 2.4vw, 30px); }
+    .form-panel { display: grid; gap: 16px; align-content: start; }
+    .form-panel::after, .result-panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 18% 0%, oklch(0.81 0.17 159 / 0.10), transparent 22rem);
+      opacity: .9;
+    }
+    .form-panel > *, .result-panel > * { position: relative; z-index: 1; }
+    .form-copy { padding-bottom: 4px; }
+    .form-copy h3 { font-size: clamp(25px, 2.5vw, 34px); line-height: 1; letter-spacing: -.045em; }
+    .form-copy p { margin-top: 10px; font-size: 15px; color: var(--ink-dim); }
+    .scan-field { padding: 14px; border: 1px solid var(--line); border-radius: 22px; background: oklch(0.08 0.022 232 / 0.54); }
+    .scan-field label { margin-bottom: 8px; }
+    .watchtower-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr); gap: 18px; align-items: stretch; margin-top: 24px; }
+    .watchtower-panel { padding: 24px; }
+    .watchtower-panel h3 { font-size: clamp(28px, 3vw, 42px); letter-spacing: -.04em; }
+    .watchtower-list { display: grid; gap: 10px; margin-top: 18px; list-style: none; }
+    .watchtower-list li { padding: 12px 14px; border: 1px solid var(--line); border-radius: 18px; background: oklch(0.1 0.024 232 / 0.56); color: var(--ink-soft); }
+    .watchtower-list strong { color: var(--ink); }
+    .b20-radar { margin-top: 18px; padding: 22px; border-radius: 30px; border: 1px solid oklch(0.81 0.17 159 / 0.30); background: linear-gradient(145deg, oklch(0.13 0.036 226 / 0.90), oklch(0.08 0.022 232 / 0.78)); }
+    .b20-radar-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .b20-radar-head h3 { margin-top: 8px; font-size: clamp(30px, 4vw, 52px); line-height: .98; letter-spacing: -.05em; }
+    .b20-radar-status { flex: 0 0 auto; color: var(--green); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .b20-radar-coverage { margin-top: 12px; color: var(--ink-dim); font: 700 11px/1.5 var(--font-mono); overflow-wrap: anywhere; }
+    .b20-radar-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+    .b20-radar-metric { padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: oklch(0.08 0.022 232 / 0.58); }
+    .b20-radar-metric b { display: block; color: var(--ink); font: 800 30px/1 var(--font-display); }
+    .b20-radar-metric span { display: block; margin-top: 6px; color: var(--ink-dim); font: 800 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .b20-launches { display: grid; gap: 10px; margin-top: 18px; }
+    .b20-launch-row { display: grid; grid-template-columns: minmax(160px, .8fr) repeat(4, minmax(96px, .55fr)) minmax(170px, .9fr); gap: 10px; align-items: center; padding: 14px; border-radius: 20px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.58); }
+    .b20-launch-row strong { display: block; color: var(--ink); font-family: var(--font-display); font-size: 20px; line-height: 1.05; }
+    .b20-launch-row span, .b20-launch-row small { color: var(--ink-dim); font: 700 11px/1.35 var(--font-mono); overflow-wrap: anywhere; }
+    .b20-launch-chip { display: inline-flex; width: fit-content; padding: 6px 9px; border-radius: 999px; border: 1px solid oklch(0.81 0.17 159 / 0.28); color: var(--green) !important; background: oklch(0.81 0.17 159 / 0.08); text-transform: uppercase; letter-spacing: .08em; }
+    .b20-launch-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .b20-launch-actions a { color: var(--ink); font: 800 10px var(--font-mono); text-transform: uppercase; border-bottom: 1px solid oklch(0.81 0.17 159 / 0.42); }
+    .b20-radar-next { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+    .b20-radar-next article { padding: 14px; border-radius: 18px; border: 1px solid oklch(0.78 0.12 212 / 0.22); background: oklch(0.08 0.022 232 / 0.42); }
+    .b20-radar-next h4 { color: var(--ink); font: 800 14px var(--font-display); }
+    .b20-radar-next p { margin-top: 6px; font-size: 13px; }
+    .risk-ladder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 18px; }
+    .risk-step { padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.56); }
+    .risk-step b { display: block; color: var(--ink); font-family: var(--font-display); }
+    .risk-step span { display: block; margin-top: 3px; color: var(--ink-dim); font: 700 10px var(--font-mono); text-transform: uppercase; letter-spacing: .1em; }
+    label { display: block; margin-bottom: 10px; color: var(--ink); font-family: var(--font-mono); font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .address-input { width: 100%; min-height: 54px; padding: 0 16px; border: 1px solid var(--line); border-radius: 16px; background: oklch(0.08 0.022 232 / 0.86); color: var(--ink); font: 700 14px var(--font-mono); outline: none; }
+    .address-input:focus { border-color: var(--green); box-shadow: 0 0 0 6px oklch(0.81 0.17 159 / 0.12); }
+    .helper { margin-top: 10px; color: var(--ink-dim); font-size: 14px; }
+    .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid oklch(0.38 0.052 190 / 0.22); }
+    .example-chip { padding: 8px 10px; border-radius: 999px; border: 1px solid var(--line); background: oklch(0.12 0.028 226 / 0.72); color: var(--ink-soft); font: 700 11px var(--font-mono); cursor: pointer; transition: transform .18s ease, border-color .18s ease, color .18s ease; }
+    .example-chip:hover { transform: translateY(-1px); border-color: oklch(0.81 0.17 159 / 0.36); color: var(--ink); }
+    .result-empty { display: grid; place-items: center; min-height: 430px; border: 1px solid oklch(0.38 0.052 190 / 0.26); border-radius: 24px; color: var(--ink-dim); text-align: center; padding: clamp(24px, 4vw, 44px); background: linear-gradient(180deg, oklch(0.075 0.022 232 / 0.72), oklch(0.1 0.024 232 / 0.52)); }
+    .empty-state { width: min(100%, 440px); display: grid; gap: 12px; justify-items: center; }
+    .empty-orb { width: 58px; height: 58px; border-radius: 22px; border: 1px solid oklch(0.81 0.17 159 / 0.34); background: radial-gradient(circle at 35% 30%, oklch(0.81 0.17 159 / 0.45), transparent 48%), oklch(0.08 0.022 232 / 0.92); box-shadow: 0 0 46px oklch(0.81 0.17 159 / 0.18); }
+    .result-kicker { font: 800 11px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--green); }
+    .result-empty h3 { font-size: clamp(27px, 3vw, 42px); line-height: 1; letter-spacing: -.045em; }
+    .result-empty p:not(.result-kicker) { max-width: 34rem; }
+    .scan-progress { display: none; width: min(100%, 360px); height: 8px; margin-top: 8px; border-radius: 999px; overflow: hidden; border: 1px solid var(--line); background: oklch(0.06 0.018 232 / 0.9); }
+    .scan-progress span { display: block; width: 42%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, transparent, var(--green), var(--cyan)); animation: scan-sweep 1.45s ease-in-out infinite; }
+    .scan-steps { display: none; width: min(100%, 430px); grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 6px; }
+    .scan-steps span { padding: 9px 10px; border: 1px solid var(--line); border-radius: 14px; background: oklch(0.1 0.024 232 / 0.62); color: var(--ink-soft); font: 700 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+    .result-empty.is-scanning { border-style: solid; border-color: oklch(0.81 0.17 159 / 0.36); }
+    .result-empty.is-scanning .scan-progress, .result-empty.is-scanning .scan-steps { display: grid; }
+    .result-empty.is-scanning .empty-orb { animation: orb-pulse 1.6s ease-in-out infinite; }
+    .result-empty.is-error { border-color: oklch(0.69 0.16 28 / 0.42); }
+    .result-empty.is-error .result-kicker { color: var(--red); }
+    .result-empty.is-error .empty-orb { border-color: oklch(0.69 0.16 28 / 0.36); background: radial-gradient(circle at 35% 30%, oklch(0.69 0.16 28 / 0.38), transparent 48%), oklch(0.08 0.022 232 / 0.92); }
+    @keyframes scan-sweep { 0% { transform: translateX(-110%); } 55%, 100% { transform: translateX(250%); } }
+    @keyframes orb-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 38px oklch(0.81 0.17 159 / 0.16); } 50% { transform: scale(1.04); box-shadow: 0 0 62px oklch(0.81 0.17 159 / 0.3); } }
+    .result-card { display: none; gap: 16px; }
+    .result-hero { display: grid; grid-template-columns: minmax(150px, .58fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+    .score-lockup, .token-lockup, .summary, .mini, .preview-frame { border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.56); }
+    .score-lockup { display: grid; align-content: center; gap: 10px; min-height: 150px; padding: 18px; border-radius: 24px; }
+    .score { font: 800 clamp(58px, 8vw, 96px)/.82 var(--font-display); color: var(--green); letter-spacing: -.065em; }
+    .risk { display: inline-flex; width: fit-content; padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--ink); font: 800 12px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .token-lockup { display: grid; align-content: center; padding: 18px; border-radius: 24px; }
+    .token-name { font-size: clamp(27px, 3vw, 40px); line-height: 1; letter-spacing: -.045em; }
+    .token-meta { margin-top: 10px; font: 700 12px var(--font-mono); color: var(--ink-dim); overflow-wrap: anywhere; }
+    .summary { margin-top: 16px; padding: 16px; border-radius: 20px; color: var(--ink-soft); }
+    .mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .mini { padding: 12px; border-radius: 16px; min-width: 0; }
+    .mini span { display: block; color: var(--ink-dim); font: 700 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .mini b { display: block; margin-top: 4px; color: var(--ink); overflow-wrap: anywhere; }
+    .preview-frame { margin-top: 16px; padding: 12px; border-radius: 24px; }
+    .preview-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: var(--ink-dim); font: 800 11px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+    .card-preview { display: block; width: 100%; border-radius: 18px; border: 1px solid var(--line); background: oklch(0.07 0.018 232); }
+    .quick-note { margin-top: 12px; padding: 12px 14px; border-radius: 18px; border: 1px solid oklch(0.78 0.12 212 / 0.24); background: oklch(0.12 0.028 226 / 0.48); color: var(--ink-dim); font-size: 14px; }
+    .result-actions { margin-top: 14px; }
+    .deep-panel { display: none; margin-top: 16px; padding: 16px; border-radius: 24px; border: 1px solid oklch(0.81 0.17 159 / 0.24); background: linear-gradient(150deg, oklch(0.08 0.022 232 / 0.86), oklch(0.13 0.03 226 / 0.64)); }
+    .deep-panel.is-open { display: grid; gap: 14px; }
+    .deep-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .deep-head h4 { font-family: var(--font-display); font-size: 24px; line-height: 1; letter-spacing: -.035em; color: var(--ink); }
+    .deep-status { color: var(--ink-dim); font: 700 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .deep-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .deep-card { padding: 12px; border-radius: 16px; border: 1px solid var(--line); background: oklch(0.1 0.024 232 / 0.58); min-width: 0; }
+    .deep-card span { display: block; color: var(--ink-dim); font: 800 10px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+    .deep-card b { display: block; margin-top: 5px; color: var(--ink); overflow-wrap: anywhere; }
+    .deep-list { display: grid; gap: 8px; list-style: none; }
+    .deep-list li { padding: 10px 12px; border-radius: 14px; border: 1px solid oklch(0.38 0.052 190 / 0.24); background: oklch(0.08 0.022 232 / 0.52); color: var(--ink-soft); }
+    .deep-list strong { color: var(--ink); }
+    .api-section { padding: 22px 0 70px; }
+
+    .api-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+    .api-card { padding: 18px; border-radius: 24px; border: 1px solid var(--line); background: oklch(0.14 0.03 226 / 0.72); }
+    .api-card h3 { font-size: 22px; }
+    code, pre { font-family: var(--font-mono); }
+    pre { margin-top: 12px; padding: 14px; border-radius: 16px; background: oklch(0.06 0.018 232 / 0.86); color: var(--ink-soft); border: 1px solid var(--line); font-size: 11px; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .notice { margin-top: 20px; padding: 16px 18px; border: 1px solid oklch(0.84 0.14 88 / 0.3); border-radius: 20px; background: oklch(0.20 0.04 88 / 0.16); color: oklch(0.86 0.08 94); }
+    footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--ink-dim); font-family: var(--font-mono); font-size: 12px; }
+    .hidden { display: none !important; }
+    @media (max-width: 940px) {
+      nav { border-radius: 28px; }
+      .nav-inner { display: grid; grid-template-columns: 1fr auto; }
+      .menu-toggle { display: inline-flex; justify-self: end; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-family: var(--font-mono); }
+      .nav-links { grid-column: 1 / -1; display: none; flex-wrap: wrap; padding-top: 8px; }
+      .nav-links.open { display: flex; }
+      .hero-grid, .scanner-grid, .api-grid, .watchtower-grid, .b20-radar-next { grid-template-columns: 1fr; }
+      .metric-grid, .risk-ladder, .b20-radar-metrics { grid-template-columns: 1fr; }
+      .b20-launch-row { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .agent-start-links { grid-template-columns: 1fr; }
+      .result-hero, .scan-steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Primary navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html"><span class="brand-mark"><img src="assets/brand/builtbyecho-logo.png" alt="" /></span>BuiltByEcho</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <div class="nav-links" id="primary-nav">
+        <a href="index.html#story">Story</a>
+        <a href="thesis.html">Thesis</a>
+        <a href="products.html">Products</a>
+        <a href="/security" class="active">Security</a>
+        <a href="gauntlet.html">Gauntlet</a>
+        <a href="skills.html">Skills</a>
+
+        <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener" class="nav-cta">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="wide hero-grid">
+        <div>
+          <div class="eyebrow">Echo Security / Base launch hygiene</div>
+          <h1>Scan a Base token before the timeline does. <span class="dim">Share the receipts.</span></h1>
+          <p class="lede">Echo Security checks public contract, pool, holder, owner, and launch-surface signals. It returns a risk score, a JSON report, and a shareable launch card that Bankrbot, Discord, X, and agents can call directly.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#scanner">Run a scan</a>
+            <a class="btn btn-ghost" href="https://shield.builtbyecho.xyz/api/launch-cohorts" target="_blank" rel="noopener">Live cohort API</a>
+          </div>
+          <section class="agent-start" aria-labelledby="agent-start-title">
+            <div class="agent-start-kicker">Agents start here</div>
+            <h2 id="agent-start-title">Plug Echo Shield into your agent without wasting deep-scan calls.</h2>
+            <p>Use the quick scan first, reuse the returned launch-card URL, and only trigger <strong>Deeper Echo Analysis</strong> when a user explicitly asks for the full provider pass.</p>
+            <div class="agent-start-links" aria-label="Echo Shield agent documentation and skills">
+              <a class="agent-link" href="/docs/echo-shield/agent-integration.md" target="_blank" rel="noopener">
+                <strong>Agent docs</strong>
+                <span>/docs/echo-shield/agent-integration.md</span>
+              </a>
+              <a class="agent-link" href="/docs/echo-shield/agent-skills/echo-shield-token-triage/SKILL.md" target="_blank" rel="noopener">
+                <strong>Token triage skill</strong>
+                <span>/docs/echo-shield/agent-skills/echo-shield-token-triage/SKILL.md</span>
+              </a>
+              <a class="agent-link" href="/docs/echo-shield/agent-skills/echo-shield-launch-card/SKILL.md" target="_blank" rel="noopener">
+                <strong>Launch card skill</strong>
+                <span>/docs/echo-shield/agent-skills/echo-shield-launch-card/SKILL.md</span>
+              </a>
+            </div>
+          </section>
+          <p class="notice">No wallet connection. No trading advice. No custody. Echo only reads public Base data and reports launch-hygiene signals.</p>
+        </div>
+        <aside class="panel status-panel" aria-label="Live Echo Security status">
+          <div class="status-head">
+            <div>
+              <div class="live-pill">Live</div>
+              <h2 style="margin-top:14px;font-size:32px;letter-spacing:-.04em;">Scan memory</h2>
+              <p id="cohort-updated">Loading latest cohorts…</p>
+            </div>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><b id="metric-surfaces">—</b><span>Launch surfaces</span></div>
+            <div class="metric"><b id="metric-sample">—</b><span>Tracked tokens</span></div>
+            <div class="metric"><b id="metric-best">—</b><span>Top cohort avg</span></div>
+            <div class="metric"><b id="metric-status">OK</b><span>API status</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="scanner" id="scanner">
+      <div class="container">
+        <div class="section-kicker">public scanner</div>
+        <h2 style="margin-top:14px;font-size:clamp(38px,5vw,70px);letter-spacing:-.05em;">Paste a Base contract.</h2>
+        <div class="surface-tabs" role="tablist" aria-label="Echo Security surfaces">
+          <button class="surface-tab" type="button" role="tab" id="scanner-tab" aria-controls="scanner-panel" aria-selected="true" data-security-tab="scanner">Token Scanner</button>
+          <button class="surface-tab" type="button" role="tab" id="b20-watchtower-tab" aria-controls="b20-watchtower-panel" aria-selected="false" data-security-tab="b20-watchtower">B20 Watchtower</button>
+        </div>
+
+        <div class="surface-panel" id="scanner-panel" role="tabpanel" aria-labelledby="scanner-tab" data-security-panel="scanner">
+          <div class="scanner-grid">
+            <form class="panel form-panel" id="scan-form">
+              <div class="form-copy">
+                <h3>Clean scan console.</h3>
+                <p>Input stays on the left. The right side becomes a focused status/readout area while Echo queries live Base data.</p>
+              </div>
+              <div class="scan-field">
+                <label for="address">Base token contract</label>
+                <input class="address-input" id="address" name="address" autocomplete="off" spellcheck="false" placeholder="0x…" value="0x4ed4e862860bed51a9570b96d89af5e1b0efefed" />
+                <p class="helper">Runs against <code>shield.builtbyecho.xyz</code>. Live providers can take a few seconds.</p>
+                <div class="examples" aria-label="Example token addresses">
+                  <button class="example-chip" type="button" data-address="0x4ed4e862860bed51a9570b96d89af5e1b0efefed">DEGEN</button>
+                  <button class="example-chip" type="button" data-address="0x940181a94A35A4569E4529A3CDfB74e38FD98631">AERO</button>
+                  <button class="example-chip" type="button" data-address="0x7afE438411ee3959C7De6f7fB76bf9C769320bA3">BLOCKTRONICS</button>
+                </div>
+              </div>
+              <div class="button-row">
+                <button class="btn btn-primary" type="submit" id="scan-button">Scan token</button>
+                <a class="btn btn-ghost" id="json-link" href="https://shield.builtbyecho.xyz/api/scan?address=0x4ed4e862860bed51a9570b96d89af5e1b0efefed" target="_blank" rel="noopener">Open JSON</a>
+              </div>
+            </form>
+
+            <div class="panel result-panel" aria-live="polite">
+              <div class="result-empty" id="result-empty">
+                <div class="empty-state">
+                  <div class="empty-orb" aria-hidden="true"></div>
+                  <p class="result-kicker" id="result-kicker">Awaiting contract</p>
+                  <h3 id="result-title">Ready when you are.</h3>
+                  <p id="result-message">Submit a contract to generate an Echo report and launch card preview.</p>
+                  <div class="scan-progress" id="scan-progress" aria-hidden="true"><span></span></div>
+                  <div class="scan-steps" id="scan-steps" aria-hidden="true">
+                    <span>Contract</span>
+                    <span>Liquidity</span>
+                    <span>Holders</span>
+                  </div>
+                </div>
+              </div>
+              <div class="result-card" id="result-card">
+                <div class="result-hero">
+                  <div class="score-lockup"><div class="score" id="score">—</div><span class="risk" id="risk">—</span></div>
+                  <div class="token-lockup"><h3 class="token-name" id="token-name">Token</h3><div class="token-meta" id="token-meta">—</div></div>
+                </div>
+                <p class="summary" id="summary">—</p>
+                <div class="mini-grid">
+                  <div class="mini"><span>Launch surface</span><b id="launch-surface">—</b></div>
+                  <div class="mini"><span>Liquidity</span><b id="liquidity">—</b></div>
+                  <div class="mini"><span>Holders</span><b id="holders">—</b></div>
+                  <div class="mini"><span>Analysis</span><b id="history">Quick</b></div>
+                </div>
+                <p class="quick-note" id="quick-note">Quick scan keeps the first result clean and cheap. Honeypot simulation, top-holder reconstruction, website content checks, and scan-memory diffs only run when you request deeper analysis.</p>
+                <div class="preview-frame">
+                  <div class="preview-head"><span>Share card preview</span><span>PNG</span></div>
+                  <img class="card-preview" id="card-preview" alt="Echo launch card preview" />
+                </div>
+                <div class="button-row result-actions">
+                  <a class="btn btn-primary" id="png-link" href="#" target="_blank" rel="noopener">Open PNG card</a>
+                  <button class="btn btn-ghost" id="deep-button" type="button" disabled>Deeper Echo Analysis</button>
+                  <a class="btn btn-ghost" id="report-link" href="#" target="_blank" rel="noopener">Open quick JSON</a>
+                </div>
+                <section class="deep-panel" id="deep-panel" aria-live="polite" aria-labelledby="deep-title">
+                  <div class="deep-head">
+                    <div>
+                      <h4 id="deep-title">Deeper Echo Analysis</h4>
+                      <p id="deep-summary">Run the deeper pass when you want the full breakdown.</p>
+                    </div>
+                    <span class="deep-status" id="deep-status">Idle</span>
+                  </div>
+                  <div class="deep-grid" id="deep-grid"></div>
+                  <ul class="deep-list" id="deep-list"></ul>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="surface-panel" id="b20-watchtower-panel" role="tabpanel" aria-labelledby="b20-watchtower-tab" data-security-panel="b20-watchtower" hidden>
+          <div class="watchtower-grid">
+            <form class="panel watchtower-panel" id="b20-form">
+              <div class="section-kicker">B20 config scanner</div>
+              <h3>B20 Watchtower</h3>
+              <p class="lede" style="font-size:20px;">B20 makes launches faster. Echo Shield makes the launch controls readable. The Watchtower reads native Base B20 status, variant, supply cap, pause flags, policy gates, and discoverable role holders before a post turns into hype.</p>
+              <div class="scan-field">
+                <label for="b20-address">B20 token address</label>
+                <input class="address-input" id="b20-address" name="b20-address" autocomplete="off" spellcheck="false" placeholder="0xB20…" value="0xB20000000000000000000022AC29fDb7Aa8Ec7A1" />
+                <p class="helper">Live Base mainnet B20 fixtures are now supported. Echo confirms B20 status from the canonical factory, not launchpad labels.</p>
+                <div class="examples" aria-label="B20 scan options">
+                  <button class="example-chip" type="button" data-b20-example="BCAT" data-b20-chain="base" data-b20-address="0xB20000000000000000000022AC29fDb7Aa8Ec7A1">BCAT live B20</button>
+                  <button class="example-chip" type="button" data-b20-example="CLAWMES" data-b20-chain="base" data-b20-address="0xB200000000000000000000010945dB4bD8DfffC0">CLAWMES live B20</button>
+                  <button class="example-chip" type="button" data-b20-example="BERYL" data-b20-chain="base" data-b20-address="0xB200000000000000000000941Ea8baA29F8b0fc5">BERYL live B20</button>
+                </div>
+              </div>
+              <div class="button-row">
+                <button class="btn btn-primary" type="submit" id="b20-button">Scan B20 config</button>
+                <select class="address-input" id="b20-chain" aria-label="B20 chain" style="min-height:46px;max-width:190px;">
+                  <option value="base" selected>Base</option>
+                  <option value="base-sepolia">Base Sepolia</option>
+                </select>
+              </div>
+              <p class="notice">B20 being native does not remove issuer controls. Echo surfaces the control profile; it does not call a token approved, risk-free, or a buy.</p>
+            </form>
+
+            <aside class="panel watchtower-panel" aria-live="polite">
+              <h3 id="b20-result-title">Ready to read B20 config.</h3>
+              <p id="b20-summary">Paste a B20 token address to generate an authority/config report.</p>
+              <div class="risk-ladder" aria-label="B20 config summary">
+                <div class="risk-step"><b id="b20-risk">—</b><span>Config risk</span></div>
+                <div class="risk-step"><b id="b20-variant">—</b><span>Variant</span></div>
+                <div class="risk-step" data-b20-control="supply-cap"><b id="b20-cap">—</b><span>Supply cap</span></div>
+                <div class="risk-step"><b id="b20-policy-count">—</b><span>Custom policies</span></div>
+              </div>
+              <ul class="watchtower-list" id="b20-findings">
+                <li><strong>Echo reads:</strong> B20 factory, metadata, cap, pause flags, policies, role constants, and recent role events.</li>
+                <li><strong>Echo does not claim:</strong> a token, market, issuer, or LP is safe.</li>
+              </ul>
+              <div class="button-row">
+                <a class="btn btn-primary" id="b20-json-link" href="https://shield.builtbyecho.xyz/api/b20-scan?chain=base&address=0xB20000000000000000000022AC29fDb7Aa8Ec7A1" target="_blank" rel="noopener">Open B20 JSON</a>
+                <a class="btn btn-ghost" id="b20-card-link" href="https://shield.builtbyecho.xyz/api/b20-card?address=0xB20000000000000000000022AC29fDb7Aa8Ec7A1&format=png" target="_blank" rel="noopener">Open B20 card</a>
+                <a class="btn btn-ghost" href="https://docs.base.org/base-chain/specs/upgrades/beryl/b20" target="_blank" rel="noopener">Base B20 docs</a>
+              </div>
+            </aside>
+          </div>
+
+          <section class="b20-radar" data-b20-dashboard="launch-radar" aria-labelledby="b20-radar-title">
+            <div class="b20-radar-head">
+              <div>
+                <div class="section-kicker">B20 Launch Radar</div>
+                <h3 id="b20-radar-title">Every new B20 launch, decoded by Echo.</h3>
+                <p class="lede" style="font-size:18px;">Echo indexes the canonical B20 Factory, preserves every first-seen launch, scans its controls, and keeps watching for configuration changes.</p>
+                <p class="b20-radar-coverage" id="b20-radar-coverage">Connecting to the durable Base factory-event index…</p>
+              </div>
+              <span class="b20-radar-status" id="b20-radar-status">Loading event index</span>
+            </div>
+            <div class="b20-radar-metrics" aria-label="B20 Launch Radar metrics">
+              <div class="b20-radar-metric"><b id="b20-radar-tracked">—</b><span>B20s indexed</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-scanned">—</b><span>Configs scanned</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-attention">—</b><span>Need attention</span></div>
+              <div class="b20-radar-metric"><b id="b20-radar-changed">—</b><span>Config changes</span></div>
+            </div>
+            <div class="b20-launches" id="b20-launches" aria-live="polite">
+              <article class="b20-launch-row">
+                <div><strong>Loading B20 radar…</strong><small>Echo is reading the persisted B20Created event index.</small></div>
+              </article>
+            </div>
+            <div class="b20-radar-next" aria-label="B20 Watchtower modules">
+              <article><h4>Factory indexer live</h4><p>Echo backfilled the canonical B20Created history and tails finalized Base blocks with a durable cursor.</p></article>
+              <article><h4>Config diff monitor live</h4><p>Persisted snapshots are rescanned to flag policy, pause, role, cap, and metadata changes after launch.</p></article>
+              <article><h4>Launch certificates next</h4><p>Each indexed B20 already has first-seen proof, a public card, JSON report, BaseScan link, and bot command.</p></article>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section id="community-reply-kit" class="api-section">
+      <div class="container">
+        <div class="section-kicker">Community reply kit</div>
+        <h2 style="margin-top:14px;font-size:clamp(36px,4.8vw,66px);letter-spacing:-.05em;">Turn scans into safer Discord and X replies.</h2>
+        <div class="api-grid">
+          <article class="api-card">
+            <h3>Card first</h3>
+            <p>Use card first as the rule: lead with the launch-card image when available, then add the score, level, and top warnings in plain language.</p>
+            <pre>Open PNG card
+Score + level
+Top 2 warnings</pre>
+          </article>
+          <article class="api-card">
+            <h3>Never say safe</h3>
+            <p>Echo reports public-data signals. Do not call a token safe, approved, or a buy. Explain confidence and source limits.</p>
+            <pre>Say: "Echo found these signals."
+Avoid: "This token is safe."</pre>
+          </article>
+          <article class="api-card">
+            <h3>Reply shape</h3>
+            <p>Use the same short structure across Discord, X, and agent handoffs so community replies stay readable.</p>
+            <pre>1. Card URL
+2. Risk level + score
+3. Why it scored that way
+4. Caveat + JSON link</pre>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="api-section">
+      <div class="container">
+        <div class="section-kicker">agent callable</div>
+        <h2 style="margin-top:14px;font-size:clamp(36px,4.8vw,66px);letter-spacing:-.05em;">Use it from Bankr, Discord, X, or any agent.</h2>
+        <div class="api-grid">
+          <article class="api-card">
+            <h3>Quick + deep reports</h3>
+            <p>Agents should call the quick report first, then trigger Deep Echo Analysis only after explicit user intent.</p>
+            <pre>GET https://shield.builtbyecho.xyz/api/scan?address=0x...
+GET https://shield.builtbyecho.xyz/api/deep-analysis?address=0x...</pre>
+          </article>
+          <article class="api-card">
+            <h3>Launch card</h3>
+            <p>Shareable image for social posts and bot replies. Reuse the quick scan card URL when available.</p>
+            <pre>GET https://shield.builtbyecho.xyz/api/launch-card?address=0x...&format=png</pre>
+          </article>
+          <article class="api-card" data-update-id="shield-risk-handoff">
+            <h3>Post-ready risk handoff</h3>
+            <p>Use the compact scan response to hand social or agent channels the score, level, card URL, top warnings, and caveats without burying the useful links.</p>
+            <pre>Output: score, level, card URL, top warnings, and caveats
+Rule: No buy/sell calls. Explain the signals.</pre>
+          </article>
+          <article class="api-card">
+            <h3>Agent skills</h3>
+            <p>Copyable SKILL.md files teach agents the quick-first flow, card handling, caveats, and source-status language.</p>
+            <pre>docs/agent-integration.md
+docs/agent-skills/echo-shield-token-triage/SKILL.md</pre>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Echo Security is a public-data scanner. It does not trade, connect wallets, custody funds, or give buy/sell calls.</div>
+  </footer>
+
+  <script>
+    const API = 'https://shield.builtbyecho.xyz';
+    const form = document.querySelector('#scan-form');
+    const input = document.querySelector('#address');
+    const scanButton = document.querySelector('#scan-button');
+    const resultEmpty = document.querySelector('#result-empty');
+    const resultCard = document.querySelector('#result-card');
+    const jsonLink = document.querySelector('#json-link');
+    const pngLink = document.querySelector('#png-link');
+    const reportLink = document.querySelector('#report-link');
+    const cardPreview = document.querySelector('#card-preview');
+    const resultKicker = document.querySelector('#result-kicker');
+    const resultTitle = document.querySelector('#result-title');
+    const resultMessage = document.querySelector('#result-message');
+    const deepButton = document.querySelector('#deep-button');
+    const deepPanel = document.querySelector('#deep-panel');
+    const deepStatus = document.querySelector('#deep-status');
+    const deepSummary = document.querySelector('#deep-summary');
+    const deepGrid = document.querySelector('#deep-grid');
+    const deepList = document.querySelector('#deep-list');
+    const b20Form = document.querySelector('#b20-form');
+    const b20Input = document.querySelector('#b20-address');
+    const b20Chain = document.querySelector('#b20-chain');
+    const b20Button = document.querySelector('#b20-button');
+    const b20JsonLink = document.querySelector('#b20-json-link');
+    const b20CardLink = document.querySelector('#b20-card-link');
+    const b20ResultTitle = document.querySelector('#b20-result-title');
+    const b20Summary = document.querySelector('#b20-summary');
+    const b20Findings = document.querySelector('#b20-findings');
+    const b20RadarStatus = document.querySelector('#b20-radar-status');
+    const b20Launches = document.querySelector('#b20-launches');
+    let activeAddress = '';
+    let activeQuickReport = null;
+    let deepAbort = null;
+
+    document.querySelector('.menu-toggle')?.addEventListener('click', (event) => {
+      const button = event.currentTarget;
+      const nav = document.querySelector('#primary-nav');
+      const open = button.getAttribute('aria-expanded') === 'true';
+      button.setAttribute('aria-expanded', String(!open));
+      nav?.classList.toggle('open', !open);
+    });
+
+    document.querySelectorAll('[data-security-tab]').forEach((tab) => {
+      tab.addEventListener('click', () => activateSecurityTab(tab.dataset.securityTab));
+    });
+
+    function activateSecurityTab(tabName) {
+      document.querySelectorAll('[data-security-tab]').forEach((tab) => {
+        const selected = tab.dataset.securityTab === tabName;
+        tab.setAttribute('aria-selected', String(selected));
+      });
+      document.querySelectorAll('[data-security-panel]').forEach((panel) => {
+        panel.hidden = panel.dataset.securityPanel !== tabName;
+      });
+    }
+
+    document.querySelectorAll('.example-chip[data-address]').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        input.value = chip.dataset.address;
+        syncLinks(input.value.trim());
+      });
+    });
+
+    document.querySelectorAll('.example-chip[data-b20-address], .example-chip[data-b20-chain]').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        if (chip.dataset.b20Address) b20Input.value = chip.dataset.b20Address;
+        if (chip.dataset.b20Chain) b20Chain.value = chip.dataset.b20Chain;
+        syncB20Links();
+      });
+    });
+
+    input.addEventListener('input', () => syncLinks(input.value.trim()));
+    b20Input.addEventListener('input', () => syncB20Links());
+    b20Chain.addEventListener('change', () => syncB20Links());
+    deepButton.addEventListener('click', () => runDeepAnalysis());
+    b20Form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      await runB20Scan();
+    });
+    syncLinks(input.value.trim());
+    syncB20Links();
+    loadCohorts();
+    loadB20LaunchRadar();
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const address = input.value.trim();
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        showError('Paste a valid Base ERC-20 contract address.');
+        return;
+      }
+      await runScan(address);
+    });
+
+    async function loadCohorts() {
+      try {
+        const res = await fetch(`${API}/api/launch-cohorts`);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.summary?.error || 'Cohort API unavailable');
+        const cohorts = data.summary.cohorts || [];
+        const sample = cohorts.reduce((sum, row) => sum + (row.sampleSize || 0), 0);
+        const best = cohorts.reduce((top, row) => !top || (row.averageScore || 0) > (top.averageScore || 0) ? row : top, null);
+        document.querySelector('#metric-surfaces').textContent = cohorts.length;
+        document.querySelector('#metric-sample').textContent = sample;
+        document.querySelector('#metric-best').textContent = best ? Math.round(best.averageScore) : '—';
+        document.querySelector('#metric-status').textContent = 'OK';
+        document.querySelector('#cohort-updated').textContent = `Updated ${new Date(data.summary.generatedAt).toLocaleString()}. ${cohorts.map(row => `${row.launchSurface}: ${row.sampleSize}`).join(' · ')}`;
+      } catch (error) {
+        document.querySelector('#metric-status').textContent = 'Check';
+        document.querySelector('#cohort-updated').textContent = error.message;
+      }
+    }
+
+    async function loadB20LaunchRadar() {
+      try {
+        const res = await fetch(`${API}/api/b20-launches?limit=20`);
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'B20 Launch Radar unavailable');
+        renderB20LaunchRadar(data);
+      } catch (error) {
+        b20RadarStatus.textContent = 'Radar check';
+        document.querySelector('#b20-radar-coverage').textContent = 'The persisted factory-event feed could not be read. Echo will retry on the next page load.';
+        b20Launches.innerHTML = `<article class="b20-launch-row"><div><strong>Radar refresh failed</strong><small>${escapeHtml(error.message || 'Provider unavailable')}</small></div></article>`;
+      }
+    }
+
+    function renderB20LaunchRadar(data) {
+      const stats = data.stats || {};
+      const watcher = data.watcher || {};
+      document.querySelector('#b20-radar-tracked').textContent = Number(stats.tracked || 0).toLocaleString();
+      document.querySelector('#b20-radar-scanned').textContent = Number(stats.scanned || 0).toLocaleString();
+      document.querySelector('#b20-radar-attention').textContent = Number(stats.needsAttention || 0).toLocaleString();
+      document.querySelector('#b20-radar-changed').textContent = Number(stats.changedConfigs || 0).toLocaleString();
+      const watcherLabel = watcher.status === 'live' ? 'Live' : watcher.status === 'catching-up' ? 'Catching up' : 'Bootstrapping';
+      b20RadarStatus.textContent = `${watcherLabel} · event indexed · ${new Date(data.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const lag = Number.isFinite(watcher.lagBlocks) ? `${watcher.lagBlocks} block${watcher.lagBlocks === 1 ? '' : 's'} behind` : 'cursor starting';
+      document.querySelector('#b20-radar-coverage').textContent = `Factory ${shortAddress(watcher.factoryAddress)} · indexed through Base block ${watcher.latestIndexedBlock || 'starting'} · ${lag} · ${Number(stats.newToday || 0).toLocaleString()} launches today`;
+      const launches = data.launches || [];
+      b20Launches.innerHTML = launches.map((row) => {
+        const pending = row.level === 'PENDING' || row.level === 'RETRYING';
+        const score = pending ? row.level : `${row.echoConfigScore} · ${row.level}`;
+        const supply = pending ? 'Configuration scan pending' : `${row.totalSupply || '—'} / ${row.supplyCap || row.supplyCapStatus || '—'}`;
+        return `
+        <article class="b20-launch-row">
+          <div><strong>${escapeHtml(row.symbol || 'B20')}</strong><small>${escapeHtml(row.name || row.address)} · ${escapeHtml(new Date(row.firstSeenAt).toLocaleString())}</small></div>
+          <div><span class="b20-launch-chip">${escapeHtml(row.factoryProof === 'factory-confirmed' ? 'Factory-confirmed' : row.factoryProof || 'Unknown')}</span></div>
+          <div><small>Score</small><span>${escapeHtml(score)}</span></div>
+          <div><small>Supply</small><span>${escapeHtml(supply)}</span></div>
+          <div><small>Controls</small><span>${escapeHtml(row.policySummary)} · pause ${escapeHtml(row.pauseState)} · roles ${escapeHtml(row.roleSurface)}</span></div>
+          <div class="b20-launch-actions">
+            <a href="${escapeHtml(row.cardPngUrl)}" target="_blank" rel="noopener">Card</a>
+            <a href="${escapeHtml(row.reportUrl)}" target="_blank" rel="noopener">JSON</a>
+            <a href="${escapeHtml(row.explorerUrl)}" target="_blank" rel="noopener">BaseScan</a>
+          </div>
+        </article>`;
+      }).join('') || '<article class="b20-launch-row"><div><strong>No B20 launches returned.</strong><small>The event index is still bootstrapping.</small></div></article>';
+    }
+
+    async function runScan(address) {
+      scanButton.disabled = true;
+      scanButton.textContent = 'Scanning…';
+      activeAddress = address;
+      activeQuickReport = null;
+      resetDeepPanel();
+      setResultState('scanning', 'Running quick Echo scan…', 'Fetching the score, token basics, liquidity, holder count, and share card in one lightweight pass.');
+      resultEmpty.classList.remove('hidden');
+      resultCard.style.display = 'none';
+      try {
+        const scanRes = await fetch(`${API}/api/scan?address=${encodeURIComponent(address)}`);
+        const scanData = await scanRes.json();
+        if (!scanRes.ok || !scanData.ok) throw new Error(scanData.message || scanData.error || 'Scan failed');
+        renderResult(scanData.report, scanData.card);
+      } catch (error) {
+        showError(error.message || 'Scan failed');
+      } finally {
+        scanButton.disabled = false;
+        scanButton.textContent = 'Scan token';
+      }
+    }
+
+    function renderResult(report, card) {
+      activeQuickReport = report;
+      setResultState('idle', 'Ready when you are.', 'Submit a contract to generate an Echo report and launch card preview.');
+      resultEmpty.classList.add('hidden');
+      resultCard.style.display = 'grid';
+      resetDeepPanel();
+      document.querySelector('#score').textContent = report.score ?? '—';
+      document.querySelector('#risk').textContent = `${report.level || 'UNKNOWN'} risk`;
+      document.querySelector('#token-name').textContent = `${report.token?.name || 'Token'} (${report.token?.symbol || '—'})`;
+      document.querySelector('#token-meta').textContent = report.token?.address || card.address;
+      document.querySelector('#summary').textContent = report.summary || card.summary || 'No summary returned.';
+      document.querySelector('#launch-surface').textContent = card.metrics?.launchVenue || card.metrics?.launchSurface || report.launch?.surface || 'unknown';
+      document.querySelector('#liquidity').textContent = formatUsd(report.primaryPair?.liquidityUsd || card.metrics?.liquidityUsd);
+      document.querySelector('#holders').textContent = card.metrics?.holderCount ? card.metrics.holderCount.toLocaleString() : 'unknown';
+      document.querySelector('#history').textContent = report.analysisDepth === 'quick' ? 'Quick' : 'Deep';
+      cardPreview.src = card.cardUrl;
+      cardPreview.alt = `Echo launch card for ${report.token?.symbol || 'token'}`;
+      pngLink.href = card.cardUrl;
+      reportLink.href = `${API}/api/scan?address=${encodeURIComponent(report.token?.address || card.address)}`;
+      deepButton.disabled = false;
+      syncLinks(report.token?.address || card.address);
+      loadCohorts();
+    }
+
+    async function runDeepAnalysis() {
+      const address = activeQuickReport?.token?.address || activeAddress || input.value.trim();
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) return;
+      deepAbort?.abort();
+      deepAbort = new AbortController();
+      deepPanel.classList.add('is-open');
+      deepStatus.textContent = 'Running';
+      deepSummary.textContent = 'Pulling Honeypot.is simulation, top-holder reconstruction, website content check, scan memory, and full score buckets.';
+      deepGrid.innerHTML = '';
+      deepList.innerHTML = '<li>Deeper Echo Analysis is running. This may take a few seconds.</li>';
+      deepButton.disabled = true;
+      deepButton.textContent = 'Deep analysis running…';
+      try {
+        const res = await fetch(`${API}/api/deep-analysis?address=${encodeURIComponent(address)}`, { signal: deepAbort.signal });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'Deep analysis failed');
+        renderDeepAnalysis(data.report);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          deepStatus.textContent = 'Failed';
+          deepSummary.textContent = error.message || 'Deep Echo Analysis failed.';
+          deepList.innerHTML = '<li>Keep the quick card, then retry the deeper pass if providers recover.</li>';
+        }
+      } finally {
+        deepButton.disabled = false;
+        deepButton.textContent = 'Refresh Deeper Echo Analysis';
+      }
+    }
+
+    function renderDeepAnalysis(report) {
+      deepStatus.textContent = 'Complete';
+      document.querySelector('#history').textContent = report.history?.enabled ? `Deep · ${report.history.changes?.length || 0} changes` : 'Deep';
+      deepSummary.textContent = report.summary || 'Full provider pass completed.';
+      const holderMap = report.holders?.echoMap;
+      const honeypot = report.security?.honeypot;
+      const cards = [
+        ['Contract source', report.security?.isOpenSource === true ? 'Open source' : report.security?.isOpenSource === false ? 'Not open source' : 'Unknown'],
+        ['Honeypot sim', honeypot?.source === 'honeypot.is' ? `${honeypot.risk || 'unknown'} · buy ${formatPct(honeypot.buyTax)} / sell ${formatPct(honeypot.sellTax)}` : 'Unavailable'],
+        ['Top 10 holders', formatPct(report.holders?.adjustedTop10Percentage ?? report.holders?.top10Percentage)],
+        ['Owner/admin', report.security?.ownerAddress ? shortAddress(report.security.ownerAddress) : 'renounced/unknown'],
+        ['Website check', report.website?.url ? `${report.website.reachable ? 'reachable' : 'unreachable'} · ${report.website.https ? 'HTTPS' : 'no HTTPS'}` : 'No website'],
+        ['Scan memory', report.history?.enabled ? `${report.history.changes?.length || 0} changes` : 'Not stored']
+      ];
+      deepGrid.innerHTML = cards.map(([label, value]) => `<div class="deep-card"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join('');
+      const bucketItems = (report.buckets || []).map((bucket) => `<li><strong>${escapeHtml(bucket.label)}:</strong> ${bucket.score}/${bucket.max} · ${escapeHtml((bucket.findings || ['No major finding.'])[0])}</li>`);
+      const mapItems = holderMap?.notes?.map((note) => `<li><strong>Echo Map:</strong> ${escapeHtml(note)}</li>`) || [];
+      const sourceItems = (report.sources || []).slice(0, 5).map((source) => `<li><strong>${escapeHtml(source.label)}:</strong> ${escapeHtml(source.status)}${source.note ? ` · ${escapeHtml(source.note)}` : ''}</li>`);
+      deepList.innerHTML = [...bucketItems, ...mapItems, ...sourceItems].join('') || '<li>No deeper findings returned.</li>';
+    }
+
+    async function runB20Scan() {
+      const address = b20Input.value.trim();
+      if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        renderB20Error('Paste a valid B20/Base token address.');
+        return;
+      }
+      b20Button.disabled = true;
+      b20Button.textContent = 'Reading config…';
+      b20ResultTitle.textContent = 'Reading B20 config…';
+      b20Summary.textContent = 'Querying the Base B20 factory, token config, policy registry, and recent role events.';
+      b20Findings.innerHTML = '<li>B20 config scan running…</li>';
+      try {
+        const res = await fetch(`${API}/api/b20-card?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`);
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.message || data.error || 'B20 scan failed');
+        renderB20Report(data.report);
+      } catch (error) {
+        renderB20Error(error.message || 'B20 scan failed.');
+      } finally {
+        b20Button.disabled = false;
+        b20Button.textContent = 'Scan B20 config';
+      }
+    }
+
+    function renderB20Report(report) {
+      const customPolicies = (report.config?.policies || []).filter((policy) => policy.status === 'custom_allowlist' || policy.status === 'custom_blocklist');
+      b20ResultTitle.textContent = `${report.token?.symbol || 'B20'} config report`;
+      b20Summary.textContent = report.summary || 'B20 config report complete.';
+      document.querySelector('#b20-risk').textContent = report.level || 'UNKNOWN';
+      document.querySelector('#b20-variant').textContent = report.standard?.variant || 'UNKNOWN';
+      document.querySelector('#b20-cap').textContent = capLabel(report.config?.supplyCapStatus);
+      document.querySelector('#b20-policy-count').textContent = customPolicies.length;
+      const identity = `<li><strong>${escapeHtml(report.token?.name || 'Token')}:</strong> ${escapeHtml(report.token?.address || '')}</li>`;
+      const findings = (report.findings || []).map((finding) => `<li><strong>${escapeHtml(finding.label)}:</strong> ${escapeHtml(finding.detail)}</li>`);
+      const policyItems = (report.config?.policies || []).map((policy) => `<li><strong>${escapeHtml(policy.label)}:</strong> ${escapeHtml(policy.status)}${policy.policyId ? ` · policy ${escapeHtml(policy.policyId)}` : ''}</li>`);
+      b20Findings.innerHTML = [identity, ...findings, ...policyItems.slice(0, 4)].join('') || '<li>No B20 findings returned.</li>';
+      syncB20Links(report.token?.address);
+    }
+
+    function renderB20Error(message) {
+      b20ResultTitle.textContent = 'B20 scan did not complete.';
+      b20Summary.textContent = message;
+      document.querySelector('#b20-risk').textContent = '—';
+      document.querySelector('#b20-variant').textContent = '—';
+      document.querySelector('#b20-cap').textContent = '—';
+      document.querySelector('#b20-policy-count').textContent = '—';
+      b20Findings.innerHTML = '<li>Check the address/chain and retry. Base mainnet B20 may show unavailable until Beryl is active on public RPCs.</li>';
+    }
+
+    function capLabel(status) {
+      if (status === 'capped') return 'Capped';
+      if (status === 'max_uint128') return 'Open';
+      if (status === 'not_b20') return 'N/A';
+      return 'Unknown';
+    }
+
+    function resetDeepPanel() {
+      deepAbort?.abort();
+      deepPanel.classList.remove('is-open');
+      deepStatus.textContent = 'Idle';
+      deepSummary.textContent = 'Run the deeper pass when you want the full breakdown.';
+      deepGrid.innerHTML = '';
+      deepList.innerHTML = '';
+      deepButton.disabled = true;
+      deepButton.textContent = 'Deeper Echo Analysis';
+    }
+
+    function setResultState(state, title, message) {
+      resultEmpty.classList.toggle('is-scanning', state === 'scanning');
+      resultEmpty.classList.toggle('is-error', state === 'error');
+      resultKicker.textContent = state === 'scanning' ? 'Scan running' : state === 'error' ? 'Needs attention' : 'Awaiting contract';
+      resultTitle.textContent = title;
+      resultMessage.textContent = message;
+    }
+
+    function showError(message) {
+      setResultState('error', 'Scan did not complete.', message);
+      resultEmpty.classList.remove('hidden');
+      resultCard.style.display = 'none';
+    }
+
+    function syncLinks(address) {
+      if (!address) return;
+      jsonLink.href = `${API}/api/scan?address=${encodeURIComponent(address)}`;
+    }
+
+    function syncB20Links(address = b20Input.value.trim()) {
+      if (!address) return;
+      b20JsonLink.href = `${API}/api/b20-scan?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}`;
+      b20CardLink.href = `${API}/api/b20-card?chain=${encodeURIComponent(b20Chain.value)}&address=${encodeURIComponent(address)}&format=png`;
+    }
+
+    function formatUsd(value) {
+      if (!Number.isFinite(value)) return 'unknown';
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+    }
+
+    function formatPct(value) {
+      if (!Number.isFinite(value)) return 'unknown';
+      return `${Number(value).toFixed(Number(value) >= 10 ? 1 : 2)}%`;
+    }
+
+    function shortAddress(address) {
+      return typeof address === 'string' && address.length > 12 ? `${address.slice(0, 6)}…${address.slice(-4)}` : address || 'unknown';
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    }
+  </script>
+</body>
+</html>

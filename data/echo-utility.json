@@ -1,0 +1,37 @@
+{
+  "date": "2026-07-21",
+  "verifiedAt": "2026-08-13T00:00:00Z",
+  "token": {
+    "name": "ECHO",
+    "symbol": "ECHO",
+    "address": "0xA7F63eB41779925803a3EEC30890742571e63Ba3"
+  },
+  "network": {
+    "name": "Base",
+    "chainId": 8453
+  },
+  "utility": [
+    {
+      "id": "gauntlet-payment",
+      "name": "Gauntlet payment",
+      "status": "live",
+      "summary": "Echo Gauntlet accepts ECHO on Base for a browser-persona website teardown. The current amount is returned by the public quote endpoint.",
+      "proofUrl": "https://www.builtbyecho.xyz/api/gauntlet-quote"
+    },
+    {
+      "id": "api-finder-payment",
+      "name": "Public API Finder payment",
+      "status": "live",
+      "summary": "Public API Finder accepts ECHO on Base for a ranked API search. The public quote endpoint returns the current token, amount, network, and receiver before payment.",
+      "proofUrl": "https://www.builtbyecho.xyz/api/echo-api-finder-quote"
+    },
+    {
+      "id": "contract-verification",
+      "name": "Contract verification",
+      "status": "live",
+      "summary": "The ECHO token contract can be verified directly on BaseScan before any wallet action.",
+      "proofUrl": "https://basescan.org/token/0xA7F63eB41779925803a3EEC30890742571e63Ba3"
+    }
+  ],
+  "disclaimer": "This feed describes current product utility. It is not a promise of price or returns and is not financial advice."
+}

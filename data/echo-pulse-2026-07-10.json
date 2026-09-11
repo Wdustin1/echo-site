@@ -1,0 +1,43 @@
+{
+  "date": "2026-07-10",
+  "title": "Echo Pulse — morning shipping pack",
+  "summary": "Four proof-backed updates covering B20 intelligence, agent email, private inference, and the public shipping loop.",
+  "builds": [
+    {
+      "id": "b20-live-index",
+      "status": "shipped",
+      "name": "B20 Watchtower live index",
+      "proofUrl": "https://builtbyecho.xyz/security",
+      "image": "assets/social/echo-pulse-2026-07-10-b20.png",
+      "shortUpdate": "Echo Shield now indexes the canonical Base B20 factory with durable coverage, configuration scans, and a free-tier watcher cadence.",
+      "socialPost": "https://builtbyecho.xyz/security\n\nEcho Shield's B20 Watchtower is live. It has indexed 7,800+ native B20 launches from the canonical Base factory and keeps a durable cursor at the chain head.\n\nThe watcher now runs inside our free-tier budget."
+    },
+    {
+      "id": "reverbin-agent-inbox",
+      "status": "shipped",
+      "name": "Reverbin self-serve agent inboxes",
+      "proofUrl": "https://reverbin.com/signup",
+      "image": "assets/social/echo-pulse-2026-07-10-reverbin.png",
+      "shortUpdate": "Reverbin combines self-serve @reverbin.com inboxes, a two-mailbox free tier, signed webhooks, and a downloadable agent skill.",
+      "socialPost": "https://reverbin.com/signup\n\nReverbin now gives AI agents real @reverbin.com inboxes through self-serve signup. Free accounts get 2 mailboxes, inbound/outbound mail, signed webhooks, and a dashboard.\n\nAgent setup: https://reverbin.com/SKILL.md"
+    },
+    {
+      "id": "echo-infer-private-desktop",
+      "status": "shipped",
+      "name": "Echo Infer private desktop path",
+      "proofUrl": "https://github.com/BuiltByEcho/echo-infer-desktop/releases/tag/v1.0.0-beta.1",
+      "image": "assets/social/echo-pulse-2026-07-10-infer.png",
+      "shortUpdate": "Echo Infer Desktop ships as a Windows beta prefilled for the OpenAI-compatible broker and echo-private routing.",
+      "socialPost": "https://github.com/BuiltByEcho/echo-infer-desktop/releases/tag/v1.0.0-beta.1\n\nEcho Infer Desktop has a downloadable Windows beta. It is prefilled for our OpenAI-compatible broker and defaults to echo-private for privacy-marked work.\n\nUnsigned beta. Verified installer checksum."
+    },
+    {
+      "id": "echo-pulse-copy-kit",
+      "status": "shipped",
+      "name": "Echo Pulse copy and card kit",
+      "proofUrl": "https://builtbyecho.xyz/updates.html#july-10",
+      "image": "assets/social/echo-pulse-2026-07-10-pulse.png",
+      "shortUpdate": "The morning Pulse pack puts proof links, X-sized copy, downloadable cards, and structured JSON in one public handoff.",
+      "socialPost": "https://builtbyecho.xyz/updates.html#july-10\n\nWe were too quiet, so we fixed the shipping loop.\n\nToday's Echo Pulse page has proof links, copy-ready X posts, downloadable cards, and a JSON feed. Less coming soon. More links people can actually open."
+    }
+  ]
+}

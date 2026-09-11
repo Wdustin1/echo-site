@@ -916,6 +916,7 @@
         <a href="api-finder.html" class="active">API Finder</a>
         <a href="skills.html">Skills</a>
         <a href="index.html#proof">Proof</a>
+
         <a href="https://github.com/BuiltByEcho" target="_blank" rel="noopener">GitHub</a>
       </div>
     </div>
@@ -976,11 +977,11 @@
             <button class="btn btn-ghost" type="button" id="connect-wallet">Connect wallet</button>
             <button class="btn btn-primary" type="button" id="wallet-pay-search">Pay + search</button>
           </div>
-          <div class="wallet-status" id="wallet-status">Wallet connect uses Reown.</div>
+          <div class="wallet-status" id="wallet-status" role="status" aria-live="polite">Wallet connect uses Reown.</div>
           <form class="paid-form" id="paid-api-finder-form">
             <input class="finder-input" id="paid-query" name="query" value="" aria-label="Paid API Finder query" placeholder="What API are you looking for today?" />
           </form>
-          <div class="paid-output" id="paid-output">Connect your wallet, describe the API you need, then pay + search.</div>
+          <div class="paid-output" id="paid-output" role="status" aria-live="polite">Connect your wallet, describe the API you need, then pay + search.</div>
           <div class="burn-note">Careful wording: this is a burn-routed collection wallet. The burn happens when those collected tokens are burned.</div>
         </div>
       </div>
