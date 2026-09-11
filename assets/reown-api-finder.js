@@ -9,7 +9,8 @@ import {
 } from './bbe-wallet.js';
 
 let connectedAddress = '';
-let latestQuote;
+let busy = false;
+let pendingSearch;
 
 const $ = (selector) => document.querySelector(selector);
 
@@ -29,16 +30,16 @@ async function getQuote() {
   const response = await fetch('/api/echo-api-finder-quote');
   const data = await response.json();
   if (!response.ok || !data.echo) throw new Error(data.error || 'quote unavailable');
-  latestQuote = data.echo;
-  return latestQuote;
-}
-
-function readQuoteFromDom() {
-  return latestQuote;
-}
-
-async function ensureQuote() {
-  return readQuoteFromDom() || getQuote();
+  const quote = data.echo;
+  const amount = BigInt(quote.amountRaw);
+  const scale = 10n ** 18n;
+  const fraction = (amount % scale).toString().padStart(18, '0').replace(/0+$/, '');
+  $('#quote-amount').textContent = `${(amount / scale).toLocaleString('en-US')}${fraction ? `.${fraction}` : ''} ECHO`;
+  for (const [id, value] of [['#quote-token', quote.tokenAddress], ['#quote-receiver', quote.receiver]]) {
+    $(id).textContent = shortAddress(value);
+    $(id).title = value;
+  }
+  return quote;
 }
 
 async function initReown() {
@@ -49,6 +50,10 @@ async function initReown() {
       setWalletStatus(`Connected ${shortAddress(connectedAddress)} on Reown.`);
       const connectButton = $('#connect-wallet');
       if (connectButton) connectButton.textContent = 'Wallet connected';
+    } else {
+      setWalletStatus('Connect your wallet to pay and search.');
+      const connectButton = $('#connect-wallet');
+      if (connectButton) connectButton.textContent = 'Connect wallet';
     }
   });
 
@@ -56,11 +61,11 @@ async function initReown() {
   else setWalletStatus('Wallet connect ready. Connect, then pay + search.');
 }
 
-async function payWithWallet() {
+async function payWithWallet(query) {
   setWalletStatus('Preparing wallet payment...');
   setPaidOutput('Preparing Reown wallet payment...');
 
-  const quote = await ensureQuote();
+  const quote = await getQuote();
   const payment = await payErc20({
     tokenAddress: quote.tokenAddress,
     receiver: quote.receiver,
@@ -70,12 +75,11 @@ async function payWithWallet() {
       setPaidOutput(message);
     },
   });
+  pendingSearch = { query, txHash: payment.txHash };
   setPaidOutput(`Payment confirmed: ${payment.txHash}\nSubmitting to Echo Gate...`, 'success');
-  await submitPaidSearch(payment.txHash);
 }
 
-async function submitPaidSearch(txHash) {
-  const query = $('#paid-query')?.value || '';
+async function submitPaidSearch({ txHash, query }) {
   const response = await fetch('/api/echo-api-finder-paid', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -100,13 +104,34 @@ function renderPaidResult(data) {
 }
 
 async function onWalletPaySearch() {
+  if (busy) return;
+  const query = pendingSearch?.query || $('#paid-query')?.value.trim();
+  if (!query) {
+    setPaidOutput('Describe the API you need before paying.', 'error');
+    $('#paid-query')?.focus();
+    return;
+  }
+  busy = true;
+  $('#wallet-pay-search').disabled = true;
+  $('#paid-query').disabled = true;
+  $('#load-echo-quote').disabled = true;
   try {
-    await payWithWallet();
+    if (!pendingSearch) await payWithWallet(query);
+    await submitPaidSearch(pendingSearch);
+    pendingSearch = undefined;
     setWalletStatus('Payment verified and API Finder results returned.');
   } catch (error) {
     const message = readableWalletError(error);
     setWalletStatus(message);
-    setPaidOutput(`Wallet payment failed: ${message}`, 'error');
+    setPaidOutput(pendingSearch
+      ? `Payment confirmed: ${pendingSearch.txHash}\nSearch could not finish: ${message}\nRetry search uses this payment without sending another transfer. Keep this page open and save the transaction hash.`
+      : `Wallet payment failed: ${message}`, 'error');
+  } finally {
+    busy = false;
+    $('#wallet-pay-search').disabled = false;
+    $('#wallet-pay-search').textContent = pendingSearch ? 'Retry search' : 'Pay + search';
+    $('#paid-query').disabled = Boolean(pendingSearch);
+    $('#load-echo-quote').disabled = false;
   }
 }
 

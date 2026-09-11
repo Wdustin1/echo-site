@@ -258,7 +258,7 @@
               <button class="btn btn-ghost" type="button" data-wallet-connect data-wallet-status-target="#gauntlet-status">Connect wallet</button>
               <button class="btn btn-primary" type="submit" id="wallet-pay-gauntlet">Pay + run</button>
             </div>
-            <div class="wallet-status" id="gauntlet-status">Connect once, then approve one transaction per Gauntlet run.</div>
+            <div class="wallet-status" id="gauntlet-status" role="status" aria-live="polite">Connect once, then approve one transaction per Gauntlet run.</div>
           </form>
         </div>
       </div>
@@ -267,7 +267,7 @@
     <section>
       <div class="wide result-panel" style="padding: clamp(20px, 4vw, 34px);">
         <div class="kicker">Latest result</div>
-        <div class="gauntlet-output" id="gauntlet-output">Paste a URL, choose USDC or ECHO, then approve the transaction. The report links appear here after the run starts.</div>
+        <div class="gauntlet-output" id="gauntlet-output" role="status" aria-live="polite">Paste a URL, choose USDC or ECHO, then approve the transaction. The report links appear here after the run starts.</div>
       </div>
     </section>
   </main>
